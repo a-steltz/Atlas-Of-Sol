@@ -6,11 +6,12 @@
         "node": ">=24 <25"
     },
     "scripts": {
-        "dev": "next dev",
+        "dev": "next dev --turbopack",
         "prebuild": "npm run content:validate",
         "build": "next build",
         "start": "next start",
         "lint": "eslint",
+        "typecheck": "tsc --noEmit",
         "content:validate": "node scripts/content/validate.mjs",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
