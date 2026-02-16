@@ -6,7 +6,7 @@ _A Wonder-First Interactive Solar System Experience_
 
 **Atlas of Sol** is an interactive, web-based solar system museum designed to spark wonder and curiosity through layered exploration. Users can zoom from the Solar System level down to individual planetary bodies, discovering curated highlights and understanding how we know what we know. It prioritizes clarity and emotional engagement over dense academic content, while still linking to trusted scientific sources. Architecturally, it is built to scale beyond our solar system without requiring a rewrite.
 
-# 1️ -  The Problem We’re Addressing
+# 1️ - The Problem We’re Addressing
 
 Space is inspiring but:
 
@@ -44,13 +44,13 @@ It is not:
 
 Users are not controlling the solar system. They are not driving a spaceship.
 
-They are observers with zoom control. (In practice, we could visualize this as a telescope with many levels of zoom, or Neil DeGrasse Tyson's *spaceship of the mind*.)
+They are observers with zoom control. (In practice, we could visualize this as a telescope with many levels of zoom, or Neil DeGrasse Tyson's _spaceship of the mind_.)
 
 Think:
 
-* Google Earth style zoom layers.
-* Solar System → Planet System → Body Detail
-* Depth and reveal create wonder.
+- Google Earth style zoom layers.
+- Solar System → Planet System → Body Detail
+- Depth and reveal create wonder.
 
 # 4️ - Navigation Architecture
 
@@ -117,17 +117,17 @@ It is **not**:
 - Mass
 - Objective value
 
-*Though, all of those can play into the determination of the rating.*
+_Though, all of those can play into the determination of the rating._
 
 It is a UX and exhibit design tool.
 
 Example scores:
 
 - Jupiter: 95
-  - Io: 92
-  - Europa: 91
-  - Amalthea: 35
-  - Minor moon: 10
+    - Io: 92
+    - Europa: 91
+    - Amalthea: 35
+    - Minor moon: 10
 - Mars: 90
 - Earth: 98
 - Venus: 80
@@ -141,7 +141,7 @@ Curation Score determines visibility under different density modes.
 
 Atlas of Sol provides three density modes:
 
-### 1️  Highlights (Default — Museum Mode)
+### 1️ Highlights (Default — Museum Mode)
 
 - Shows only children with high curation scores.
 - Clean, intentional, wonder-first experience.
@@ -256,10 +256,11 @@ Example:
 
 ### Purpose
 
-* Defines system-level metadata (name, description, optional theming).
-- Acts as the top-level container for a star system (e.g., Sol).
-- Provides architectural support for future exosystems.
-- Does **not** directly list or embed bodies.
+- Defines system-level metadata (name, description, optional theming).
+
+* Acts as the top-level container for a star system (e.g., Sol).
+* Provides architectural support for future exosystems.
+* Does **not** directly list or embed bodies.
 
 Bodies belong to a system by referencing it via `systemId`, and their hierarchy is defined through `navParentId`.
 
@@ -332,10 +333,10 @@ They are modeled as a JSON object inside the planet entity rather than as separa
 
 ```json
 {
-  "rings": {
-    "description": "Saturn’s main rings.",
-    "data": {}
-  }
+    "rings": {
+        "description": "Saturn’s main rings.",
+        "data": {}
+    }
 }
 ```
 
@@ -458,14 +459,14 @@ Example `body.json` (abridged):
 
 ```json
 {
-  "id": "sol/jupiter/io",
-  "name": "Io",
-  "type": "moon",
-  "systemId": "sol",
-  "navParentId": "sol/jupiter",
-  "navOrder": 1,
-  "curationScore": 92,
-  "relations": [{ "type": "orbits", "targetId": "sol/jupiter" }]
+    "id": "sol/jupiter/io",
+    "name": "Io",
+    "type": "moon",
+    "systemId": "sol",
+    "navParentId": "sol/jupiter",
+    "navOrder": 1,
+    "curationScore": 92,
+    "relations": [{ "type": "orbits", "targetId": "sol/jupiter" }]
 }
 ```
 
@@ -503,9 +504,7 @@ Schema shape:
 
 ```json
 {
-  "relations": [
-    { "type": "visitedBy", "targetId": "sol/missions/cassini-huygens" }
-  ]
+    "relations": [{ "type": "visitedBy", "targetId": "sol/missions/cassini-huygens" }]
 }
 ```
 
