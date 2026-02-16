@@ -1,0 +1,9 @@
+{
+    "id": "sol/sun",
+    "name": "Sun",
+    "type": "star",
+    "systemId": "sol",
+    "navParentId": "sol",
+    "curationScore": 100,
+    "relations": []
+}
