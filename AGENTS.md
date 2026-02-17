@@ -88,6 +88,55 @@ const handleRowToggle = (requestId: number) => {
 - `highlights[]`, `howWeKnow[]`, and `openQuestions[]` are optional; if present, each must be a non-empty array of non-empty strings.
 - Folder names are for developer ergonomics only; numeric prefixes (e.g., `05-jupiter`) are allowed for sorting, but JSON `id` values remain canonical and must not be renumbered.
 
+## Agent Memory Workflow
+
+`agentMemory/` is a running handoff journal for recent context. It supports continuity but is not a source of truth for architecture or schema decisions.
+
+### Startup Context Read Order (Hybrid, Bounded)
+
+1. Read the latest journal entry from `agentMemory/` (latest 1 file only).
+2. Read commit metadata for the last 5 commits (commit message + touched files, no diffs).
+
+Use these commands:
+
+```bash
+find agentMemory -maxdepth 1 -type f -name '????-??-??-????-*.md' | sort | tail -n 1
+git log --name-only --pretty=format:'--- %h %ad %s' --date=short -n 5
+```
+
+Rules:
+
+- If no journal entry exists, continue with commit metadata only.
+- Do not read diffs by default during startup context gathering.
+- Keep startup context bounded to avoid flooding the context window.
+
+### Session-End Journal Rule
+
+- Write exactly one journal entry at the end of each work session.
+- Journal entries are written manually by the agent using the standard template.
+- Filename format: `agentMemory/YYYY-MM-DD-HHMM-<slug>.md` (24-hour `HHMM`).
+- Keep all journal entries; no pruning or archival policy is required right now.
+
+### Uncommitted Context Policy
+
+- Ask per session whether to include uncommitted-but-completed work.
+- If included, label bullets explicitly with status tags:
+    - `[committed]`
+    - `[uncommitted]`
+
+### Required Journal Sections
+
+Each journal entry must include these section headers:
+
+- `## Session Summary`
+- `## Decisions Locked`
+- `## Files Touched`
+- `## Validation Run`
+- `## Open Questions`
+- `## Next Steps`
+- `## Risks / Notes`
+
+If no decisions or actions apply to a required header, write "N/A". Do not invent content to fill sections.
 ## Commit Messages
 
 Use Conventional Commits where possible:
