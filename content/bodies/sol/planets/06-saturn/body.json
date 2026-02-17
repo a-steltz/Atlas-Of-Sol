@@ -1,6 +1,7 @@
 {
     "id": "sol/saturn",
     "name": "Saturn",
+    "hook": "A ringed giant whose icy bands make it the most iconic silhouette in Sol.",
     "type": "planet",
     "systemId": "sol",
     "navParentId": "sol",

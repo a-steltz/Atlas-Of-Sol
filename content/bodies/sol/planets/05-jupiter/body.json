@@ -1,6 +1,7 @@
 {
     "id": "sol/jupiter",
     "name": "Jupiter",
+    "hook": "A giant world of storms whose gravity helps shape the architecture of Sol.",
     "type": "planet",
     "systemId": "sol",
     "navParentId": "sol",

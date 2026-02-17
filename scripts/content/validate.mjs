@@ -44,6 +44,8 @@ const relationSchema = z.object({
     targetId: z.string().min(1)
 });
 
+const nonEmptyStringListSchema = z.array(z.string().trim().min(1)).min(1);
+
 const ringsSchema = z
     .object({
         description: z.string().optional(),
@@ -63,11 +65,15 @@ const bodySchema = z
     .object({
         id: z.string().min(1),
         name: z.string().min(1),
+        hook: z.string().trim().min(1),
         type: bodyTypeSchema,
         systemId: z.string().min(1),
         navParentId: z.string().min(1),
         navOrder: z.number().finite().optional(),
         curationScore: z.number().finite().min(0).max(100),
+        highlights: nonEmptyStringListSchema.optional(),
+        howWeKnow: nonEmptyStringListSchema.optional(),
+        openQuestions: nonEmptyStringListSchema.optional(),
         relations: z.array(relationSchema).optional(),
         rings: ringsSchema.optional()
     })

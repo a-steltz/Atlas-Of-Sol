@@ -1,6 +1,7 @@
 {
     "id": "sol/earth",
     "name": "Earth",
+    "hook": "The only known world where oceans, atmosphere, and life coexist.",
     "type": "planet",
     "systemId": "sol",
     "navParentId": "sol",

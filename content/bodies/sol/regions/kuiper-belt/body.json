@@ -1,6 +1,7 @@
 {
     "id": "sol/kuiper-belt",
     "name": "Kuiper Belt",
+    "hook": "A frozen frontier beyond Neptune filled with icy bodies and dwarf worlds.",
     "type": "region",
     "systemId": "sol",
     "navParentId": "sol",

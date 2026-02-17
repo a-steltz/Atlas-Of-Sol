@@ -446,16 +446,20 @@ Each body entity includes:
 
 - `id`
 - `name`
+- `hook` (required one-line wonder statement)
 - `type` (strict enum; see below)
 - `navParentId`
 - optional `navOrder`
 - `systemId`
 - `curationScore`
 - `relations[]`
-- `highlights[]`
-- `howWeKnow[]`
+- optional `highlights[]`
+- optional `howWeKnow[]`
+- optional `openQuestions[]`
 - `sources[]`
 - optional `rings` object (for planets)
+
+For MVP validation, if `highlights[]`, `howWeKnow[]`, or `openQuestions[]` are provided, each must be a non-empty array of non-empty strings.
 
 Example `body.json` (abridged):
 

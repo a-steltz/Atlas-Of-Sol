@@ -1,6 +1,7 @@
 {
     "id": "sol/neptune",
     "name": "Neptune",
+    "hook": "A deep-blue ice giant lashed by the fastest winds in the Solar System.",
     "type": "planet",
     "systemId": "sol",
     "navParentId": "sol",

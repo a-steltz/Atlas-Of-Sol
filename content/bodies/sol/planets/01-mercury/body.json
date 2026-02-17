@@ -1,6 +1,7 @@
 {
     "id": "sol/mercury",
     "name": "Mercury",
+    "hook": "A world where the Sun can rise, set, and rise again in one Mercurian day.",
     "type": "planet",
     "systemId": "sol",
     "navParentId": "sol",

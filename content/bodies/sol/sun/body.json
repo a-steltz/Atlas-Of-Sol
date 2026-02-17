@@ -1,6 +1,7 @@
 {
     "id": "sol/sun",
     "name": "Sun",
+    "hook": "The star whose light and gravity shape every world in Sol.",
     "type": "star",
     "systemId": "sol",
     "navParentId": "sol",

@@ -1,6 +1,7 @@
 {
     "id": "sol/mars",
     "name": "Mars",
+    "hook": "A cold desert with ancient river valleys carved into its surface.",
     "type": "planet",
     "systemId": "sol",
     "navParentId": "sol",

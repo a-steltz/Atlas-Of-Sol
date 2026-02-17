@@ -1,6 +1,7 @@
 {
     "id": "sol/venus",
     "name": "Venus",
+    "hook": "A shrouded world where runaway greenhouse heat turns the surface into an inferno.",
     "type": "planet",
     "systemId": "sol",
     "navParentId": "sol",

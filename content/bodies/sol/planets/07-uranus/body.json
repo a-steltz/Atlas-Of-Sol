@@ -1,6 +1,7 @@
 {
     "id": "sol/uranus",
     "name": "Uranus",
+    "hook": "An ice giant tipped sideways, rotating like a world rolling around the Sun.",
     "type": "planet",
     "systemId": "sol",
     "navParentId": "sol",
