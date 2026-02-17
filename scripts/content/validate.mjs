@@ -1,3 +1,22 @@
+/**
+ * Atlas of Sol content validation entrypoint.
+ *
+ * Purpose:
+ * - Enforce strict schema validation for `system.json`, `body.json`, and `mission.json`
+ * - Enforce globally unique entity IDs across all indexed content
+ * - Enforce cross-entity reference integrity (`systemId`, `navParentId`, `relations[].targetId`)
+ *
+ * Inputs:
+ * - Recursively scans the `content/` directory under the current project root
+ *
+ * Outputs:
+ * - Prints a success summary when validation passes
+ * - Throws with explicit, path-aware error messages when validation fails
+ *
+ * Exit behavior:
+ * - Exits with code `0` on success
+ * - Exits with code `1` on validation or parse errors
+ */
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
@@ -6,6 +25,10 @@ import { z } from "zod";
 const projectRoot = path.resolve(process.cwd());
 const contentRoot = path.join(projectRoot, "content");
 
+/**
+ * Allowed top-level body types for MVP.
+ * Rings are intentionally excluded because they are embedded data.
+ */
 const bodyTypeSchema = z.enum([
     "star",
     "planet",
@@ -59,6 +82,12 @@ const missionSchema = z
     })
     .strict();
 
+/**
+ * Flattens Zod issue objects into a compact, readable error message.
+ *
+ * @param {import("zod").ZodError} error - Validation error returned by Zod
+ * @returns {string} Human-readable issue list
+ */
 function formatZodError(error) {
     return error.issues
         .map((issue) => {
@@ -68,6 +97,12 @@ function formatZodError(error) {
         .join("; ");
 }
 
+/**
+ * Recursively collects all content schema files under a directory.
+ *
+ * @param {string} dir - Directory to scan
+ * @returns {Promise<string[]>} Absolute file paths for system/body/mission JSON files
+ */
 async function listContentFiles(dir) {
     const entries = await fs.readdir(dir, { withFileTypes: true });
     const results = [];
@@ -93,6 +128,12 @@ async function listContentFiles(dir) {
     return results;
 }
 
+/**
+ * Maps a known content filename to its entity kind.
+ *
+ * @param {string} filename - Basename to classify
+ * @returns {"system" | "body" | "mission" | "unknown"} Entity kind
+ */
 function kindFromFilename(filename) {
     if (filename === "system.json") return "system";
     if (filename === "body.json") return "body";
@@ -100,6 +141,12 @@ function kindFromFilename(filename) {
     return "unknown";
 }
 
+/**
+ * Reads and parses a JSON file with a path-aware parse error.
+ *
+ * @param {string} filePath - Absolute file path
+ * @returns {Promise<unknown>} Parsed JSON object
+ */
 async function readJsonFile(filePath) {
     const raw = await fs.readFile(filePath, "utf8");
     try {
@@ -111,7 +158,18 @@ async function readJsonFile(filePath) {
     }
 }
 
+/**
+ * Validates content files against strict schemas and cross-entity references.
+ *
+ * Validation guarantees:
+ * - global ID uniqueness across all indexed entities
+ * - strict schema shape per entity type
+ * - valid `systemId`, `navParentId`, and `relations[].targetId` references
+ *
+ * @returns {Promise<void>}
+ */
 async function main() {
+    // Phase 0: Skip gracefully for repos that have not introduced content yet.
     const exists = await fs
         .stat(contentRoot)
         .then((s) => s.isDirectory())
@@ -122,6 +180,7 @@ async function main() {
         return;
     }
 
+    // Phase 1: Discover candidate files and build a global entity index by ID.
     const files = await listContentFiles(contentRoot);
     const entitiesById = new Map();
 
@@ -142,6 +201,7 @@ async function main() {
             );
         }
 
+        // Enforce globally unique IDs across systems, bodies, and missions.
         const { id } = parsed.data;
         const existing = entitiesById.get(id);
         if (existing) {
@@ -160,7 +220,7 @@ async function main() {
         });
     }
 
-    // Reference validation: navParentId must exist.
+    // Phase 2: Validate body graph integrity (system linkage + navigation parent + relations).
     for (const [id, entry] of entitiesById.entries()) {
         if (entry.kind !== "body") continue;
 
@@ -186,6 +246,7 @@ async function main() {
             );
         }
 
+        // Body relations may target any existing entity in the global graph.
         if (relations) {
             for (const rel of relations) {
                 if (!entitiesById.has(rel.targetId)) {
@@ -197,7 +258,7 @@ async function main() {
         }
     }
 
-    // Reference validation: mission relation targets must exist.
+    // Phase 3: Validate mission relation targets.
     for (const [id, entry] of entitiesById.entries()) {
         if (entry.kind !== "mission") continue;
         const { relations } = entry.data;

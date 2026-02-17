@@ -17,6 +17,14 @@ export const metadata: Metadata = {
     description: "A wonder-first interactive solar system experience."
 };
 
+/**
+ * Root layout for all app routes.
+ * Applies global font variables and baseline document structure.
+ *
+ * @param {Readonly<{ children: React.ReactNode }>} props - Layout props
+ * @param {React.ReactNode} props.children - Route content to render
+ * @returns {JSX.Element} Root HTML document wrapper
+ */
 export default function RootLayout({
     children
 }: Readonly<{

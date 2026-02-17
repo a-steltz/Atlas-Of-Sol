@@ -1,3 +1,9 @@
+/**
+ * Initial MVP landing page for Atlas of Sol.
+ * Provides project context and the current development starting points.
+ *
+ * @returns {JSX.Element} Home page content
+ */
 export default function Home() {
     return (
         <div className="min-h-screen bg-background text-foreground">
