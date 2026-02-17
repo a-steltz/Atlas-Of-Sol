@@ -1,0 +1,10 @@
+{
+    "id": "sol/kuiper-belt",
+    "name": "Kuiper Belt",
+    "type": "region",
+    "systemId": "sol",
+    "navParentId": "sol",
+    "navOrder": 10,
+    "curationScore": 76,
+    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+}

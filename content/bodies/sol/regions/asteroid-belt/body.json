@@ -1,0 +1,10 @@
+{
+    "id": "sol/asteroid-belt",
+    "name": "Asteroid Belt",
+    "type": "region",
+    "systemId": "sol",
+    "navParentId": "sol",
+    "navOrder": 5,
+    "curationScore": 81,
+    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+}

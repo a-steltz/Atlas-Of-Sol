@@ -84,6 +84,7 @@ const handleRowToggle = (requestId: number) => {
 - `systemId` on bodies must reference an existing system `id`.
 - `type` on bodies must be one of the allowed enum values (see `scripts/content/validate.mjs` / `Atlas of Sol.md`).
 - `relations[].targetId` must reference an existing entity `id`.
+- Folder names are for developer ergonomics only; numeric prefixes (e.g., `05-jupiter`) are allowed for sorting, but JSON `id` values remain canonical and must not be renumbered.
 
 ## Commit Messages
 

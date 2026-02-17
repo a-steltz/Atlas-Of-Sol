@@ -1,0 +1,10 @@
+{
+    "id": "sol/neptune",
+    "name": "Neptune",
+    "type": "planet",
+    "systemId": "sol",
+    "navParentId": "sol",
+    "navOrder": 9,
+    "curationScore": 83,
+    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+}

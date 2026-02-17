@@ -420,6 +420,8 @@ Controlled recursion:
 The folder structure mirrors conceptual hierarchy for developer ergonomics only.
 Runtime hierarchy and navigation are derived exclusively from `navParentId`.
 
+Folder names are not canonical identifiers. Numeric prefixes for local sorting are allowed (e.g., `/planets/05-jupiter`) as long as the entity `id` in JSON remains canonical (e.g., `sol/jupiter`).
+
 The body graph is the single source of truth for:
 
 - Parent-child relationships

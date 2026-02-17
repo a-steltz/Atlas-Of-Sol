@@ -1,0 +1,10 @@
+{
+    "id": "sol/venus",
+    "name": "Venus",
+    "type": "planet",
+    "systemId": "sol",
+    "navParentId": "sol",
+    "navOrder": 2,
+    "curationScore": 86,
+    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+}

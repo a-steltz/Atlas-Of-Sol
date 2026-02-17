@@ -1,0 +1,10 @@
+{
+    "id": "sol/jupiter",
+    "name": "Jupiter",
+    "type": "planet",
+    "systemId": "sol",
+    "navParentId": "sol",
+    "navOrder": 6,
+    "curationScore": 95,
+    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+}

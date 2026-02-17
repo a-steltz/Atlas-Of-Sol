@@ -1,0 +1,10 @@
+{
+    "id": "sol/mercury",
+    "name": "Mercury",
+    "type": "planet",
+    "systemId": "sol",
+    "navParentId": "sol",
+    "navOrder": 1,
+    "curationScore": 82,
+    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+}

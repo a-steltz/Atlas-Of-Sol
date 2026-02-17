@@ -4,6 +4,7 @@
     "type": "star",
     "systemId": "sol",
     "navParentId": "sol",
+    "navOrder": 0,
     "curationScore": 100,
     "relations": []
 }
