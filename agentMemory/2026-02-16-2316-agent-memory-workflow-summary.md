@@ -40,7 +40,7 @@
 - `[committed]` `AGENTS.md` - Added content-validation updates and full `agentMemory` workflow contract.
 - `[committed]` `agentMemory/README.md` - Added journal workflow rules and startup commands.
 - `[committed]` `agentMemory/TEMPLATE.md` - Added required-section template and `N/A` rule.
-- `[uncommitted]` `agentMemory/2026-02-16-2316-agent-memory-workflow-summary.md` - Session handoff journal entry.
+- `[committed]` `agentMemory/2026-02-16-2316-agent-memory-workflow-summary.md` - Session handoff journal entry.
 
 ## Validation Run
 
