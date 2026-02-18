@@ -14,7 +14,7 @@ This file is the “how to work in this repo” guide for coding agents and huma
 
 - `src/app/` — Next.js App Router UI
 - `content/` — MVP content (`system.json`, `body.json`, `mission.json`)
-- `scripts/content/validate.mjs` — Zod schemas + global ID + reference validation
+- `scripts/content/validate.ts` — content validation entrypoint (uses shared schemas in `src/lib/content/schema.ts`)
 - `.github/workflows/ci.yml` — CI (format check, lint, build)
 - `.husky/` — Git hooks (pre-commit runs lint-staged/Prettier)
 
@@ -74,15 +74,15 @@ const handleRowToggle = (requestId: number) => {
 ## Content Rules (Source of Truth)
 
 - The canonical content/model rules are in `Atlas of Sol.md`.
-- Content is **strictly validated** by `scripts/content/validate.mjs`.
-    - Adding new fields to `system.json`/`body.json`/`mission.json` requires updating the validator schema first.
+- Content is **strictly validated** by `scripts/content/validate.ts` using shared schemas in `src/lib/content/schema.ts`.
+    - Adding new fields to `system.json`/`body.json`/`mission.json` requires updating shared schemas first.
 
 ### Content Validation Contract (High-Level)
 
 - All entities must have a globally unique `id` across systems + bodies + missions.
 - `navParentId` must reference an existing entity `id`.
 - `systemId` on bodies must reference an existing system `id`.
-- `type` on bodies must be one of the allowed enum values (see `scripts/content/validate.mjs` / `Atlas of Sol.md`).
+- `type` on bodies must be one of the allowed enum values (see `scripts/content/validate.ts` / `Atlas of Sol.md`).
 - `relations[].targetId` must reference an existing entity `id`.
 - `hook` on bodies is required and must be a non-empty string.
 - `highlights[]`, `howWeKnow[]`, and `openQuestions[]` are optional; if present, each must be a non-empty array of non-empty strings.
@@ -137,6 +137,7 @@ Each journal entry must include these section headers:
 - `## Risks / Notes`
 
 If no decisions or actions apply to a required header, write "N/A". Do not invent content to fill sections.
+
 ## Commit Messages
 
 Use Conventional Commits where possible:
@@ -150,5 +151,5 @@ Use Conventional Commits where possible:
 ## “Do Not” List
 
 - Don’t add environment variables for MVP unless required (static-first).
-- Don’t introduce new content fields without updating `scripts/content/validate.mjs`.
+- Don’t introduce new content fields without updating shared schemas and `scripts/content/validate.ts`.
 - Don’t commit `node_modules/` or `.next/`.

@@ -20,73 +20,25 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
-import { z } from "zod";
+import {
+    bodySchema,
+    kindFromFilename,
+    missionSchema,
+    systemSchema,
+    type AnyEntity,
+    type BodyEntity,
+    type ContentEntityKind,
+    type MissionEntity
+} from "../../src/lib/content/schema";
 
 const projectRoot = path.resolve(process.cwd());
 const contentRoot = path.join(projectRoot, "content");
 
-/**
- * Allowed top-level body types for MVP.
- * Rings are intentionally excluded because they are embedded data.
- */
-const bodyTypeSchema = z.enum([
-    "star",
-    "planet",
-    "moon",
-    "dwarf-planet",
-    "asteroid",
-    "comet",
-    "region"
-]);
-
-const relationSchema = z.object({
-    type: z.string().min(1),
-    targetId: z.string().min(1)
-});
-
-const nonEmptyStringListSchema = z.array(z.string().trim().min(1)).min(1);
-
-const ringsSchema = z
-    .object({
-        description: z.string().optional(),
-        data: z.record(z.unknown()).optional()
-    })
-    .strict();
-
-const systemSchema = z
-    .object({
-        id: z.string().min(1),
-        name: z.string().min(1),
-        description: z.string().optional()
-    })
-    .strict();
-
-const bodySchema = z
-    .object({
-        id: z.string().min(1),
-        name: z.string().min(1),
-        hook: z.string().trim().min(1),
-        type: bodyTypeSchema,
-        systemId: z.string().min(1),
-        navParentId: z.string().min(1),
-        navOrder: z.number().finite().optional(),
-        curationScore: z.number().finite().min(0).max(100),
-        highlights: nonEmptyStringListSchema.optional(),
-        howWeKnow: nonEmptyStringListSchema.optional(),
-        openQuestions: nonEmptyStringListSchema.optional(),
-        relations: z.array(relationSchema).optional(),
-        rings: ringsSchema.optional()
-    })
-    .strict();
-
-const missionSchema = z
-    .object({
-        id: z.string().min(1),
-        name: z.string().min(1),
-        description: z.string().optional(),
-        relations: z.array(relationSchema).optional()
-    })
-    .strict();
+type IndexedEntity = {
+    kind: ContentEntityKind;
+    relPath: string;
+    data: AnyEntity;
+};
 
 /**
  * Flattens Zod issue objects into a compact, readable error message.
@@ -94,10 +46,12 @@ const missionSchema = z
  * @param {import("zod").ZodError} error - Validation error returned by Zod
  * @returns {string} Human-readable issue list
  */
-function formatZodError(error) {
+function formatZodError(error: import("zod").ZodError): string {
     return error.issues
         .map((issue) => {
-            const p = issue.path?.length ? issue.path.join(".") : "(root)";
+            const p = issue.path?.length
+                ? issue.path.map((pathSegment) => String(pathSegment)).join(".")
+                : "(root)";
             return `${p}: ${issue.message}`;
         })
         .join("; ");
@@ -109,9 +63,9 @@ function formatZodError(error) {
  * @param {string} dir - Directory to scan
  * @returns {Promise<string[]>} Absolute file paths for system/body/mission JSON files
  */
-async function listContentFiles(dir) {
+async function listContentFiles(dir: string): Promise<string[]> {
     const entries = await fs.readdir(dir, { withFileTypes: true });
-    const results = [];
+    const results: string[] = [];
 
     for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
@@ -135,31 +89,18 @@ async function listContentFiles(dir) {
 }
 
 /**
- * Maps a known content filename to its entity kind.
- *
- * @param {string} filename - Basename to classify
- * @returns {"system" | "body" | "mission" | "unknown"} Entity kind
- */
-function kindFromFilename(filename) {
-    if (filename === "system.json") return "system";
-    if (filename === "body.json") return "body";
-    if (filename === "mission.json") return "mission";
-    return "unknown";
-}
-
-/**
  * Reads and parses a JSON file with a path-aware parse error.
  *
  * @param {string} filePath - Absolute file path
  * @returns {Promise<unknown>} Parsed JSON object
  */
-async function readJsonFile(filePath) {
+async function readJsonFile(filePath: string): Promise<unknown> {
     const raw = await fs.readFile(filePath, "utf8");
     try {
         return JSON.parse(raw);
     } catch (err) {
         throw new Error(
-            `Invalid JSON in ${path.relative(projectRoot, filePath)}: ${err?.message ?? String(err)}`
+            `Invalid JSON in ${path.relative(projectRoot, filePath)}: ${err instanceof Error ? err.message : String(err)}`
         );
     }
 }
@@ -188,22 +129,22 @@ async function main() {
 
     // Phase 1: Discover candidate files and build a global entity index by ID.
     const files = await listContentFiles(contentRoot);
-    const entitiesById = new Map();
+    const entitiesById = new Map<string, IndexedEntity>();
 
     for (const filePath of files) {
         const filename = path.basename(filePath);
         const kind = kindFromFilename(filename);
-        const json = await readJsonFile(filePath);
+        if (kind === "unknown") continue;
 
-        let parsed;
-        if (kind === "system") parsed = systemSchema.safeParse(json);
-        else if (kind === "body") parsed = bodySchema.safeParse(json);
-        else if (kind === "mission") parsed = missionSchema.safeParse(json);
-        else continue;
+        const json = await readJsonFile(filePath);
+        const relPath = path.relative(projectRoot, filePath);
+        const parseSchema =
+            kind === "system" ? systemSchema : kind === "body" ? bodySchema : missionSchema;
+        const parsed = parseSchema.safeParse(json);
 
         if (!parsed.success) {
             throw new Error(
-                `Schema validation failed for ${path.relative(projectRoot, filePath)}: ${formatZodError(parsed.error)}`
+                `Schema validation failed for ${relPath}: ${formatZodError(parsed.error)}`
             );
         }
 
@@ -212,17 +153,14 @@ async function main() {
         const existing = entitiesById.get(id);
         if (existing) {
             throw new Error(
-                `Duplicate id: "${id}" (found in ${existing.kind}: ${existing.relPath} and ${kind}: ${path.relative(
-                    projectRoot,
-                    filePath
-                )})`
+                `Duplicate id: "${id}" (found in ${existing.kind}: ${existing.relPath} and ${kind}: ${relPath})`
             );
         }
 
         entitiesById.set(id, {
             kind,
-            relPath: path.relative(projectRoot, filePath),
-            data: parsed.data
+            relPath,
+            data: parsed.data as AnyEntity
         });
     }
 
@@ -230,7 +168,7 @@ async function main() {
     for (const [id, entry] of entitiesById.entries()) {
         if (entry.kind !== "body") continue;
 
-        const { navParentId, systemId, relations } = entry.data;
+        const { navParentId, systemId, relations } = entry.data as BodyEntity;
 
         const system = entitiesById.get(systemId);
         if (!system || system.kind !== "system") {
@@ -267,7 +205,7 @@ async function main() {
     // Phase 3: Validate mission relation targets.
     for (const [id, entry] of entitiesById.entries()) {
         if (entry.kind !== "mission") continue;
-        const { relations } = entry.data;
+        const { relations } = entry.data as MissionEntity;
         if (!relations) continue;
 
         for (const rel of relations) {

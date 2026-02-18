@@ -12,7 +12,7 @@
         "start": "next start",
         "lint": "eslint",
         "typecheck": "tsc --noEmit",
-        "content:validate": "node scripts/content/validate.mjs",
+        "content:validate": "tsx scripts/content/validate.ts",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "prepare": "husky"
@@ -34,6 +34,7 @@
         "lint-staged": "^16.2.7",
         "prettier": "^3.6.2",
         "tailwindcss": "^4",
+        "tsx": "^4.21.0",
         "typescript": "^5",
         "zod": "^4.1.5"
     },

@@ -6,7 +6,8 @@ This folder is for continuity, not canonical product rules. Architecture and sch
 
 - `AGENTS.md`
 - `Atlas of Sol.md`
-- `scripts/content/validate.mjs`
+- `src/lib/content/schema.ts`
+- `scripts/content/validate.ts`
 
 ## Startup Context Workflow
 

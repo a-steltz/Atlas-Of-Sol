@@ -456,8 +456,9 @@ Each body entity includes:
 - optional `highlights[]`
 - optional `howWeKnow[]`
 - optional `openQuestions[]`
-- `sources[]`
 - optional `rings` object (for planets)
+
+`sources[]` is intentionally out of the current MVP schema contract and can be added in a later schema version.
 
 For MVP validation, if `highlights[]`, `howWeKnow[]`, or `openQuestions[]` are provided, each must be a non-empty array of non-empty strings.
 
@@ -547,7 +548,7 @@ Atlas of Sol is curated first, exhaustive second.
 
 - Next.js (static-first architecture).
 - Build-time indexing of bodies and missions.
-- Zod (or equivalent) schema validation at build time.
+- Zod schema validation at build time.
 - Client-side interactive zoom UI.
 - Visibility derived from `navParentId` + `curationScore` + density mode.
 - Future backend optional (user accounts, bookmarks, personalization, etc.).
@@ -558,8 +559,17 @@ Validate content during indexing/build:
 
 - Enforce global `id` uniqueness across all indexed entities (systems, bodies, missions, etc.).
 - Validate `body.json.type` using a strict enum.
+- Require non-empty `hook` on bodies.
 - Validate that every `navParentId` references a real entity `id`.
+- Validate that every body `systemId` references a real system `id`.
+- Validate that `relations[].targetId` references a real entity `id`.
 - Validate optional shapes (`navOrder`, `rings`, `relations[]`).
+- Validate optional rich-text arrays (`highlights[]`, `howWeKnow[]`, `openQuestions[]`) as non-empty arrays of non-empty strings when present.
+
+Validation implementation lives in:
+
+- `src/lib/content/schema.ts` (shared schema/type source of truth)
+- `scripts/content/validate.ts` (content validation entrypoint)
 
 Prefer explicit error messages, e.g.:
 
