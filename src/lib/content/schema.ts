@@ -12,6 +12,16 @@
  */
 import { z } from "zod";
 
+const NonEmptyString = z.string().trim().min(1);
+const NonEmptyStringArray = z.array(NonEmptyString).min(1);
+const FiniteNumber = z.number().finite();
+const NonNegativeFiniteNumber = FiniteNumber.min(0);
+const AtmosphereType = z.enum(["substantial-envelope", "thick", "thin", "tenuous", "none"]);
+const LiquidWaterPresence = z.enum(["surface", "subsurface", "transient", "past", "none"]);
+const MagneticFieldType = z.enum(["global", "weak-global", "crustal-remnant", "induced", "none"]);
+const ActivityLevel = z.enum(["confirmed", "suspected", "past", "none"]);
+const DiscoveryYearPrecision = z.enum(["exact", "estimated", "prehistoric"]);
+
 /**
  * Allowed top-level body types for MVP.
  * Rings are intentionally excluded because they are embedded data.
@@ -33,7 +43,7 @@ export const relationSchema = z.object({
     targetId: z.string().min(1)
 });
 
-export const nonEmptyStringListSchema = z.array(z.string().trim().min(1)).min(1);
+export const nonEmptyStringListSchema = NonEmptyStringArray;
 
 export const ringsSchema = z
     .object({
@@ -43,6 +53,122 @@ export const ringsSchema = z
         data: z.record(z.string(), z.unknown()).optional()
     })
     .strict();
+
+const sourceSchema = z
+    .object({
+        attribution: NonEmptyString,
+        title: NonEmptyString,
+        url: NonEmptyString.optional(),
+        year: FiniteNumber.int().optional(),
+        publisher: NonEmptyString.optional()
+    })
+    .strict();
+
+const physicalSchema = z
+    .object({
+        meanRadiusKm: FiniteNumber.optional(),
+        massKg: FiniteNumber.optional(),
+        densityKgM3: FiniteNumber.optional(),
+        surfaceGravityMS2: FiniteNumber.optional(),
+        escapeVelocityMS: FiniteNumber.optional()
+    })
+    .strict();
+
+const orbitSchema = z
+    .object({
+        semiMajorAxisKm: FiniteNumber.optional(),
+        orbitalPeriodDays: FiniteNumber.optional(),
+        eccentricity: FiniteNumber.min(0).lt(1).optional(),
+        inclinationDeg: FiniteNumber.optional(),
+        rotationPeriodHours: FiniteNumber.optional(),
+        retrogradeRotation: z.boolean().optional(),
+        tidallyLocked: z.boolean().optional()
+    })
+    .strict();
+
+const atmosphereSchema = z
+    .object({
+        type: AtmosphereType.optional(),
+        mainComponents: NonEmptyStringArray.optional(),
+        surfacePressureBar: NonNegativeFiniteNumber.optional()
+    })
+    .strict()
+    .superRefine((value, context) => {
+        if (value.type === "none") {
+            if (value.mainComponents !== undefined) {
+                context.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: ["mainComponents"],
+                    message: 'mainComponents must be omitted when atmosphere type is "none"'
+                });
+            }
+
+            if (value.surfacePressureBar !== undefined) {
+                context.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: ["surfacePressureBar"],
+                    message: 'surfacePressureBar must be omitted when atmosphere type is "none"'
+                });
+            }
+        }
+
+        if (value.type === "substantial-envelope" && value.surfacePressureBar !== undefined) {
+            context.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["surfacePressureBar"],
+                message:
+                    'surfacePressureBar must be omitted when atmosphere type is "substantial-envelope"'
+            });
+        }
+    });
+
+const compositionSchema = z
+    .object({
+        primary: NonEmptyStringArray.optional(),
+        atmosphere: atmosphereSchema.optional(),
+        internalStructure: NonEmptyStringArray.optional()
+    })
+    .strict();
+
+const environmentSchema = z
+    .object({
+        meanTemperatureK: NonNegativeFiniteNumber.optional(),
+        minTemperatureK: NonNegativeFiniteNumber.optional(),
+        maxTemperatureK: NonNegativeFiniteNumber.optional(),
+        liquidWaterPresence: LiquidWaterPresence.optional(),
+        magneticFieldType: MagneticFieldType.optional(),
+        volcanicActivity: ActivityLevel.optional(),
+        cryovolcanicActivity: ActivityLevel.optional(),
+        tectonicActivity: ActivityLevel.optional()
+    })
+    .strict();
+
+const discoverySchema = z
+    .object({
+        discoveredBy: NonEmptyString.optional(),
+        discoveryYear: FiniteNumber.int().optional(),
+        discoveryYearPrecision: DiscoveryYearPrecision.optional(),
+        discoveryMethod: NonEmptyString.optional()
+    })
+    .strict()
+    .superRefine((value, context) => {
+        if (value.discoveryYear !== undefined && value.discoveryYearPrecision === undefined) {
+            context.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["discoveryYearPrecision"],
+                message: "discoveryYearPrecision is required when discoveryYear is provided"
+            });
+        }
+
+        if (value.discoveryYearPrecision === "prehistoric" && value.discoveryYear !== undefined) {
+            context.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["discoveryYear"],
+                message:
+                    'discoveryYear must be omitted when discoveryYearPrecision is "prehistoric"'
+            });
+        }
+    });
 
 export const systemSchema = z
     .object({
@@ -70,21 +196,80 @@ export const bodySchema = z
         /** Parent node identifier in the navigation hierarchy. */
         navParentId: z.string().min(1),
         /** Optional sibling ordering value within a navigation group. */
-        navOrder: z.number().finite().optional(),
+        navOrder: FiniteNumber.optional(),
         /** Editorial ranking used for curation and density mode thresholds. */
-        curationScore: z.number().finite().min(0).max(100),
+        curationScore: FiniteNumber.min(0).max(100),
         /** Optional short highlight bullets about the body. */
         highlights: nonEmptyStringListSchema.optional(),
         /** Optional evidence/measurement bullets explaining how we know. */
         howWeKnow: nonEmptyStringListSchema.optional(),
         /** Optional unresolved question bullets for future learning prompts. */
         openQuestions: nonEmptyStringListSchema.optional(),
+        /** Optional source list supporting cited statements (`[n]` maps to `sources[n-1]`). */
+        sources: z.array(sourceSchema).min(1).optional(),
+        /** Optional narrative synthesis with inline citations (`[n]`). */
+        scientificSynthesis: NonEmptyString.optional(),
+        /** Optional physical properties stored in canonical SI-compatible units. */
+        physical: physicalSchema.optional(),
+        /** Optional orbital and rotational characteristics. */
+        orbit: orbitSchema.optional(),
+        /** Optional composition details (bulk, atmosphere, interior structure). */
+        composition: compositionSchema.optional(),
+        /** Optional environmental conditions; temperatures are stored in Kelvin. */
+        environment: environmentSchema.optional(),
+        /** Optional discovery metadata and year confidence semantics. */
+        discovery: discoverySchema.optional(),
         /** Optional graph edges linking this body to other entities. */
         relations: z.array(relationSchema).optional(),
         /** Optional embedded ring metadata; rings are not standalone entities. */
         rings: ringsSchema.optional()
     })
-    .strict();
+    .strict()
+    .superRefine((value, context) => {
+        const citations: Array<{ n: number; path: (string | number)[] }> = [];
+
+        if (value.highlights) {
+            for (const [index, highlight] of value.highlights.entries()) {
+                for (const match of highlight.matchAll(/\[(\d+)\]/g)) {
+                    citations.push({
+                        n: Number.parseInt(match[1], 10),
+                        path: ["highlights", index]
+                    });
+                }
+            }
+        }
+
+        if (value.scientificSynthesis) {
+            for (const match of value.scientificSynthesis.matchAll(/\[(\d+)\]/g)) {
+                citations.push({
+                    n: Number.parseInt(match[1], 10),
+                    path: ["scientificSynthesis"]
+                });
+            }
+        }
+
+        if (citations.length === 0) return;
+
+        if (!value.sources) {
+            context.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["sources"],
+                message:
+                    "sources are required when citations are present (`[n]` maps to `sources[n-1]`)"
+            });
+            return;
+        }
+
+        for (const citation of citations) {
+            if (citation.n < 1 || citation.n > value.sources.length) {
+                context.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: citation.path,
+                    message: `citation [${citation.n}] is out of range (valid range: [1] to [${value.sources.length}])`
+                });
+            }
+        }
+    });
 
 export const missionSchema = z
     .object({

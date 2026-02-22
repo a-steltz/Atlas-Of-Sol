@@ -457,10 +457,37 @@ Each body entity includes:
 - optional `howWeKnow[]`
 - optional `openQuestions[]`
 - optional `rings` object (for planets)
-
-`sources[]` is intentionally out of the current MVP schema contract and can be added in a later schema version.
+- optional `physical` object (scientific physical properties)
+- optional `orbit` object (orbital/rotational values, including optional `retrogradeRotation`)
+- optional `composition` object (bulk composition + atmosphere + interior)
+- optional `environment` object (Kelvin temperatures + classified water/magnetic/activity states)
+- optional `discovery` object (discoverer/year/precision/method)
+- optional `scientificSynthesis` string (2–3 paragraphs with inline citations)
+- optional `sources[]` array (structured source metadata)
 
 For MVP validation, if `highlights[]`, `howWeKnow[]`, or `openQuestions[]` are provided, each must be a non-empty array of non-empty strings.
+
+Scientific backbone validation (all optional; omit when unknown):
+
+- Numeric fields are validated as finite numbers.
+- `orbit.eccentricity`, when present, must satisfy `0 <= e < 1`.
+- `orbit.retrogradeRotation`, when present, is a boolean.
+- `environment.meanTemperatureK`, `environment.minTemperatureK`, and `environment.maxTemperatureK`, when present, must be `>= 0`.
+- `composition.atmosphere.surfacePressureBar`, when present, must be `>= 0`.
+- `composition.atmosphere.type`, when present, must be one of `substantial-envelope`, `thick`, `thin`, `tenuous`, or `none`.
+- If `composition.atmosphere.type` is `none`, `composition.atmosphere.mainComponents` and `composition.atmosphere.surfacePressureBar` must be omitted.
+- If `composition.atmosphere.type` is `substantial-envelope`, `composition.atmosphere.surfacePressureBar` must be omitted.
+- `composition.primary[]`, `composition.internalStructure[]`, and `composition.atmosphere.mainComponents[]`, when present, must be non-empty arrays of non-empty strings.
+- `environment.liquidWaterPresence`, when present, must be one of `surface`, `subsurface`, `transient`, `past`, or `none`.
+- `environment.magneticFieldType`, when present, must be one of `global`, `weak-global`, `crustal-remnant`, `induced`, or `none`.
+- `environment.volcanicActivity`, `environment.cryovolcanicActivity`, and `environment.tectonicActivity`, when present, must be one of `confirmed`, `suspected`, `past`, or `none`.
+- `sources[]`, when present, must contain non-empty structured entries (`attribution`, `title`; optional `url`, `year`, `publisher`).
+- `scientificSynthesis`, when present, must be a non-empty string.
+- Inline citations are 1-based (`[n]`) and map to `sources[n-1]`; cited indices must satisfy `1 <= n <= sources.length`.
+- `discovery.discoveryYear`, when present, must be an integer and may be negative (astronomical year numbering).
+- `discovery.discoveryYearPrecision`, when present, must be one of `exact`, `estimated`, or `prehistoric`.
+- If `discovery.discoveryYear` is present, `discovery.discoveryYearPrecision` is required.
+- If `discovery.discoveryYearPrecision` is `prehistoric`, `discovery.discoveryYear` must be omitted.
 
 Example `body.json` (abridged):
 
@@ -565,6 +592,10 @@ Validate content during indexing/build:
 - Validate that `relations[].targetId` references a real entity `id`.
 - Validate optional shapes (`navOrder`, `rings`, `relations[]`).
 - Validate optional rich-text arrays (`highlights[]`, `howWeKnow[]`, `openQuestions[]`) as non-empty arrays of non-empty strings when present.
+- Validate optional scientific backbone fields (`physical`, `orbit`, `composition`, `environment`, `discovery`) with finite-number and enum constraints.
+- Validate atmosphere classification constraints (`none` omits components/pressure; `substantial-envelope` omits pressure) and enum-based environment activity/water/magnetic fields.
+- Validate citation mapping (`[n]` -> `sources[n-1]`) and ensure cited source indexes are in range.
+- Validate discovery year semantics (`discoveryYear` requires precision, and `prehistoric` precision forbids year).
 
 Validation implementation lives in:
 

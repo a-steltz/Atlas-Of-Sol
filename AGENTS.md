@@ -86,6 +86,16 @@ const handleRowToggle = (requestId: number) => {
 - `relations[].targetId` must reference an existing entity `id`.
 - `hook` on bodies is required and must be a non-empty string.
 - `highlights[]`, `howWeKnow[]`, and `openQuestions[]` are optional; if present, each must be a non-empty array of non-empty strings.
+- Scientific backbone fields on bodies (`physical`, `orbit`, `composition`, `environment`, `discovery`) are optional and should be omitted when unknown.
+- In `orbit`, `retrogradeRotation` is optional and `rotationPeriodHours` remains numeric.
+- Scientific backbone numeric fields must be finite numbers; `orbit.eccentricity` must satisfy `0 <= e < 1`; Kelvin temperatures and atmospheric `surfacePressureBar` must be `>= 0`.
+- In `composition.atmosphere`, `type` is optional with enum values (`substantial-envelope`, `thick`, `thin`, `tenuous`, `none`).
+- If `composition.atmosphere.type` is `none`, omit `mainComponents` and `surfacePressureBar`; if `type` is `substantial-envelope`, omit `surfacePressureBar`.
+- In `environment`, use enum fields (`liquidWaterPresence`, `magneticFieldType`, `volcanicActivity`, `cryovolcanicActivity`, `tectonicActivity`) instead of booleans.
+- `sources[]` is optional; if present, each source requires `attribution` and `title` with optional `url`, `year`, and `publisher`.
+- `scientificSynthesis` is optional and stored as a non-empty string (paragraph breaks can be encoded with newlines).
+- Inline citations are 1-based (`[n]`) and map to `sources[n-1]`; if citations are present, `sources` must exist and each cited index must satisfy `1 <= n <= sources.length`.
+- Discovery metadata uses `discoveryYearPrecision` (`exact` | `estimated` | `prehistoric`); if `discoveryYear` is present, precision is required, and `prehistoric` requires omitting `discoveryYear`.
 - Folder names are for developer ergonomics only; numeric prefixes (e.g., `05-jupiter`) are allowed for sorting, but JSON `id` values remain canonical and must not be renumbered.
 
 ## Agent Memory Workflow
