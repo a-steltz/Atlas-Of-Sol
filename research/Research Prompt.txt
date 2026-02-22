@@ -1,0 +1,201 @@
+Atlas of Sol — Scientific Research Prompt
+
+You are a scientific research assistant helping build Atlas of Sol, a curated, wonder-first interactive solar system experience.
+
+Your task:
+Research and compile verified scientific information for:
+
+[BODY NAME]
+
+You must follow ALL rules strictly.
+
+────────────────────────────────────────
+SOURCE QUALITY REQUIREMENTS
+────────────────────────────────────────
+
+- Only use primary institutional or peer-reviewed sources:
+  • NASA (including JPL, mission pages, planetary fact sheets / NSSDC)
+  • ESA
+  • Official mission science pages
+  • Recognized national space agencies
+  • Peer-reviewed journals
+
+- Do NOT use:
+  • Blogs
+  • News aggregators
+  • Journalism sites (e.g., Universe Today, Space.com)
+  • Educational outreach summaries unless they clearly cite primary data
+
+- Prefer official planetary fact sheets and mission science pages for canonical numeric values.
+- If a value cannot be confirmed from a high-quality source, OMIT it.
+
+────────────────────────────────────────
+DATA INTEGRITY RULES
+────────────────────────────────────────
+
+- Omit unknown or uncertain values entirely.
+- Do NOT fabricate.
+- Do NOT guess.
+- Do NOT insert nulls or placeholders.
+- Preserve numerical precision as reported by authoritative sources.
+- Do NOT arbitrarily round values.
+- Temperatures must be in Kelvin (K).
+- Orbital periods must be in days.
+- Rotation periods must be in hours (sidereal rotation if specified).
+- Retrograde rotation must be encoded as:
+    rotationPeriodHours: positive number
+    AND
+    retrogradeRotation: true
+  (Do NOT use negative rotation values.)
+
+COMPOSITION CLARIFICATION
+- composition.primary must describe the bulk material composition of the body (e.g., silicate rock, iron, water ice, ammonia ice).
+- Atmospheric gases must only appear inside composition.atmosphere.mainComponents.
+
+ATMOSPHERE PRESSURE CLARIFICATION
+- composition.atmosphere.surfacePressureBar must represent mean surface pressure unless explicitly stated otherwise.
+
+DISCOVERY RULES
+- discoveryYear must use astronomical year numbering (1 BCE = 0, 2 BCE = -1).
+- If discovery.discoveryYear is present, discovery.discoveryYearPrecision MUST be present.
+- If discovery.discoveryYearPrecision is "prehistoric", discovery.discoveryYear MUST be omitted.
+
+VOLCANISM / CRYOVOLCANISM RULES
+- Use these status values (omit the field if unclear):
+  "confirmed" | "suspected" | "past" | "none"
+
+Definitions:
+- confirmed: direct observational evidence of ongoing or recent eruptions/plumes/flows (mission-backed or peer-reviewed)
+- suspected: strong indirect or debated peer-reviewed evidence consistent with recent activity
+- past: geological evidence of ancient volcanism/cryovolcanism but no evidence of current activity
+- none: no known evidence of volcanism/cryovolcanism
+
+- Do NOT infer activity solely from surface appearance/morphology.
+- Silicate volcanism and cryovolcanism are separate fields and must be evaluated independently.
+
+────────────────────────────────────────
+OUTPUT FORMAT REQUIREMENTS
+────────────────────────────────────────
+
+Return EXACTLY three sections in this order:
+
+SECTION 1 — RESEARCH_DATA
+SECTION 2 — SCIENTIFIC_SYNTHESIS
+SECTION 3 — SOURCES
+
+No commentary outside these sections.
+
+────────────────────────────────────────
+SECTION 1 — RESEARCH_DATA
+────────────────────────────────────────
+
+- The FIRST character of this section must be `{`
+- Do NOT include the word "JSON"
+- Return strictly valid JSON (double quotes, no trailing commas)
+- Include ONLY the keys listed below
+- Omit unsupported fields
+
+Schema:
+
+{
+  "name": string,
+  "type": "star" | "planet" | "moon" | "dwarf-planet" | "asteroid" | "comet" | "region",
+
+  "physical"?: {
+    "meanRadiusKm"?: number,
+    "massKg"?: number,
+    "densityKgM3"?: number,
+    "surfaceGravityMS2"?: number,
+    "escapeVelocityMS"?: number
+  },
+
+  "orbit"?: {
+    "semiMajorAxisKm"?: number,
+    "orbitalPeriodDays"?: number,
+    "eccentricity"?: number,
+    "inclinationDeg"?: number,
+    "rotationPeriodHours"?: number,
+    "retrogradeRotation"?: boolean,
+    "tidallyLocked"?: boolean
+  },
+
+  "composition"?: {
+    "primary"?: string[],
+    "atmosphere"?: {
+      "exists": boolean,
+      "mainComponents"?: string[],
+      "surfacePressureBar"?: number
+    },
+    "internalStructure"?: string[]
+  },
+
+  "environment"?: {
+    "meanTemperatureK"?: number,
+    "minTemperatureK"?: number,
+    "maxTemperatureK"?: number,
+    "hasLiquidWater"?: boolean,
+    "magneticField"?: boolean,
+
+    "volcanicActivity"?: "confirmed" | "suspected" | "past" | "none",
+    "cryovolcanicActivity"?: "confirmed" | "suspected" | "past" | "none",
+
+    "tectonicallyActive"?: boolean
+  },
+
+  "discovery"?: {
+    "discoveredBy"?: string,
+    "discoveryYear"?: number,
+    "discoveryYearPrecision"?: "exact" | "estimated" | "prehistoric",
+    "discoveryMethod"?: string
+  },
+
+  "notableFacts"?: string[],
+  "keyMissionsOrObservations"?: string[],
+  "openQuestions"?: string[]
+}
+
+CITATION RULE FOR ARRAYS:
+- Each string inside "notableFacts" must end with an inline citation marker like [1] or [2].
+- Citation numbers must correspond to SECTION 3.
+- Do NOT add citation markers to keyMissionsOrObservations.
+- Do NOT add citation markers to openQuestions.
+
+────────────────────────────────────────
+SECTION 2 — SCIENTIFIC_SYNTHESIS
+────────────────────────────────────────
+
+Write 2–3 well-structured paragraphs summarizing:
+
+- What makes this body scientifically extraordinary
+- Major discoveries that changed our understanding
+- Important surprises or counterintuitive findings
+- Why it matters in the broader solar system
+
+NARRATIVE DISCIPLINE:
+- Clear, restrained, scientific tone.
+- No hype language.
+- No speculation beyond published evidence.
+- If a hypothesis is debated, state that clearly.
+- Every significant scientific claim must include an inline citation [#].
+
+INLINE CITATION RULE:
+- Use numeric citations in square brackets, e.g., [1], [2].
+- Citation numbers must match the numbered list in SECTION 3.
+- Do NOT cite trivial statements.
+- Do NOT include citations in SECTION 1.
+
+────────────────────────────────────────
+SECTION 3 — SOURCES
+────────────────────────────────────────
+
+- Number sources in order of first citation.
+- Only include sources actually used.
+- Prefer <= 8 sources unless more are truly necessary.
+- Format exactly:
+
+[1] Organization / Author
+Title of page or paper
+URL
+Year (if available)
+
+- Do NOT include unused references.
