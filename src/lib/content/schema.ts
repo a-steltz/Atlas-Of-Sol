@@ -207,8 +207,8 @@ export const bodySchema = z
         openQuestions: nonEmptyStringListSchema.optional(),
         /** Optional source list supporting cited statements (`[n]` maps to `sources[n-1]`). */
         sources: z.array(sourceSchema).min(1).optional(),
-        /** Optional narrative synthesis with inline citations (`[n]`). */
-        scientificSynthesis: NonEmptyString.optional(),
+        /** Optional narrative synthesis paragraphs with inline citations (`[n]`). */
+        scientificSynthesis: nonEmptyStringListSchema.optional(),
         /** Optional physical properties stored in canonical SI-compatible units. */
         physical: physicalSchema.optional(),
         /** Optional orbital and rotational characteristics. */
@@ -240,11 +240,13 @@ export const bodySchema = z
         }
 
         if (value.scientificSynthesis) {
-            for (const match of value.scientificSynthesis.matchAll(/\[(\d+)\]/g)) {
-                citations.push({
-                    n: Number.parseInt(match[1], 10),
-                    path: ["scientificSynthesis"]
-                });
+            for (const [index, paragraph] of value.scientificSynthesis.entries()) {
+                for (const match of paragraph.matchAll(/\[(\d+)\]/g)) {
+                    citations.push({
+                        n: Number.parseInt(match[1], 10),
+                        path: ["scientificSynthesis", index]
+                    });
+                }
             }
         }
 

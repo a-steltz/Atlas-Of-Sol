@@ -225,7 +225,7 @@ Return **EXACTLY** one JSON object.
 
 ### SCIENTIFIC SYNTHESIS CONTENT RULES
 
-- `scientificSynthesis` should be 2–3 well-structured paragraphs covering:
+- `scientificSynthesis` should be a 2–3 item paragraph array, where each string is one well-structured paragraph and the set collectively covers:
 
 1. What makes this body scientifically extraordinary
 2. Major discoveries that changed understanding
@@ -251,7 +251,7 @@ Return **EXACTLY** one JSON object.
 - Each string inside `highlights` must end with a citation marker like `[1]`.
 - Do **NOT** add citations to `howWeKnow`.
 - Do **NOT** add citations to `openQuestions`.
-- `scientificSynthesis`, if present, must include inline citations for significant scientific claims.
+- `scientificSynthesis[]`, if present, must include inline citations for significant scientific claims.
 
 **Schema:**
 
@@ -310,7 +310,7 @@ Return **EXACTLY** one JSON object.
     "discoveryMethod"?: string
   },
 
-  "scientificSynthesis"?: string,
+  "scientificSynthesis"?: string[],
 
   "highlights"?: string[],
   "howWeKnow"?: string[],

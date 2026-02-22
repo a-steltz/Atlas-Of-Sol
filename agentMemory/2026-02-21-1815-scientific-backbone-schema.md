@@ -54,5 +54,11 @@
 ## Addendum (2026-02-22, Sources/Synthesis Contract)
 
 - Removed `composition.atmosphere.exists` and use `composition.atmosphere.type` as the atmosphere indicator.
-- Added JSON-native `sources[]` metadata and optional JSON-native `scientificSynthesis` (single string).
+- Added JSON-native `sources[]` metadata and optional JSON-native `scientificSynthesis` field.
 - Defined citation mapping explicitly as 1-based inline markers (`[n]`) mapped to 0-based source arrays (`sources[n-1]`), with range validation.
+
+## Addendum (2026-02-22, Scientific Synthesis Array)
+
+- Updated `scientificSynthesis` from an optional single string to an optional paragraph array (`string[]`).
+- Validation now follows existing narrative-array rules: if present, `scientificSynthesis[]` must be non-empty and each entry must be a non-empty string.
+- Citation parsing/validation now scans each synthesis paragraph and reports indexed paths (`scientificSynthesis[i]`).

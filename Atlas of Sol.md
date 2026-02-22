@@ -462,7 +462,7 @@ Each body entity includes:
 - optional `composition` object (bulk composition + atmosphere + interior)
 - optional `environment` object (Kelvin temperatures + classified water/magnetic/activity states)
 - optional `discovery` object (discoverer/year/precision/method)
-- optional `scientificSynthesis` string (2–3 paragraphs with inline citations)
+- optional `scientificSynthesis[]` array (2–3 paragraph strings with inline citations)
 - optional `sources[]` array (structured source metadata)
 
 For MVP validation, if `highlights[]`, `howWeKnow[]`, or `openQuestions[]` are provided, each must be a non-empty array of non-empty strings.
@@ -482,7 +482,7 @@ Scientific backbone validation (all optional; omit when unknown):
 - `environment.magneticFieldType`, when present, must be one of `global`, `weak-global`, `crustal-remnant`, `induced`, or `none`.
 - `environment.volcanicActivity`, `environment.cryovolcanicActivity`, and `environment.tectonicActivity`, when present, must be one of `confirmed`, `suspected`, `past`, or `none`.
 - `sources[]`, when present, must contain non-empty structured entries (`attribution`, `title`; optional `url`, `year`, `publisher`).
-- `scientificSynthesis`, when present, must be a non-empty string.
+- `scientificSynthesis[]`, when present, must be a non-empty array of non-empty strings.
 - Inline citations are 1-based (`[n]`) and map to `sources[n-1]`; cited indices must satisfy `1 <= n <= sources.length`.
 - `discovery.discoveryYear`, when present, must be an integer and may be negative (astronomical year numbering).
 - `discovery.discoveryYearPrecision`, when present, must be one of `exact`, `estimated`, or `prehistoric`.

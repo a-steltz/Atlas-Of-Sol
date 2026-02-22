@@ -93,7 +93,7 @@ const handleRowToggle = (requestId: number) => {
 - If `composition.atmosphere.type` is `none`, omit `mainComponents` and `surfacePressureBar`; if `type` is `substantial-envelope`, omit `surfacePressureBar`.
 - In `environment`, use enum fields (`liquidWaterPresence`, `magneticFieldType`, `volcanicActivity`, `cryovolcanicActivity`, `tectonicActivity`) instead of booleans.
 - `sources[]` is optional; if present, each source requires `attribution` and `title` with optional `url`, `year`, and `publisher`.
-- `scientificSynthesis` is optional and stored as a non-empty string (paragraph breaks can be encoded with newlines).
+- `scientificSynthesis[]` is optional; if present, it must be a non-empty array of non-empty paragraph strings.
 - Inline citations are 1-based (`[n]`) and map to `sources[n-1]`; if citations are present, `sources` must exist and each cited index must satisfy `1 <= n <= sources.length`.
 - Discovery metadata uses `discoveryYearPrecision` (`exact` | `estimated` | `prehistoric`); if `discoveryYear` is present, precision is required, and `prehistoric` requires omitting `discoveryYear`.
 - Folder names are for developer ergonomics only; numeric prefixes (e.g., `05-jupiter`) are allowed for sorting, but JSON `id` values remain canonical and must not be renumbered.
