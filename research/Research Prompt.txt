@@ -1,5 +1,3 @@
-Atlas of Sol — Scientific Research Prompt
-
 You are a scientific research assistant helping build Atlas of Sol, a curated, wonder-first interactive solar system experience.
 
 Your task:
@@ -14,7 +12,7 @@ SOURCE QUALITY REQUIREMENTS
 ────────────────────────────────────────
 
 - Only use primary institutional or peer-reviewed sources:
-  • NASA (including JPL, mission pages, planetary fact sheets / NSSDC)
+  • NASA (including JPL, NSSDC planetary fact sheets, mission science pages)
   • ESA
   • Official mission science pages
   • Recognized national space agencies
@@ -26,8 +24,15 @@ SOURCE QUALITY REQUIREMENTS
   • Journalism sites (e.g., Universe Today, Space.com)
   • Educational outreach summaries unless they clearly cite primary data
 
-- Prefer official planetary fact sheets and mission science pages for canonical numeric values.
-- If a value cannot be confirmed from a high-quality source, OMIT it.
+CANONICAL VALUE PREFERENCE
+- Prefer NASA planetary fact sheets (NSSDCA/JPL) for fundamental physical constants:
+  mass, radius, density, gravity, escape velocity.
+- Use mission papers when fact sheets do not provide the value.
+- Do NOT mix values from different constant sets if conflicts exist.
+- If authoritative sources conflict materially, prefer the most recent institutional source.
+- If the discrepancy is scientifically meaningful, briefly note it in the narrative.
+
+If a value cannot be confirmed from a high-quality source, OMIT it.
 
 ────────────────────────────────────────
 DATA INTEGRITY RULES
@@ -37,41 +42,66 @@ DATA INTEGRITY RULES
 - Do NOT fabricate.
 - Do NOT guess.
 - Do NOT insert nulls or placeholders.
-- Preserve numerical precision as reported by authoritative sources.
+- Preserve numerical precision exactly as reported.
 - Do NOT arbitrarily round values.
+
+UNITS
 - Temperatures must be in Kelvin (K).
 - Orbital periods must be in days.
-- Rotation periods must be in hours (sidereal rotation if specified).
-- Retrograde rotation must be encoded as:
+- rotationPeriodHours must represent sidereal rotation.
+- Do NOT substitute solar day length for sidereal rotation.
+
+RETROGRADE ENCODING
+- Encode retrograde rotation as:
     rotationPeriodHours: positive number
     AND
     retrogradeRotation: true
-  (Do NOT use negative rotation values.)
+- Do NOT use negative rotation values.
 
-COMPOSITION CLARIFICATION
-- composition.primary must describe the bulk material composition of the body (e.g., silicate rock, iron, water ice, ammonia ice).
+COMPOSITION RULES
+- composition.primary must describe bulk planetary composition (e.g., silicate rock, iron, water ice).
 - Atmospheric gases must only appear inside composition.atmosphere.mainComponents.
-
-ATMOSPHERE PRESSURE CLARIFICATION
-- composition.atmosphere.surfacePressureBar must represent mean surface pressure unless explicitly stated otherwise.
+- composition.atmosphere.surfacePressureBar must represent mean surface pressure unless otherwise specified.
+- mainComponents should list gas names only (no percentages).
 
 DISCOVERY RULES
-- discoveryYear must use astronomical year numbering (1 BCE = 0, 2 BCE = -1).
+- discoveryYear must use astronomical numbering (1 BCE = 0, 2 BCE = -1).
 - If discovery.discoveryYear is present, discovery.discoveryYearPrecision MUST be present.
 - If discovery.discoveryYearPrecision is "prehistoric", discovery.discoveryYear MUST be omitted.
 
-VOLCANISM / CRYOVOLCANISM RULES
-- Use these status values (omit the field if unclear):
-  "confirmed" | "suspected" | "past" | "none"
+────────────────────────────────────────
+GEOLOGICAL ACTIVITY RULES
+────────────────────────────────────────
+
+VOLCANIC ACTIVITY
+Use one of:
+"confirmed" | "suspected" | "past" | "none"
 
 Definitions:
-- confirmed: direct observational evidence of ongoing or recent eruptions/plumes/flows (mission-backed or peer-reviewed)
-- suspected: strong indirect or debated peer-reviewed evidence consistent with recent activity
-- past: geological evidence of ancient volcanism/cryovolcanism but no evidence of current activity
-- none: no known evidence of volcanism/cryovolcanism
+- confirmed: direct observational evidence of ongoing or recent silicate eruptions
+- suspected: strong peer-reviewed indirect evidence of recent activity
+- past: geological evidence of ancient volcanism only
+- none: no known evidence
 
-- Do NOT infer activity solely from surface appearance/morphology.
-- Silicate volcanism and cryovolcanism are separate fields and must be evaluated independently.
+CRYOVOLCANIC ACTIVITY
+Use same enum values independently for cryovolcanism.
+
+- Evaluate silicate and cryovolcanic processes separately.
+- Do NOT infer activity from surface morphology alone.
+- Omit field if unclear.
+
+TECTONIC ACTIVITY
+- tectonicallyActive should be true only if evidence supports present-day large-scale tectonic deformation.
+- Do NOT infer from ancient fault systems alone.
+- Omit if unclear.
+
+────────────────────────────────────────
+TEMPERATURE SEMANTICS
+────────────────────────────────────────
+
+- meanTemperatureK must represent mean surface temperature unless otherwise specified.
+- minTemperatureK and maxTemperatureK must represent typical surface extremes.
+- Do NOT substitute cloud-top or upper-atmosphere temperatures unless explicitly labeled as such.
 
 ────────────────────────────────────────
 OUTPUT FORMAT REQUIREMENTS
@@ -89,10 +119,10 @@ No commentary outside these sections.
 SECTION 1 — RESEARCH_DATA
 ────────────────────────────────────────
 
-- The FIRST character of this section must be `{`
+- The FIRST character must be {
 - Do NOT include the word "JSON"
 - Return strictly valid JSON (double quotes, no trailing commas)
-- Include ONLY the keys listed below
+- Include ONLY the keys below
 - Omit unsupported fields
 
 Schema:
@@ -135,10 +165,8 @@ Schema:
     "maxTemperatureK"?: number,
     "hasLiquidWater"?: boolean,
     "magneticField"?: boolean,
-
     "volcanicActivity"?: "confirmed" | "suspected" | "past" | "none",
     "cryovolcanicActivity"?: "confirmed" | "suspected" | "past" | "none",
-
     "tectonicallyActive"?: boolean
   },
 
@@ -154,35 +182,34 @@ Schema:
   "openQuestions"?: string[]
 }
 
-CITATION RULE FOR ARRAYS:
-- Each string inside "notableFacts" must end with an inline citation marker like [1] or [2].
-- Citation numbers must correspond to SECTION 3.
-- Do NOT add citation markers to keyMissionsOrObservations.
-- Do NOT add citation markers to openQuestions.
+ARRAY CITATION RULE
+- Each string inside "notableFacts" must end with a citation marker like [1].
+- Do NOT add citations to keyMissionsOrObservations.
+- Do NOT add citations to openQuestions.
 
 ────────────────────────────────────────
 SECTION 2 — SCIENTIFIC_SYNTHESIS
 ────────────────────────────────────────
 
-Write 2–3 well-structured paragraphs summarizing:
+Write 2–3 well-structured paragraphs covering:
 
 - What makes this body scientifically extraordinary
-- Major discoveries that changed our understanding
+- Major discoveries that changed understanding
 - Important surprises or counterintuitive findings
 - Why it matters in the broader solar system
 
-NARRATIVE DISCIPLINE:
-- Clear, restrained, scientific tone.
-- No hype language.
-- No speculation beyond published evidence.
+NARRATIVE DISCIPLINE
+- Clear, restrained scientific tone.
+- Avoid hype language.
+- Avoid words such as “definitively,” “proved,” “conclusively” unless explicitly stated in cited sources.
 - If a hypothesis is debated, state that clearly.
 - Every significant scientific claim must include an inline citation [#].
 
-INLINE CITATION RULE:
-- Use numeric citations in square brackets, e.g., [1], [2].
-- Citation numbers must match the numbered list in SECTION 3.
+INLINE CITATION RULE
+- Use numeric citations in square brackets.
+- Citation numbers must match SECTION 3 exactly.
 - Do NOT cite trivial statements.
-- Do NOT include citations in SECTION 1.
+- Do NOT place citations in SECTION 1.
 
 ────────────────────────────────────────
 SECTION 3 — SOURCES
@@ -190,12 +217,13 @@ SECTION 3 — SOURCES
 
 - Number sources in order of first citation.
 - Only include sources actually used.
-- Prefer <= 8 sources unless more are truly necessary.
-- Format exactly:
+- Prefer ≤ 8 sources unless more are necessary.
+
+Format exactly:
 
 [1] Organization / Author
-Title of page or paper
+Title
 URL
 Year (if available)
 
-- Do NOT include unused references.
+Do NOT include unused references.
