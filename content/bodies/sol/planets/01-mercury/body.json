@@ -7,12 +7,6 @@
     "navParentId": "sol",
     "navOrder": 1,
     "curationScore": 82,
-    "relations": [
-        {
-            "type": "orbits",
-            "targetId": "sol/sun"
-        }
-    ],
     "highlights": [
         "Mercury possesses an unexpectedly large iron core, comprising about 85% of its planetary radius and leaving only a thin outer shell of silicate mantle and crust [4].",
         "Despite its extreme proximity to the Sun, permanently shadowed craters at Mercury's poles act as cold traps containing significant deposits of water ice [2].",

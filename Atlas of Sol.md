@@ -327,22 +327,11 @@ The body graph is the single source of truth.
 
 #### Rings
 
-Rings are embedded within a planet’s `body.json` for MVP.
+Rings are not currently modeled as a structured field in `body.json`.
 
-They are modeled as a JSON object inside the planet entity rather than as separate bodies, for example:
+For the current MVP, ring details live in narrative/scientific text fields when needed.
 
-```json
-{
-    "rings": {
-        "description": "Saturn’s main rings.",
-        "data": {}
-    }
-}
-```
-
-This keeps structure simple while allowing expansion later if ring systems become navigable entities.
-
-Rings do not participate in hierarchical navigation or density filtering in the MVP.
+If ring systems later need dedicated behavior (filtering, graph links, standalone views), a structured rings model can be reintroduced.
 
 ### Regions
 
@@ -452,11 +441,9 @@ Each body entity includes:
 - optional `navOrder`
 - `systemId`
 - `curationScore`
-- `relations[]`
 - optional `highlights[]`
 - optional `howWeKnow[]`
 - optional `openQuestions[]`
-- optional `rings` object (for planets)
 - optional `physical` object (scientific physical properties)
 - optional `orbit` object (orbital/rotational values, including optional `retrogradeRotation`)
 - optional `composition` object (bulk composition + atmosphere + interior)
@@ -499,8 +486,7 @@ Example `body.json` (abridged):
     "systemId": "sol",
     "navParentId": "sol/jupiter",
     "navOrder": 1,
-    "curationScore": 92,
-    "relations": [{ "type": "orbits", "targetId": "sol/jupiter" }]
+    "curationScore": 92
 }
 ```
 
@@ -530,9 +516,13 @@ It does **not** restrict future lens-based filtering (e.g., Ocean Worlds, Geolog
 
 Curation Score represents the museum’s editorial recommendation, not scientific importance.
 
-## Relations Array
+## Mission Relations Array (Dormant)
 
-Allows graph-style modeling independent of hierarchy.
+`relations[]` is currently reserved for mission entities.
+
+Body hierarchy and placement are modeled with `systemId` + `navParentId` only.
+
+There are currently no `mission.json` files in content, but the mission schema remains in place for future ingestion.
 
 Schema shape:
 
@@ -550,15 +540,14 @@ Examples:
 - `resonanceWith`
 - `orbits`
 
-This supports:
+When mission content is introduced, this supports:
 
 - Mission linking
 - Cross-system references
-- Future binary stars and barycenters
-- Non-hierarchical relationships
+- Non-hierarchical mission relationships
 
 Hierarchy is defined only by `navParentId`.
-Everything else belongs in `relations`.
+Additional body-level graph links are out of scope for the current contract.
 
 # 9️ - What We Are Explicitly Not Doing
 
@@ -589,8 +578,8 @@ Validate content during indexing/build:
 - Require non-empty `hook` on bodies.
 - Validate that every `navParentId` references a real entity `id`.
 - Validate that every body `systemId` references a real system `id`.
-- Validate that `relations[].targetId` references a real entity `id`.
-- Validate optional shapes (`navOrder`, `rings`, `relations[]`).
+- Validate that mission `relations[].targetId` references a real entity `id`.
+- Validate optional shapes (for example, `navOrder` and mission `relations[]`).
 - Validate optional rich-text arrays (`highlights[]`, `howWeKnow[]`, `openQuestions[]`) as non-empty arrays of non-empty strings when present.
 - Validate optional scientific backbone fields (`physical`, `orbit`, `composition`, `environment`, `discovery`) with finite-number and enum constraints.
 - Validate atmosphere classification constraints (`none` omits components/pressure; `substantial-envelope` omits pressure) and enum-based environment activity/water/magnetic fields.

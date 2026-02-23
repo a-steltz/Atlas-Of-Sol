@@ -7,12 +7,6 @@
     "navParentId": "sol",
     "navOrder": 9,
     "curationScore": 83,
-    "relations": [
-        {
-            "type": "orbits",
-            "targetId": "sol/sun"
-        }
-    ],
     "highlights": [
         "First planet discovered through mathematical prediction rather than empirical observation [4].",
         "Atmospheric winds reach the highest speeds recorded in the solar system, approaching 600 meters per second [2].",

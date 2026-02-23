@@ -45,15 +45,6 @@ export const relationSchema = z.object({
 
 export const nonEmptyStringListSchema = NonEmptyStringArray;
 
-export const ringsSchema = z
-    .object({
-        /** Human-readable overview of the ring system. */
-        description: z.string().optional(),
-        /** Flexible payload for ring-specific data fields. */
-        data: z.record(z.string(), z.unknown()).optional()
-    })
-    .strict();
-
 const sourceSchema = z
     .object({
         attribution: NonEmptyString,
@@ -218,11 +209,7 @@ export const bodySchema = z
         /** Optional environmental conditions; temperatures are stored in Kelvin. */
         environment: environmentSchema.optional(),
         /** Optional discovery metadata and year confidence semantics. */
-        discovery: discoverySchema.optional(),
-        /** Optional graph edges linking this body to other entities. */
-        relations: z.array(relationSchema).optional(),
-        /** Optional embedded ring metadata; rings are not standalone entities. */
-        rings: ringsSchema.optional()
+        discovery: discoverySchema.optional()
     })
     .strict()
     .superRefine((value, context) => {
@@ -273,6 +260,10 @@ export const bodySchema = z
         }
     });
 
+/**
+ * Dormant contract: missions are not yet present in `content/`, but this schema is
+ * intentionally retained so mission ingestion can be enabled without redesigning types.
+ */
 export const missionSchema = z
     .object({
         /** Globally unique canonical mission identifier. */

@@ -7,12 +7,6 @@
     "navParentId": "sol",
     "navOrder": 7,
     "curationScore": 94,
-    "relations": [
-        {
-            "type": "orbits",
-            "targetId": "sol/sun"
-        }
-    ],
     "highlights": [
         "Saturn is the least dense planet in the solar system, with a bulk density of 687 kg/m³, which is lower than that of liquid water [1].",
         "The planet possesses a highly complex ring system made primarily of water ice, which recent gravitational data indicates formed relatively recently in solar system history [2].",

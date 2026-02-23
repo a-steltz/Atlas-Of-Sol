@@ -145,15 +145,6 @@ function validateReferenceIntegrity(entriesById: Map<string, IndexedEntity>): vo
             );
         }
 
-        if (body.relations) {
-            for (const relation of body.relations) {
-                if (!entriesById.has(relation.targetId)) {
-                    throw new Error(
-                        `Invalid relation targetId: "${relation.targetId}" on body "${id}" (${entry.relPath})`
-                    );
-                }
-            }
-        }
     }
 
     for (const [id, entry] of entriesById.entries()) {

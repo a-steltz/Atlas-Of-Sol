@@ -7,12 +7,6 @@
     "navParentId": "sol",
     "navOrder": 3,
     "curationScore": 98,
-    "relations": [
-        {
-            "type": "orbits",
-            "targetId": "sol/sun"
-        }
-    ],
     "highlights": [
         "Harbors a stable surface ocean covering approximately 71% of the planetary surface [1].",
         "Possesses an active tectonic plate system that drives global geochemical cycling and massive geologic resurfacing [2].",

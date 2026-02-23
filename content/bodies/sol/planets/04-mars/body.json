@@ -7,12 +7,6 @@
     "navParentId": "sol",
     "navOrder": 4,
     "curationScore": 93,
-    "relations": [
-        {
-            "type": "orbits",
-            "targetId": "sol/sun"
-        }
-    ],
     "highlights": [
         "Mars features the largest volcano in the solar system, Olympus Mons, and one of the largest canyon systems, Valles Marineris. [1]",
         "The planet's distinctive red hue is the result of widespread iron(III) oxide (rust) covering much of its surface. [1]",

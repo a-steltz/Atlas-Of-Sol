@@ -6,6 +6,5 @@
     "systemId": "sol",
     "navParentId": "sol",
     "navOrder": 10,
-    "curationScore": 76,
-    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+    "curationScore": 76
 }

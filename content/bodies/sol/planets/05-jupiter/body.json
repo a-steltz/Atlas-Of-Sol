@@ -7,12 +7,6 @@
     "navParentId": "sol",
     "navOrder": 6,
     "curationScore": 95,
-    "relations": [
-        {
-            "type": "orbits",
-            "targetId": "sol/sun"
-        }
-    ],
     "highlights": [
         "Jupiter contains more than twice the mass of all other planets in the solar system combined [1].",
         "The planet possesses the strongest intrinsic magnetic field of any planetary body, generating a vast magnetosphere filled with extreme radiation belts [4].",

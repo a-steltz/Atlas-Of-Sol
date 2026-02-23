@@ -83,7 +83,7 @@ const handleRowToggle = (requestId: number) => {
 - `navParentId` must reference an existing entity `id`.
 - `systemId` on bodies must reference an existing system `id`.
 - `type` on bodies must be one of the allowed enum values (see `scripts/content/validate.ts` / `Atlas of Sol.md`).
-- `relations[].targetId` must reference an existing entity `id`.
+- `relations[].targetId` on missions must reference an existing entity `id`.
 - `hook` on bodies is required and must be a non-empty string.
 - `highlights[]`, `howWeKnow[]`, and `openQuestions[]` are optional; if present, each must be a non-empty array of non-empty strings.
 - Scientific backbone fields on bodies (`physical`, `orbit`, `composition`, `environment`, `discovery`) are optional and should be omitted when unknown.

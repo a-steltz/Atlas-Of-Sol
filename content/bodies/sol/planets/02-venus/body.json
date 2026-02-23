@@ -7,12 +7,6 @@
     "navParentId": "sol",
     "navOrder": 2,
     "curationScore": 86,
-    "relations": [
-        {
-            "type": "orbits",
-            "targetId": "sol/sun"
-        }
-    ],
     "highlights": [
         "Venus is the hottest planet in the solar system, with a mean surface temperature of 737 K driven by an extreme runaway greenhouse effect [1].",
         "It rotates backwards compared to most planets, with a single sidereal day taking approximately 243 Earth days to complete [1].",

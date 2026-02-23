@@ -4,7 +4,7 @@
  * Purpose:
  * - Enforce strict schema validation for `system.json`, `body.json`, and `mission.json`
  * - Enforce globally unique entity IDs across all indexed content
- * - Enforce cross-entity reference integrity (`systemId`, `navParentId`, `relations[].targetId`)
+ * - Enforce cross-entity reference integrity (`systemId`, `navParentId`, mission `relations[].targetId`)
  *
  * Inputs:
  * - Recursively scans the `content/` directory under the current project root
@@ -111,7 +111,7 @@ async function readJsonFile(filePath: string): Promise<unknown> {
  * Validation guarantees:
  * - global ID uniqueness across all indexed entities
  * - strict schema shape per entity type
- * - valid `systemId`, `navParentId`, and `relations[].targetId` references
+ * - valid `systemId`, `navParentId`, and mission `relations[].targetId` references
  *
  * @returns {Promise<void>}
  */
@@ -164,11 +164,11 @@ async function main() {
         });
     }
 
-    // Phase 2: Validate body graph integrity (system linkage + navigation parent + relations).
+    // Phase 2: Validate body graph integrity (system linkage + navigation parent).
     for (const [id, entry] of entitiesById.entries()) {
         if (entry.kind !== "body") continue;
 
-        const { navParentId, systemId, relations } = entry.data as BodyEntity;
+        const { navParentId, systemId } = entry.data as BodyEntity;
 
         const system = entitiesById.get(systemId);
         if (!system || system.kind !== "system") {
@@ -190,16 +190,6 @@ async function main() {
             );
         }
 
-        // Body relations may target any existing entity in the global graph.
-        if (relations) {
-            for (const rel of relations) {
-                if (!entitiesById.has(rel.targetId)) {
-                    throw new Error(
-                        `Invalid relation targetId: "${rel.targetId}" on body "${id}" (${entry.relPath})`
-                    );
-                }
-            }
-        }
     }
 
     // Phase 3: Validate mission relation targets.
