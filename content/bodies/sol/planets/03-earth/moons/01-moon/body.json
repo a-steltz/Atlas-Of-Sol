@@ -1,0 +1,122 @@
+{
+    "id": "sol/earth/moon",
+    "name": "Moon",
+    "hook": "Earth's companion world preserves the impact history of the inner solar system.",
+    "type": "moon",
+    "systemId": "sol",
+    "navParentId": "sol/earth",
+    "navOrder": 1,
+    "curationScore": 96,
+    "physical": {
+        "meanRadiusKm": 1737.4,
+        "massKg": 7.342e+22,
+        "densityKgM3": 3344,
+        "surfaceGravityMS2": 1.62,
+        "escapeVelocityMS": 2380
+    },
+    "orbit": {
+        "semiMajorAxisKm": 384400,
+        "orbitalPeriodDays": 27.3217,
+        "eccentricity": 0.0549,
+        "inclinationDeg": 5.145,
+        "rotationPeriodHours": 655.728,
+        "retrogradeRotation": false,
+        "tidallyLocked": true
+    },
+    "composition": {
+        "primary": [
+            "silicate rock",
+            "iron"
+        ],
+        "atmosphere": {
+            "type": "tenuous",
+            "mainComponents": [
+                "Helium",
+                "Neon",
+                "Hydrogen",
+                "Argon"
+            ]
+        },
+        "internalStructure": [
+            "solid iron-rich inner core",
+            "fluid outer core",
+            "partial melt layer",
+            "silicate mantle",
+            "anorthositic crust"
+        ]
+    },
+    "environment": {
+        "meanTemperatureK": 250,
+        "minTemperatureK": 100,
+        "maxTemperatureK": 390,
+        "liquidWaterPresence": "none",
+        "magneticFieldType": "crustal-remnant",
+        "volcanicActivity": "past",
+        "cryovolcanicActivity": "none",
+        "tectonicActivity": "confirmed"
+    },
+    "discovery": {
+        "discoveryYearPrecision": "prehistoric",
+        "discoveryMethod": "naked-eye observation"
+    },
+    "scientificSynthesis": [
+        "The Moon represents a critical cornerstone for planetary science, serving as a relatively pristine geological archive of the inner solar system's early history [2]. Its heavily cratered surface provides a vital baseline for radiometric dating and crater counting techniques used to estimate the ages of other planetary bodies across the solar system [2]. The prevalent hypothesis for its origin, the Giant Impact Hypothesis, suggests the Moon formed from the debris of a collision between a Mars-sized body and the early Earth, fundamentally shaping the evolution and axial stability of our planet [5].",
+        "Over the past few decades, our understanding of the Moon has shifted from a completely dry, geologically dead world to a far more dynamic environment. Discoveries of water ice in permanently shadowed polar craters have transformed the Moon into a key target for future exploration and potential resource utilization [4]. Furthermore, high-resolution orbital imagery and re-analysis of seismic data from the Apollo missions have revealed fresh thrust faults, indicating that the Moon is undergoing active, albeit slow, tectonic deformation as its interior cools and shrinks [6]."
+    ],
+    "highlights": [
+        "The Moon is Earth's only natural satellite and the fifth largest moon in the solar system [1].",
+        "It is tidally locked to Earth, meaning the same hemisphere constantly faces our planet [1].",
+        "The lunar surface is characterized by dark volcanic maria, heavily cratered highlands, and a layer of fine dust called regolith [2].",
+        "Its tenuous exosphere is continually replenished by solar wind, outgassing, and micrometeoroid impacts [3].",
+        "Permanently shadowed craters at the lunar poles harbor significant deposits of water ice [4]."
+    ],
+    "howWeKnow": [
+        "Seismic data from Apollo surface experiments mapping internal structure.",
+        "Laser ranging reflecting off retroreflectors placed on the surface to measure orbital distance and dynamics with extreme precision.",
+        "Orbital spectroscopy and imaging from missions like Lunar Reconnaissance Orbiter (LRO) and Chandrayaan to map surface composition and confirm polar ice.",
+        "Radiometric dating and geochemical analysis of returned lunar rock samples from the Apollo, Luna, and Chang'e missions."
+    ],
+    "openQuestions": [
+        "What is the precise composition and physical state of the deepest lunar mantle and core?",
+        "How exactly are volatiles like water delivered, redistributed, and trapped across the lunar surface?",
+        "Are there highly localized areas of persistent outgassing or very recent volcanic activity?"
+    ],
+    "sources": [
+        {
+            "attribution": "Williams, D. R.",
+            "title": "Moon Fact Sheet",
+            "url": "[https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html](https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html)",
+            "publisher": "NASA NSSDCA"
+        },
+        {
+            "attribution": "Heiken, G., Vaniman, D., & French, B. M.",
+            "title": "Lunar Sourcebook: A User's Guide to the Moon",
+            "year": 1991,
+            "publisher": "Cambridge University Press"
+        },
+        {
+            "attribution": "Elphic, R. C., et al.",
+            "title": "The Lunar Atmosphere and Dust Environment Explorer Mission",
+            "year": 2014,
+            "publisher": "Space Science Reviews"
+        },
+        {
+            "attribution": "Li, S., et al.",
+            "title": "Direct evidence of surface exposed water ice in the lunar polar regions",
+            "year": 2018,
+            "publisher": "PNAS"
+        },
+        {
+            "attribution": "Canup, R. M., & Asphaug, E.",
+            "title": "Origin of the Moon in a giant impact near the end of the Earth's formation",
+            "year": 2001,
+            "publisher": "Nature"
+        },
+        {
+            "attribution": "Watters, T. R., et al.",
+            "title": "Shallow seismic activity and young thrust faults on the Moon",
+            "year": 2019,
+            "publisher": "Nature Geoscience"
+        }
+    ]
+}
