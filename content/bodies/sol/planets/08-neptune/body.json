@@ -7,5 +7,113 @@
     "navParentId": "sol",
     "navOrder": 9,
     "curationScore": 83,
-    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+    "relations": [
+        {
+            "type": "orbits",
+            "targetId": "sol/sun"
+        }
+    ],
+    "highlights": [
+        "First planet discovered through mathematical prediction rather than empirical observation [4].",
+        "Atmospheric winds reach the highest speeds recorded in the solar system, approaching 600 meters per second [2].",
+        "Magnetic field is tilted 47 degrees from the rotation axis and offset from the planet's center by over half its radius [3].",
+        "Radiates over twice as much energy into space as it receives from the Sun, indicating a significant internal heat source [1]."
+    ],
+    "howWeKnow": [
+        "The Voyager 2 flyby in 1989 provided the only direct spacecraft measurements of the planet's mass, magnetic field topology, and fine atmospheric dynamics.",
+        "Ground-based observatories and space-based telescopes conduct long-term continuous monitoring of atmospheric features, storm systems, and cloud evolution.",
+        "Laboratory high-pressure experiments simulate the extreme conditions of the mantle to understand the planet's interior structure, conductivity, and dynamo generation."
+    ],
+    "openQuestions": [
+        "What is the physical mechanism and source of the internal heat that drives the exceptionally strong atmospheric winds?",
+        "How stable is the unusual offset, multi-polar magnetic field over long time scales?",
+        "What is the exact ratio of rock to ice in the deep interior?",
+        "Are the observed transient dark spots manifestations of deep convective processes or localized atmospheric instabilities?"
+    ],
+    "sources": [
+        {
+            "attribution": "NASA Space Science Data Coordinated Archive",
+            "title": "Neptune Fact Sheet",
+            "url": "[https://nssdc.gsfc.nasa.gov/planetary/factsheet/neptunefact.html](https://nssdc.gsfc.nasa.gov/planetary/factsheet/neptunefact.html)",
+            "year": 2024,
+            "publisher": "NASA"
+        },
+        {
+            "attribution": "NASA Science",
+            "title": "Neptune: In Depth",
+            "url": "[https://science.nasa.gov/neptune/in-depth/](https://www.google.com/search?q=https://science.nasa.gov/neptune/in-depth/)",
+            "year": 2023,
+            "publisher": "NASA"
+        },
+        {
+            "attribution": "Ness, N. F., et al.",
+            "title": "Magnetic Fields at Neptune",
+            "year": 1989,
+            "publisher": "Science"
+        },
+        {
+            "attribution": "NASA Jet Propulsion Laboratory",
+            "title": "Voyager 2 Mission Overview: Neptune",
+            "url": "[https://voyager.jpl.nasa.gov/mission/science/neptune/](https://www.google.com/search?q=https://voyager.jpl.nasa.gov/mission/science/neptune/)",
+            "year": 2023,
+            "publisher": "NASA"
+        }
+    ],
+    "scientificSynthesis": [
+        "Neptune represents a distinct class of planetary bodies known as ice giants, fundamentally differing in composition from the gas giants Jupiter and Saturn. Its bulk composition is dominated by heavier elements, primarily oxygen, carbon, nitrogen, and sulfur, which exist as a dense, hot supercritical fluid mantle above an Earth-mass rocky core [1]. A small fraction of atmospheric methane absorbs red light, contributing to the planet's characteristic deep blue coloration [2].",
+        "The planet possesses a highly unusual, complex magnetic field that is strongly tilted at an angle of 47 degrees relative to the rotation axis and significantly offset from the physical center of the planet by more than half its radius [3]. This non-dipolar structure suggests the dynamo generating the field operates within a thin spherical shell of electrically conducting fluid, likely ionized water and ammonia in the mantle, rather than deep within the core [1].",
+        "Despite its extreme distance from the Sun and receiving minimal solar irradiation, Neptune exhibits highly dynamic atmospheric weather systems. It features the highest recorded wind speeds in the solar system, with atmospheric flows reaching nearly 600 meters per second, alongside large, transient dark storm systems [4]. The internal heat mechanism required to drive this intense meteorological activity remains a subject of ongoing scientific investigation [2]."
+    ],
+    "physical": {
+        "meanRadiusKm": 24622,
+        "massKg": 1.02409e+26,
+        "densityKgM3": 1638,
+        "surfaceGravityMS2": 11.15,
+        "escapeVelocityMS": 23.5
+    },
+    "orbit": {
+        "semiMajorAxisKm": 4495060000,
+        "orbitalPeriodDays": 60189,
+        "eccentricity": 0.0113,
+        "inclinationDeg": 1.769,
+        "rotationPeriodHours": 16.11,
+        "retrogradeRotation": false,
+        "tidallyLocked": false
+    },
+    "composition": {
+        "primary": [
+            "water",
+            "ammonia",
+            "methane",
+            "silicate rock",
+            "iron"
+        ],
+        "atmosphere": {
+            "type": "substantial-envelope",
+            "mainComponents": [
+                "Hydrogen",
+                "Helium",
+                "Methane"
+            ]
+        },
+        "internalStructure": [
+            "rocky core",
+            "water-ammonia-methane mantle",
+            "hydrogen-helium-methane atmosphere"
+        ]
+    },
+    "environment": {
+        "meanTemperatureK": 72,
+        "liquidWaterPresence": "none",
+        "magneticFieldType": "global",
+        "volcanicActivity": "none",
+        "cryovolcanicActivity": "none",
+        "tectonicActivity": "none"
+    },
+    "discovery": {
+        "discoveredBy": "Urbain Le Verrier, John Couch Adams, Johann Galle",
+        "discoveryYear": 1846,
+        "discoveryYearPrecision": "exact",
+        "discoveryMethod": "Mathematical prediction followed by telescopic observation"
+    }
 }

@@ -7,5 +7,107 @@
     "navParentId": "sol",
     "navOrder": 6,
     "curationScore": 95,
-    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+    "relations": [
+        {
+            "type": "orbits",
+            "targetId": "sol/sun"
+        }
+    ],
+    "highlights": [
+        "Jupiter contains more than twice the mass of all other planets in the solar system combined [1].",
+        "The planet possesses the strongest intrinsic magnetic field of any planetary body, generating a vast magnetosphere filled with extreme radiation belts [4].",
+        "Precision gravity mapping reveals Jupiter's core is 'dilute' and lacks a sharp boundary, blending heavy elements smoothly into the planet's metallic hydrogen layer [2].",
+        "Jupiter's rapid rotation period of under 10 hours drives fierce atmospheric jet streams that extend thousands of kilometers deep into its interior [3]."
+    ],
+    "howWeKnow": [
+        "Orbital dynamics and precision microwave gravity mapping from the Juno spacecraft reveal the complex internal mass distribution and deep zonal winds.",
+        "Microwave radiometry is used to peer beneath the opaque ammonia clouds to measure the water and ammonia abundance deep in the atmosphere.",
+        "Magnetometers and particle detectors on orbiting spacecraft measure the immense strength, topology, and plasma interactions of the jovian magnetosphere.",
+        "Spectroscopic observations from Earth-based telescopes and orbital observatories determine the atmospheric composition and track dynamic cloud features over time."
+    ],
+    "openQuestions": [
+        "Does a small, solid inner core exist at the very center of Jupiter's extensive dilute core region?",
+        "What is the exact global abundance of water deep within Jupiter's atmosphere, and what does it reveal about where the planet initially formed?",
+        "How are the extreme energetic particles within Jupiter's magnetosphere accelerated to such high velocities?",
+        "What are the precise deep-interior fluid dynamics that maintain the Great Red Spot and other long-lived cyclonic storms over centuries?"
+    ],
+    "sources": [
+        {
+            "attribution": "NASA Space Science Data Coordinated Archive (NSSDCA)",
+            "title": "Jupiter Fact Sheet",
+            "publisher": "NASA/JPL"
+        },
+        {
+            "attribution": "Wahl, S. M. et al.",
+            "title": "Comparing Jupiter interior structure models to Juno gravity measurements and the role of a dilute core",
+            "year": 2017,
+            "publisher": "Geophysical Research Letters"
+        },
+        {
+            "attribution": "Kaspi, Y. et al.",
+            "title": "Jupiter's atmospheric jet streams extend thousands of kilometres deep",
+            "year": 2018,
+            "publisher": "Nature"
+        },
+        {
+            "attribution": "Bagenal, F. et al.",
+            "title": "Magnetospheric Science Objectives of the Juno Mission",
+            "year": 2014,
+            "publisher": "Space Science Reviews"
+        }
+    ],
+    "scientificSynthesis": [
+        "Jupiter is the undisputed giant of the solar system, commanding more than twice the mass of all other planets combined. This immense gravity well played a crucial architectural role in the early solar system, shaping the orbits of smaller bodies and sweeping the asteroid belt. Its bulk composition of hydrogen and helium directly mirrors the primordial solar nebula, making the planet a critical comparative baseline for understanding gas giant formation both locally and in exoplanetary systems [1].",
+        "Data from the Juno spacecraft has fundamentally altered planetary science by revealing that Jupiter does not possess a compact, solid central core as historically assumed. Instead, precision gravity measurements indicate a 'dilute' or fuzzy core—a vast, poorly defined region where heavy elements are dissolved and mixed into the surrounding liquid metallic hydrogen [2].\n\n\nThis unexpected internal architecture may be the lingering scar of an ancient, colossal impact with an Earth-sized planetary embryo that shattered the original proto-core.",
+        "Furthermore, Juno's observations have shown that Jupiter's iconic atmospheric bands and extreme jet streams are not merely superficial weather patterns, but extend up to 3,000 kilometers deep into the interior before transitioning into a rigidly rotating fluid [3]. Deep within, extreme pressures strip electrons from hydrogen, creating a conductive liquid metallic hydrogen layer that powers the strongest planetary magnetic field in the solar system, generating a vast, highly energetic magnetosphere [4]."
+    ],
+    "physical": {
+        "meanRadiusKm": 69911,
+        "massKg": 1.89819e+27,
+        "densityKgM3": 1326,
+        "surfaceGravityMS2": 24.79,
+        "escapeVelocityMS": 59500
+    },
+    "orbit": {
+        "semiMajorAxisKm": 778570000,
+        "orbitalPeriodDays": 4332.589,
+        "eccentricity": 0.0489,
+        "inclinationDeg": 1.304,
+        "rotationPeriodHours": 9.925,
+        "retrogradeRotation": false,
+        "tidallyLocked": false
+    },
+    "composition": {
+        "primary": [
+            "Hydrogen",
+            "Helium"
+        ],
+        "atmosphere": {
+            "type": "substantial-envelope",
+            "mainComponents": [
+                "Hydrogen",
+                "Helium",
+                "Methane",
+                "Ammonia"
+            ]
+        },
+        "internalStructure": [
+            "Dilute central core of dissolved heavy elements",
+            "Liquid metallic hydrogen mantle",
+            "Liquid molecular hydrogen envelope"
+        ]
+    },
+    "environment": {
+        "meanTemperatureK": 165,
+        "liquidWaterPresence": "none",
+        "magneticFieldType": "global",
+        "volcanicActivity": "none",
+        "cryovolcanicActivity": "none",
+        "tectonicActivity": "none"
+    },
+    "discovery": {
+        "discoveredBy": "Ancient astronomers",
+        "discoveryYearPrecision": "prehistoric",
+        "discoveryMethod": "Naked-eye observation"
+    }
 }

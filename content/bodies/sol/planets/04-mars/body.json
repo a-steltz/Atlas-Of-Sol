@@ -7,5 +7,109 @@
     "navParentId": "sol",
     "navOrder": 4,
     "curationScore": 93,
-    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+    "relations": [
+        {
+            "type": "orbits",
+            "targetId": "sol/sun"
+        }
+    ],
+    "highlights": [
+        "Mars features the largest volcano in the solar system, Olympus Mons, and one of the largest canyon systems, Valles Marineris. [1]",
+        "The planet's distinctive red hue is the result of widespread iron(III) oxide (rust) covering much of its surface. [1]",
+        "Geological and mineralogical evidence strongly indicates Mars hosted a thick atmosphere and stable surface liquid water billions of years ago. [3]",
+        "The MAVEN orbiter established that solar wind stripping is primarily responsible for the depletion of the early Martian atmosphere. [4]",
+        "Seismic data from the InSight mission revealed a fully liquid iron-alloy core and ongoing marsquake activity, proving the planet's interior is not completely inactive. [2]"
+    ],
+    "howWeKnow": [
+        "Surface rovers and landers conducting in-situ chemical, mineralogical, and meteorological analyses of rocks and soil.",
+        "Orbiters utilizing high-resolution imaging, ground-penetrating radar, and spectroscopy to map surface composition and subsurface water-ice structures.",
+        "Seismometers deployed directly on the surface to measure interior density, state, and structure through seismic wave propagation.",
+        "Isotopic analysis of Martian meteorites that were ejected from the planet and later fell to Earth."
+    ],
+    "openQuestions": [
+        "Did microbial life ever emerge on Mars during its early habitable periods, and could organic biosignatures be preserved in ancient lake deposits?",
+        "Are there extant subsurface aquifers of liquid water or brine, and could they support extremophile life today?",
+        "What exact mechanism and timeline drove the rapid cessation of the Martian global magnetic dynamo?",
+        "Is the recent seismic activity detected on Mars purely tectonic in origin, or is there ongoing subsurface magmatic movement?"
+    ],
+    "sources": [
+        {
+            "attribution": "NSSDCA / JPL",
+            "title": "Mars Fact Sheet",
+            "publisher": "NASA"
+        },
+        {
+            "attribution": "Banerdt et al.",
+            "title": "Initial results from the InSight mission on Mars",
+            "year": 2020,
+            "publisher": "Nature Geoscience"
+        },
+        {
+            "attribution": "Grotzinger et al.",
+            "title": "A Habitable Fluvio-Lacustrine Environment at Yellowknife Bay, Gale Crater, Mars",
+            "year": 2014,
+            "publisher": "Science"
+        },
+        {
+            "attribution": "Jakosky et al.",
+            "title": "MAVEN observations of the response of Mars to an interplanetary coronal mass ejection",
+            "year": 2015,
+            "publisher": "Science"
+        }
+    ],
+    "scientificSynthesis": [
+        "Mars is uniquely compelling as a terrestrial planet that preserves a highly accessible, rich geological record of a once-habitable environment. Unlike Earth, where active tectonic recycling continually destroys ancient crust, the Martian surface retains vast networks of ancient river valleys, lakebeds, and deltaic deposits indicating widespread liquid water flowed across its surface during the Noachian and Hesperian periods [1]. This preservation makes Mars a primary laboratory for understanding early planetary evolution and the necessary conditions that might foster the emergence of life [3].",
+        "Observations from decades of orbital and landed missions have fundamentally shifted the understanding of Mars from a static, geologically dead world to a dynamic one with a complex and evolving history. Data from the MAVEN mission conclusively revealed that the loss of the planet's global magnetic field early in its history allowed the solar wind to strip away much of its previously thick atmosphere, driving the drastic climate transition to its current cold, arid state [4]. Furthermore, the InSight lander overturned assumptions of an inactive interior by detecting hundreds of marsquakes, indicating that the planet remains seismically active, particularly in the Cerberus Fossae region where faulting suggests ongoing tectonic processes [2]."
+    ],
+    "physical": {
+        "meanRadiusKm": 3389.5,
+        "massKg": 6.4171e+23,
+        "densityKgM3": 3934,
+        "surfaceGravityMS2": 3.71,
+        "escapeVelocityMS": 5030
+    },
+    "orbit": {
+        "semiMajorAxisKm": 227920000,
+        "orbitalPeriodDays": 686.98,
+        "eccentricity": 0.0934,
+        "inclinationDeg": 1.85,
+        "rotationPeriodHours": 24.6229,
+        "retrogradeRotation": false,
+        "tidallyLocked": false
+    },
+    "composition": {
+        "primary": [
+            "silicate rock",
+            "iron oxides"
+        ],
+        "atmosphere": {
+            "type": "thin",
+            "mainComponents": [
+                "carbon dioxide",
+                "nitrogen",
+                "argon"
+            ],
+            "surfacePressureBar": 0.0061
+        },
+        "internalStructure": [
+            "liquid iron-sulfur core",
+            "silicate mantle",
+            "basaltic crust"
+        ]
+    },
+    "environment": {
+        "meanTemperatureK": 210,
+        "minTemperatureK": 130,
+        "maxTemperatureK": 308,
+        "liquidWaterPresence": "past",
+        "magneticFieldType": "crustal-remnant",
+        "volcanicActivity": "past",
+        "cryovolcanicActivity": "none",
+        "tectonicActivity": "suspected"
+    },
+    "discovery": {
+        "discoveredBy": "Unknown",
+        "discoveryYearPrecision": "prehistoric",
+        "discoveryMethod": "naked-eye observation"
+    }
 }

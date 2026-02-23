@@ -7,5 +7,112 @@
     "navParentId": "sol",
     "navOrder": 1,
     "curationScore": 82,
-    "relations": [{ "type": "orbits", "targetId": "sol/sun" }]
+    "relations": [
+        {
+            "type": "orbits",
+            "targetId": "sol/sun"
+        }
+    ],
+    "highlights": [
+        "Mercury possesses an unexpectedly large iron core, comprising about 85% of its planetary radius and leaving only a thin outer shell of silicate mantle and crust [4].",
+        "Despite its extreme proximity to the Sun, permanently shadowed craters at Mercury's poles act as cold traps containing significant deposits of water ice [2].",
+        "The planet exhibits a 3:2 spin-orbit resonance, rotating precisely three times on its axis for every two orbits around the Sun [1].",
+        "Mercury generates a weak but globally measurable dipole magnetic field, approximately 1% the strength of Earth's, indicating a partially liquid outer core [2].",
+        "Recent geological mapping revealed small, unmodified fault scarps, strongly suggesting that Mercury is still actively contracting and tectonically active today [3]."
+    ],
+    "howWeKnow": [
+        "Radar observations from Earth, such as those using the Arecibo Observatory, discovered polar ice deposits and definitively measured the 3:2 spin-orbit resonance.",
+        "The Mariner 10 flybys provided the first close-up imagery, detected the intrinsic magnetic field, and mapped parts of the heavily cratered surface.",
+        "The MESSENGER orbiter extensively mapped the global surface chemistry using X-ray and gamma-ray spectrometers, measured the magnetic field's offset, and confirmed the fluid nature of the outer core through precise gravity and spin state tracking.",
+        "Geomorphological analysis of high-resolution images returned by MESSENGER identified small thrust fault scarps cross-cutting impact craters, serving as the basis for active tectonic hypotheses."
+    ],
+    "openQuestions": [
+        "What specific formational mechanism allowed Mercury to retain a relatively high abundance of volatile elements despite its formation and existence so close to the Sun?",
+        "Is the planet's core still generating a magnetic dynamo through conventional active thermal convection, or is the field driven by another complex fluid dynamic or compositional process?",
+        "How did Mercury acquire its anomalously massive iron core, and to what extent did early impact events or primordial solar nebula conditions contribute to this unique internal structure?"
+    ],
+    "sources": [
+        {
+            "attribution": "NASA NSSDCA",
+            "title": "Mercury Planetary Fact Sheet",
+            "url": "[https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html](https://nssdc.gsfc.nasa.gov/planetary/factsheet/mercuryfact.html)",
+            "year": 2024,
+            "publisher": "NASA"
+        },
+        {
+            "attribution": "NASA / JHUAPL",
+            "title": "MESSENGER Mission Overview and Key Science Findings",
+            "year": 2015,
+            "publisher": "NASA"
+        },
+        {
+            "attribution": "Watters, T. R., et al.",
+            "title": "Recent tectonic activity on Mercury revealed by small thrust fault scarps",
+            "year": 2016,
+            "publisher": "Nature Geoscience"
+        },
+        {
+            "attribution": "Hauck, S. A., et al.",
+            "title": "The curious case of Mercury's internal structure",
+            "year": 2013,
+            "publisher": "Journal of Geophysical Research: Planets"
+        }
+    ],
+    "scientificSynthesis": [
+        "Mercury stands as an extraordinary laboratory for understanding the extremes of planetary formation in the inner solar system. As the smallest and innermost terrestrial planet, its bulk composition is characterized by a massive metallic core that comprises approximately 85% of its planetary radius, dominating its interior volume and challenging traditional accretion models [4]. Prior to the MESSENGER mission, it was widely hypothesized that Mercury's proximity to the Sun and potential massive impacts would have depleted its volatile elements; however, orbital spectrometry revealed significant concentrations of potassium, sulfur, and other volatiles, contradicting the giant impact hypothesis as the sole explanation for its high density [2].",
+        "The planet's modern scientific narrative is defined by surprising complexities, including the confirmation of a weak, intrinsic global magnetic field offset to the north, which suggests ongoing dynamo action within a partially fluid outer core [2]. Another highly counterintuitive discovery was the definitive identification of water ice in permanently shadowed polar craters, surviving just a short distance from the Sun's intense radiation due to Mercury's minimal axial tilt [2]. Furthermore, the detection of small, crisp thrust fault scarps indicates that Mercury may still be tectonically active today as the planetary body continues to cool and contract [3]. These findings have fundamentally reshaped our understanding of how terrestrial planets form, evolve, and retain materials in close proximity to their host stars."
+    ],
+    "physical": {
+        "meanRadiusKm": 2439.7,
+        "massKg": 3.3011e+23,
+        "densityKgM3": 5429,
+        "surfaceGravityMS2": 3.7,
+        "escapeVelocityMS": 4250
+    },
+    "orbit": {
+        "semiMajorAxisKm": 57909000,
+        "orbitalPeriodDays": 87.969,
+        "eccentricity": 0.2056,
+        "inclinationDeg": 7,
+        "rotationPeriodHours": 1407.6,
+        "retrogradeRotation": false,
+        "tidallyLocked": false
+    },
+    "composition": {
+        "primary": [
+            "iron",
+            "silicate rock"
+        ],
+        "atmosphere": {
+            "type": "tenuous",
+            "mainComponents": [
+                "oxygen",
+                "sodium",
+                "hydrogen",
+                "helium",
+                "potassium"
+            ]
+        },
+        "internalStructure": [
+            "solid silicate crust",
+            "solid silicate mantle",
+            "liquid outer iron core",
+            "solid inner iron core"
+        ]
+    },
+    "environment": {
+        "meanTemperatureK": 440,
+        "minTemperatureK": 100,
+        "maxTemperatureK": 700,
+        "liquidWaterPresence": "none",
+        "magneticFieldType": "weak-global",
+        "volcanicActivity": "past",
+        "cryovolcanicActivity": "none",
+        "tectonicActivity": "suspected"
+    },
+    "discovery": {
+        "discoveredBy": "Known to ancient civilizations",
+        "discoveryYearPrecision": "prehistoric",
+        "discoveryMethod": "Naked-eye observation"
+    }
 }
