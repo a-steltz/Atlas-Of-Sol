@@ -3,8 +3,9 @@
     "name": "Uranus",
     "hook": "An ice giant tipped sideways, rotating like a world rolling around the Sun.",
     "type": "planet",
+    "size": 7,
     "systemId": "sol",
-    "navParentId": "sol",
+    "navParentId": "sol/sun",
     "navOrder": 8,
     "curationScore": 84,
     "highlights": [
@@ -53,7 +54,7 @@
     ],
     "physical": {
         "meanRadiusKm": 25362,
-        "massKg": 8.6813e+25,
+        "massKg": 8.6813e25,
         "densityKgM3": 1270,
         "surfaceGravityMS2": 8.69,
         "escapeVelocityMS": 21300
@@ -78,11 +79,7 @@
         ],
         "atmosphere": {
             "type": "substantial-envelope",
-            "mainComponents": [
-                "Hydrogen",
-                "Helium",
-                "Methane"
-            ]
+            "mainComponents": ["Hydrogen", "Helium", "Methane"]
         },
         "internalStructure": [
             "silicate-iron core",

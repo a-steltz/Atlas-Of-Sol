@@ -82,7 +82,10 @@ const handleRowToggle = (requestId: number) => {
 - All entities must have a globally unique `id` across systems + bodies + missions.
 - `navParentId` must reference an existing entity `id`.
 - `systemId` on bodies must reference an existing system `id`.
+- `primaryBodyId` on systems is required, must reference an existing body `id`, and that body must belong to the same system.
 - `type` on bodies must be one of the allowed enum values (see `scripts/content/validate.ts` / `Atlas of Sol.md`).
+- `size` on bodies is required and must be an integer from `1` to `10` (stylized UI sizing, not true physical scale).
+- Only a system's `primaryBodyId` body may use `navParentId` equal to the system `id` (single direct-root body in MVP).
 - `relations[].targetId` on missions must reference an existing entity `id`.
 - `hook` on bodies is required and must be a non-empty string.
 - `highlights[]`, `howWeKnow[]`, and `openQuestions[]` are optional; if present, each must be a non-empty array of non-empty strings.

@@ -257,6 +257,7 @@ Example:
 ### Purpose
 
 - Defines system-level metadata (name, description, optional theming).
+- Defines the system's primary center body via `primaryBodyId`.
 
 * Acts as the top-level container for a star system (e.g., Sol).
 * Provides architectural support for future exosystems.
@@ -271,7 +272,9 @@ The system file remains lightweight and focused on system-wide concerns, not hie
 MVP uses **Option A**: `system.json` is a navigable node with `id: "sol"`.
 
 - The app starts at the system node (e.g., Sol).
-- All top-level bodies in that system set `navParentId: "sol"`.
+- Each system defines `primaryBodyId` (for Sol: `sol/sun`).
+- Only the primary body is a direct child of the system root (`navParentId: "sol"`).
+- Other top-level orbiters are children of the primary body (for Sol: `navParentId: "sol/sun"`).
 
 ## Bodies
 
@@ -318,7 +321,8 @@ Hierarchy is determined exclusively by:
 
 For example:
 
-- Bodies with `navParentId: "sol"` appear in the Sol system view.
+- The system primary body uses `navParentId: "sol"` and anchors the Sol system view.
+- Bodies with `navParentId: "sol/sun"` appear as the Sun's direct orbiters.
 - Bodies with `navParentId: "sol/jupiter"` appear in the Jupiter system view.
 - Bodies with `navParentId: "sol/asteroid-belt"` appear within the belt region.
 
@@ -437,6 +441,7 @@ Each body entity includes:
 - `name`
 - `hook` (required one-line wonder statement)
 - `type` (strict enum; see below)
+- `size` (required integer `1-10`, editorial display sizing for 2D map UI)
 - `navParentId`
 - optional `navOrder`
 - `systemId`
@@ -483,6 +488,7 @@ Example `body.json` (abridged):
     "id": "sol/jupiter/io",
     "name": "Io",
     "type": "moon",
+    "size": 7,
     "systemId": "sol",
     "navParentId": "sol/jupiter",
     "navOrder": 1,
@@ -574,9 +580,12 @@ Atlas of Sol is curated first, exhaustive second.
 Validate content during indexing/build:
 
 - Enforce global `id` uniqueness across all indexed entities (systems, bodies, missions, etc.).
+- Require `system.json.primaryBodyId` and validate that it references a body in the same system.
 - Validate `body.json.type` using a strict enum.
+- Require `body.json.size` as an integer in the range `1-10`.
 - Require non-empty `hook` on bodies.
 - Validate that every `navParentId` references a real entity `id`.
+- Validate that only the system primary body uses `navParentId` equal to the system root `id`.
 - Validate that every body `systemId` references a real system `id`.
 - Validate that mission `relations[].targetId` references a real entity `id`.
 - Validate optional shapes (for example, `navOrder` and mission `relations[]`).

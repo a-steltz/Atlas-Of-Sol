@@ -3,8 +3,9 @@
     "name": "Earth",
     "hook": "The only known world where oceans, atmosphere, and life coexist.",
     "type": "planet",
+    "size": 6,
     "systemId": "sol",
-    "navParentId": "sol",
+    "navParentId": "sol/sun",
     "navOrder": 3,
     "curationScore": 98,
     "highlights": [
@@ -53,7 +54,7 @@
     ],
     "physical": {
         "meanRadiusKm": 6371,
-        "massKg": 5.9724e+24,
+        "massKg": 5.9724e24,
         "densityKgM3": 5514,
         "surfaceGravityMS2": 9.8,
         "escapeVelocityMS": 11190
@@ -68,22 +69,10 @@
         "tidallyLocked": false
     },
     "composition": {
-        "primary": [
-            "iron",
-            "oxygen",
-            "silicon",
-            "magnesium",
-            "sulfur"
-        ],
+        "primary": ["iron", "oxygen", "silicon", "magnesium", "sulfur"],
         "atmosphere": {
             "type": "thick",
-            "mainComponents": [
-                "nitrogen",
-                "oxygen",
-                "argon",
-                "water vapor",
-                "carbon dioxide"
-            ],
+            "mainComponents": ["nitrogen", "oxygen", "argon", "water vapor", "carbon dioxide"],
             "surfacePressureBar": 1.014
         },
         "internalStructure": [

@@ -1,5 +1,6 @@
 {
     "id": "sol",
     "name": "Sol",
-    "description": "The Solar System."
+    "description": "The Solar System.",
+    "primaryBodyId": "sol/sun"
 }

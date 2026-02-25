@@ -3,8 +3,9 @@
     "name": "Mars",
     "hook": "A cold desert with ancient river valleys carved into its surface.",
     "type": "planet",
+    "size": 5,
     "systemId": "sol",
-    "navParentId": "sol",
+    "navParentId": "sol/sun",
     "navOrder": 4,
     "curationScore": 93,
     "highlights": [
@@ -57,7 +58,7 @@
     ],
     "physical": {
         "meanRadiusKm": 3389.5,
-        "massKg": 6.4171e+23,
+        "massKg": 6.4171e23,
         "densityKgM3": 3934,
         "surfaceGravityMS2": 3.71,
         "escapeVelocityMS": 5030
@@ -72,24 +73,13 @@
         "tidallyLocked": false
     },
     "composition": {
-        "primary": [
-            "silicate rock",
-            "iron oxides"
-        ],
+        "primary": ["silicate rock", "iron oxides"],
         "atmosphere": {
             "type": "thin",
-            "mainComponents": [
-                "carbon dioxide",
-                "nitrogen",
-                "argon"
-            ],
+            "mainComponents": ["carbon dioxide", "nitrogen", "argon"],
             "surfacePressureBar": 0.0061
         },
-        "internalStructure": [
-            "liquid iron-sulfur core",
-            "silicate mantle",
-            "basaltic crust"
-        ]
+        "internalStructure": ["liquid iron-sulfur core", "silicate mantle", "basaltic crust"]
     },
     "environment": {
         "meanTemperatureK": 210,

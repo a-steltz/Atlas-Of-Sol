@@ -3,8 +3,9 @@
     "name": "Asteroid Belt",
     "hook": "A broad ring of rocky remnants orbiting between Mars and Jupiter.",
     "type": "region",
+    "size": 4,
     "systemId": "sol",
-    "navParentId": "sol",
+    "navParentId": "sol/sun",
     "navOrder": 5,
     "curationScore": 81
 }
