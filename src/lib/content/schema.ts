@@ -167,6 +167,8 @@ export const systemSchema = z
         id: z.string().min(1),
         /** Display name shown in navigation and UI labels. */
         name: z.string().min(1),
+        /** Canonical body ID that acts as the system's primary center body. */
+        primaryBodyId: z.string().min(1),
         /** Optional short summary used in previews and overview content. */
         description: z.string().optional()
     })
@@ -182,6 +184,8 @@ export const bodySchema = z
         hook: z.string().trim().min(1),
         /** Top-level body classification used for filtering and rendering behavior. */
         type: bodyTypeSchema,
+        /** Stylized relative display size (`1-10`) used by 2D map UI layouts. */
+        size: FiniteNumber.int().min(1).max(10),
         /** Parent system identifier this body belongs to. */
         systemId: z.string().min(1),
         /** Parent node identifier in the navigation hierarchy. */

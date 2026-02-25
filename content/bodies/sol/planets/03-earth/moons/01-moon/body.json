@@ -3,13 +3,14 @@
     "name": "Moon",
     "hook": "Earth's companion world preserves the impact history of the inner solar system.",
     "type": "moon",
+    "size": 3,
     "systemId": "sol",
     "navParentId": "sol/earth",
     "navOrder": 1,
     "curationScore": 96,
     "physical": {
         "meanRadiusKm": 1737.4,
-        "massKg": 7.342e+22,
+        "massKg": 7.342e22,
         "densityKgM3": 3344,
         "surfaceGravityMS2": 1.62,
         "escapeVelocityMS": 2380
@@ -24,18 +25,10 @@
         "tidallyLocked": true
     },
     "composition": {
-        "primary": [
-            "silicate rock",
-            "iron"
-        ],
+        "primary": ["silicate rock", "iron"],
         "atmosphere": {
             "type": "tenuous",
-            "mainComponents": [
-                "Helium",
-                "Neon",
-                "Hydrogen",
-                "Argon"
-            ]
+            "mainComponents": ["Helium", "Neon", "Hydrogen", "Argon"]
         },
         "internalStructure": [
             "solid iron-rich inner core",

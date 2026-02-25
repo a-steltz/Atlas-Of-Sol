@@ -3,8 +3,9 @@
     "name": "Jupiter",
     "hook": "A giant world of storms whose gravity helps shape the architecture of Sol.",
     "type": "planet",
+    "size": 9,
     "systemId": "sol",
-    "navParentId": "sol",
+    "navParentId": "sol/sun",
     "navOrder": 6,
     "curationScore": 95,
     "highlights": [
@@ -57,7 +58,7 @@
     ],
     "physical": {
         "meanRadiusKm": 69911,
-        "massKg": 1.89819e+27,
+        "massKg": 1.89819e27,
         "densityKgM3": 1326,
         "surfaceGravityMS2": 24.79,
         "escapeVelocityMS": 59500
@@ -72,18 +73,10 @@
         "tidallyLocked": false
     },
     "composition": {
-        "primary": [
-            "Hydrogen",
-            "Helium"
-        ],
+        "primary": ["Hydrogen", "Helium"],
         "atmosphere": {
             "type": "substantial-envelope",
-            "mainComponents": [
-                "Hydrogen",
-                "Helium",
-                "Methane",
-                "Ammonia"
-            ]
+            "mainComponents": ["Hydrogen", "Helium", "Methane", "Ammonia"]
         },
         "internalStructure": [
             "Dilute central core of dissolved heavy elements",

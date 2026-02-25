@@ -3,8 +3,9 @@
     "name": "Mercury",
     "hook": "A world where the Sun can rise, set, and rise again in one Mercurian day.",
     "type": "planet",
+    "size": 4,
     "systemId": "sol",
-    "navParentId": "sol",
+    "navParentId": "sol/sun",
     "navOrder": 1,
     "curationScore": 82,
     "highlights": [
@@ -58,7 +59,7 @@
     ],
     "physical": {
         "meanRadiusKm": 2439.7,
-        "massKg": 3.3011e+23,
+        "massKg": 3.3011e23,
         "densityKgM3": 5429,
         "surfaceGravityMS2": 3.7,
         "escapeVelocityMS": 4250
@@ -73,19 +74,10 @@
         "tidallyLocked": false
     },
     "composition": {
-        "primary": [
-            "iron",
-            "silicate rock"
-        ],
+        "primary": ["iron", "silicate rock"],
         "atmosphere": {
             "type": "tenuous",
-            "mainComponents": [
-                "oxygen",
-                "sodium",
-                "hydrogen",
-                "helium",
-                "potassium"
-            ]
+            "mainComponents": ["oxygen", "sodium", "hydrogen", "helium", "potassium"]
         },
         "internalStructure": [
             "solid silicate crust",

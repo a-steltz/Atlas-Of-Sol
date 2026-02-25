@@ -121,6 +121,33 @@ async function readJsonFile(filePath: string): Promise<unknown> {
  * @returns {void}
  */
 function validateReferenceIntegrity(entriesById: Map<string, IndexedEntity>): void {
+    // Validate system-level center-body semantics before body graph checks so
+    // downstream UI derivations can safely rely on `primaryBodyId`.
+    for (const [id, entry] of entriesById.entries()) {
+        if (entry.kind !== "system") continue;
+
+        const system = entry.data as SystemEntity;
+        const primaryBodyEntry = entriesById.get(system.primaryBodyId);
+        if (!primaryBodyEntry || primaryBodyEntry.kind !== "body") {
+            throw new Error(
+                `Invalid primaryBodyId: "${system.primaryBodyId}" on system "${id}" (${entry.relPath}) (no body with that id)`
+            );
+        }
+
+        const primaryBody = primaryBodyEntry.data as BodyEntity;
+        if (primaryBody.systemId !== system.id) {
+            throw new Error(
+                `Invalid primaryBodyId: "${system.primaryBodyId}" on system "${id}" (${entry.relPath}) (body belongs to system "${primaryBody.systemId}")`
+            );
+        }
+
+        if (primaryBody.navParentId !== system.id) {
+            throw new Error(
+                `Invalid primaryBodyId: "${system.primaryBodyId}" on system "${id}" (${entry.relPath}) (primary body must have navParentId "${system.id}")`
+            );
+        }
+    }
+
     for (const [id, entry] of entriesById.entries()) {
         if (entry.kind !== "body") continue;
 
@@ -145,6 +172,19 @@ function validateReferenceIntegrity(entriesById: Map<string, IndexedEntity>): vo
             );
         }
 
+        if (body.navParentId === body.systemId) {
+            // MVP invariant: a system root may only have one direct body child,
+            // and that child must be the configured primary center body.
+            const systemEntry = entriesById.get(body.systemId);
+            const systemData = systemEntry?.data as SystemEntity | undefined;
+            const primaryBodyId = systemData?.primaryBodyId;
+
+            if (!primaryBodyId || body.id !== primaryBodyId) {
+                throw new Error(
+                    `Invalid navParentId: "${body.navParentId}" on body "${id}" (${entry.relPath}) (only the system primary body may be a direct child of the system root)`
+                );
+            }
+        }
     }
 
     for (const [id, entry] of entriesById.entries()) {

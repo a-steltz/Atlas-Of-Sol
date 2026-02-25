@@ -3,8 +3,9 @@
     "name": "Kuiper Belt",
     "hook": "A frozen frontier beyond Neptune filled with icy bodies and dwarf worlds.",
     "type": "region",
+    "size": 4,
     "systemId": "sol",
-    "navParentId": "sol",
+    "navParentId": "sol/sun",
     "navOrder": 10,
     "curationScore": 76
 }

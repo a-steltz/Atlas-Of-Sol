@@ -28,7 +28,8 @@ import {
     type AnyEntity,
     type BodyEntity,
     type ContentEntityKind,
-    type MissionEntity
+    type MissionEntity,
+    type SystemEntity
 } from "../../src/lib/content/schema";
 
 const projectRoot = path.resolve(process.cwd());
@@ -164,7 +165,33 @@ async function main() {
         });
     }
 
-    // Phase 2: Validate body graph integrity (system linkage + navigation parent).
+    // Phase 2: Validate system center-body and body graph integrity
+    // (system linkage + navigation parent).
+    for (const [id, entry] of entitiesById.entries()) {
+        if (entry.kind !== "system") continue;
+
+        const system = entry.data as SystemEntity;
+        const primaryBodyEntry = entitiesById.get(system.primaryBodyId);
+        if (!primaryBodyEntry || primaryBodyEntry.kind !== "body") {
+            throw new Error(
+                `Invalid primaryBodyId: "${system.primaryBodyId}" on system "${id}" (${entry.relPath}) (no body with that id)`
+            );
+        }
+
+        const primaryBody = primaryBodyEntry.data as BodyEntity;
+        if (primaryBody.systemId !== system.id) {
+            throw new Error(
+                `Invalid primaryBodyId: "${system.primaryBodyId}" on system "${id}" (${entry.relPath}) (body belongs to system "${primaryBody.systemId}")`
+            );
+        }
+
+        if (primaryBody.navParentId !== system.id) {
+            throw new Error(
+                `Invalid primaryBodyId: "${system.primaryBodyId}" on system "${id}" (${entry.relPath}) (primary body must have navParentId "${system.id}")`
+            );
+        }
+    }
+
     for (const [id, entry] of entitiesById.entries()) {
         if (entry.kind !== "body") continue;
 
@@ -190,6 +217,19 @@ async function main() {
             );
         }
 
+        if (navParentId === systemId) {
+            // Keep CLI validation aligned with runtime loading behavior:
+            // only the system primary body can be a direct root child.
+            const systemEntry = entitiesById.get(systemId);
+            const systemData = systemEntry?.data as SystemEntity | undefined;
+            const primaryBodyId = systemData?.primaryBodyId;
+
+            if (!primaryBodyId || id !== primaryBodyId) {
+                throw new Error(
+                    `Invalid navParentId: "${navParentId}" on body "${id}" (${entry.relPath}) (only the system primary body may be a direct child of the system root)`
+                );
+            }
+        }
     }
 
     // Phase 3: Validate mission relation targets.

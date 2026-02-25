@@ -3,8 +3,9 @@
     "name": "Saturn",
     "hook": "A ringed giant whose icy bands make it the most iconic silhouette in Sol.",
     "type": "planet",
+    "size": 8,
     "systemId": "sol",
-    "navParentId": "sol",
+    "navParentId": "sol/sun",
     "navOrder": 7,
     "curationScore": 94,
     "highlights": [
@@ -53,7 +54,7 @@
     ],
     "physical": {
         "meanRadiusKm": 58232,
-        "massKg": 5.6832e+26,
+        "massKg": 5.6832e26,
         "densityKgM3": 687,
         "surfaceGravityMS2": 10.44,
         "escapeVelocityMS": 35500
@@ -68,18 +69,10 @@
         "tidallyLocked": false
     },
     "composition": {
-        "primary": [
-            "hydrogen",
-            "helium"
-        ],
+        "primary": ["hydrogen", "helium"],
         "atmosphere": {
             "type": "substantial-envelope",
-            "mainComponents": [
-                "Hydrogen",
-                "Helium",
-                "Methane",
-                "Ammonia"
-            ]
+            "mainComponents": ["Hydrogen", "Helium", "Methane", "Ammonia"]
         },
         "internalStructure": [
             "rocky and icy core",

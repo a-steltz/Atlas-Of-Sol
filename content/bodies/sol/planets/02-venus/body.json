@@ -3,8 +3,9 @@
     "name": "Venus",
     "hook": "A shrouded world where runaway greenhouse heat turns the surface into an inferno.",
     "type": "planet",
+    "size": 6,
     "systemId": "sol",
-    "navParentId": "sol",
+    "navParentId": "sol/sun",
     "navOrder": 2,
     "curationScore": 86,
     "highlights": [
@@ -59,7 +60,7 @@
     ],
     "physical": {
         "meanRadiusKm": 6051.8,
-        "massKg": 4.8673e+24,
+        "massKg": 4.8673e24,
         "densityKgM3": 5243,
         "surfaceGravityMS2": 8.87,
         "escapeVelocityMS": 10360
@@ -74,23 +75,13 @@
         "tidallyLocked": false
     },
     "composition": {
-        "primary": [
-            "Silicate rock",
-            "Iron"
-        ],
+        "primary": ["Silicate rock", "Iron"],
         "atmosphere": {
             "type": "thick",
-            "mainComponents": [
-                "Carbon dioxide",
-                "Nitrogen"
-            ],
+            "mainComponents": ["Carbon dioxide", "Nitrogen"],
             "surfacePressureBar": 92
         },
-        "internalStructure": [
-            "Iron-nickel core",
-            "Silicate mantle",
-            "Silicate crust"
-        ]
+        "internalStructure": ["Iron-nickel core", "Silicate mantle", "Silicate crust"]
     },
     "environment": {
         "meanTemperatureK": 737,

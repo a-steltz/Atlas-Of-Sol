@@ -3,8 +3,9 @@
     "name": "Oort Cloud",
     "hook": "A distant spherical shell thought to be the long-period comet reservoir of Sol.",
     "type": "region",
+    "size": 4,
     "systemId": "sol",
-    "navParentId": "sol",
+    "navParentId": "sol/sun",
     "navOrder": 11,
     "curationScore": 60
 }

@@ -3,6 +3,7 @@
     "name": "Sun",
     "hook": "The star whose light and gravity shape every world in Sol.",
     "type": "star",
+    "size": 10,
     "systemId": "sol",
     "navParentId": "sol",
     "navOrder": 0,
