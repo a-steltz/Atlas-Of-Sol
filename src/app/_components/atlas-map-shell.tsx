@@ -10,8 +10,8 @@
  */
 import { useMemo, useState } from "react";
 
-import { ChevronRight, Orbit, Telescope } from "lucide-react";
-import { LayoutGroup, motion } from "motion/react";
+import { ChevronRight, Orbit } from "lucide-react";
+import { LayoutGroup, motion, useReducedMotion } from "motion/react";
 
 import type { BodyEntity, SystemEntity } from "@/lib/content/schema";
 
@@ -83,16 +83,10 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
             <section className="sticky top-0 z-0 h-[80svh] overflow-hidden border-b border-white/10">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(148,163,184,0.24),transparent_40%),radial-gradient(circle_at_80%_10%,rgba(56,189,248,0.16),transparent_30%),linear-gradient(180deg,#020617_0%,#020617_65%,#0f172a_100%)]" />
                 <div className="relative mx-auto flex h-full w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:px-8">
-                    <header className="flex flex-col gap-2">
-                        <p className="text-xs tracking-[0.28em] text-sky-300 uppercase">
+                    <header className="flex flex-col gap-3">
+                        <h1 className="text-2xl font-semibold tracking-[0.08em] text-sky-100 uppercase drop-shadow-[0_0_22px_rgba(56,189,248,0.32)] sm:text-3xl">
                             Atlas of Sol
-                        </p>
-                        <div className="flex items-center gap-2 text-sm text-slate-300">
-                            <Telescope className="h-4 w-4 text-sky-300" />
-                            <span>
-                                Sticky Map + Peek POC grounded on <code>navParentId</code>
-                            </span>
-                        </div>
+                        </h1>
                         <nav
                             aria-label="Breadcrumb"
                             className="flex flex-wrap items-center gap-1 text-xs"
@@ -186,7 +180,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                                                     {body.name}
                                                                 </p>
                                                                 <p className="text-xs text-slate-300">
-                                                                    {body.type} · {body.size}/10
+                                                                    {body.type}
                                                                 </p>
                                                             </div>
                                                         </article>
@@ -284,6 +278,42 @@ type BodyMarkerProps = {
     interactive?: boolean;
 };
 
+type MarkerKind = "orb" | "annulus";
+type RegionSpeck = {
+    left: string;
+    top: string;
+    size: number;
+    opacity: number;
+    twinkle?: boolean;
+    delay: number;
+};
+
+const REGION_BAND_SPECKS: RegionSpeck[] = [
+    { left: "21%", top: "47%", size: 2.4, opacity: 0.48, twinkle: true, delay: 0 },
+    { left: "28%", top: "34%", size: 2, opacity: 0.42, delay: 0.12 },
+    { left: "34%", top: "24%", size: 2.6, opacity: 0.56, twinkle: true, delay: 0.24 },
+    { left: "48%", top: "19%", size: 2.2, opacity: 0.45, delay: 0.3 },
+    { left: "61%", top: "24%", size: 2.8, opacity: 0.58, twinkle: true, delay: 0.42 },
+    { left: "72%", top: "34%", size: 2.1, opacity: 0.44, delay: 0.52 },
+    { left: "78%", top: "47%", size: 2.5, opacity: 0.5, twinkle: true, delay: 0.64 },
+    { left: "74%", top: "61%", size: 2.2, opacity: 0.45, delay: 0.74 },
+    { left: "64%", top: "72%", size: 2.6, opacity: 0.54, twinkle: true, delay: 0.84 },
+    { left: "50%", top: "79%", size: 2, opacity: 0.44, delay: 0.94 },
+    { left: "36%", top: "73%", size: 2.3, opacity: 0.47, twinkle: true, delay: 1.04 },
+    { left: "26%", top: "61%", size: 2.1, opacity: 0.43, delay: 1.14 }
+];
+
+/**
+ * Resolves the visual marker family from canonical body type.
+ * Regions default to annulus styling; all other body types stay circular orbs.
+ *
+ * @param {BodyEntity["type"]} bodyType - Canonical body type enum value
+ * @returns {MarkerKind} Visual marker kind used by the orbit map
+ */
+function resolveMarkerKind(bodyType: BodyEntity["type"]): MarkerKind {
+    return bodyType === "region" ? "annulus" : "orb";
+}
+
 /**
  * Circular 2D map marker used for both center-body and orbiter rendering.
  * The canonical body ID is used to build the shared Motion `layoutId`.
@@ -300,13 +330,22 @@ function BodyMarker({
     interactive = true
 }: BodyMarkerProps) {
     const diameter = sizeToPixels(body.size, variant);
+    const markerKind = resolveMarkerKind(body.type);
+    const isAnnulus = markerKind === "annulus";
+    const prefersReducedMotion = useReducedMotion();
+    const [regionHovered, setRegionHovered] = useState(false);
+    const twinkleActive = isAnnulus && regionHovered && !prefersReducedMotion;
+    const baseClass = isAnnulus
+        ? "border-slate-300/45 bg-slate-300/10 text-slate-100 shadow-[0_0_35px_rgba(148,163,184,0.24)]"
+        : "border-sky-200/50 bg-sky-300/18 text-sky-50 shadow-[0_0_35px_rgba(56,189,248,0.3)]";
+    const hoverClass = isAnnulus ? "hover:border-slate-100/75" : "hover:border-sky-200";
 
     return (
         <motion.button
             aria-label={`${interactive ? "Select" : "Viewing"} ${body.name}`}
-            className={`relative grid shrink-0 place-items-center overflow-hidden rounded-full border border-sky-200/50 bg-sky-300/18 text-[11px] font-semibold tracking-wide text-sky-50 shadow-[0_0_35px_rgba(56,189,248,0.3)] transition ${
+            className={`relative grid shrink-0 place-items-center overflow-hidden rounded-full border text-[11px] font-semibold tracking-wide transition ${baseClass} ${
                 interactive
-                    ? "cursor-pointer hover:scale-[1.03] hover:border-sky-200"
+                    ? `cursor-pointer hover:scale-[1.03] ${hoverClass}`
                     : "cursor-default"
             }`}
             layout
@@ -316,6 +355,18 @@ function BodyMarker({
             onClick={() => {
                 if (!interactive || !onSelect) return;
                 onSelect();
+            }}
+            onBlur={() => {
+                setRegionHovered(false);
+            }}
+            onFocus={() => {
+                setRegionHovered(true);
+            }}
+            onHoverEnd={() => {
+                setRegionHovered(false);
+            }}
+            onHoverStart={() => {
+                setRegionHovered(true);
             }}
             style={{
                 width: diameter,
@@ -329,9 +380,59 @@ function BodyMarker({
             }}
             type="button"
         >
-            <span className="absolute inset-[14%] rounded-full border border-sky-100/35" />
+            {isAnnulus ? (
+                <>
+                    {/* Hybrid silhouette: faint boundary ring plus diffuse particulate belt. */}
+                    <span className="pointer-events-none absolute inset-[10%] rounded-full border border-slate-200/22" />
+                    <span className="pointer-events-none absolute inset-[14%] rounded-full bg-[radial-gradient(circle,transparent_42%,rgba(148,163,184,0.08)_52%,rgba(148,163,184,0.28)_61%,rgba(148,163,184,0.11)_69%,transparent_78%)]" />
+                    <span className="pointer-events-none absolute inset-[19%] rounded-full bg-[radial-gradient(circle,transparent_45%,rgba(226,232,240,0.13)_58%,transparent_72%)] blur-[0.5px]" />
+                    <span className="pointer-events-none absolute inset-[31%] rounded-full bg-slate-950/72" />
+                    {REGION_BAND_SPECKS.map((speck) => (
+                        <motion.span
+                            className="pointer-events-none absolute rounded-full bg-slate-100"
+                            key={`${speck.left}-${speck.top}`}
+                            initial={false}
+                            animate={
+                                twinkleActive && speck.twinkle
+                                    ? {
+                                          opacity: [speck.opacity, Math.min(1, speck.opacity + 0.22), speck.opacity],
+                                          scale: [1, 1.18, 1]
+                                      }
+                                    : {
+                                          opacity: speck.opacity,
+                                          scale: 1
+                                      }
+                            }
+                            style={{
+                                left: speck.left,
+                                top: speck.top,
+                                width: speck.size,
+                                height: speck.size
+                            }}
+                            transition={
+                                twinkleActive && speck.twinkle
+                                    ? {
+                                          duration: 1.5,
+                                          repeat: Number.POSITIVE_INFINITY,
+                                          repeatType: "mirror",
+                                          ease: "easeInOut",
+                                          delay: speck.delay
+                                      }
+                                    : {
+                                          duration: 0.18,
+                                          ease: "easeOut"
+                                      }
+                            }
+                        />
+                    ))}
+                </>
+            ) : (
+                <span className="absolute inset-[14%] rounded-full border border-sky-100/35" />
+            )}
             {selected ? (
-                <span className="absolute inset-[6%] rounded-full border border-sky-100/40" />
+                <span
+                    className={`absolute inset-[6%] rounded-full ${isAnnulus ? "border border-slate-100/35" : "border border-sky-100/40"}`}
+                />
             ) : null}
             {showNameInside ? (
                 <span className="px-2 text-center leading-tight">{body.name}</span>
