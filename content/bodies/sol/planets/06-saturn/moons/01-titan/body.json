@@ -1,0 +1,135 @@
+{
+    "id": "sol/saturn/titan",
+    "name": "Titan",
+    "hook": "Titan has a dense, surface-bound atmosphere with a reported surface pressure of 1.5 bar and major constituents including nitrogen and methane.[2]",
+    "type": "moon",
+    "size": 4,
+    "systemId": "sol",
+    "navParentId": "sol/saturn",
+    "navOrder": 1,
+    "curationScore": 93,
+    "physical": {
+        "meanRadiusKm": 2575.5,
+        "massKg": 1.34553e23,
+        "densityKgM3": 1880,
+        "surfaceGravityMS2": 1.35,
+        "escapeVelocityMS": 2640
+    },
+    "orbit": {
+        "semiMajorAxisKm": 1221870,
+        "orbitalPeriodDays": 15.945421,
+        "eccentricity": 0.0288,
+        "inclinationDeg": 0.28,
+        "tidallyLocked": true
+    },
+    "composition": {
+        "primary": ["water ice", "silicate rock"],
+        "atmosphere": {
+            "type": "thick",
+            "mainComponents": ["nitrogen", "methane"],
+            "surfacePressureBar": 1.5
+        },
+        "internalStructure": [
+            "rocky core",
+            "high-pressure water-ice layers",
+            "outer water-ice shell"
+        ]
+    },
+    "environment": {
+        "meanTemperatureK": 94,
+        "magneticFieldType": "induced",
+        "volcanicActivity": "none",
+        "cryovolcanicActivity": "suspected",
+        "tectonicActivity": "past"
+    },
+    "discovery": {
+        "discoveredBy": "Christiaan Huygens",
+        "discoveryYear": 1655,
+        "discoveryYearPrecision": "exact",
+        "discoveryMethod": "telescopic observation"
+    },
+    "scientificSynthesis": [
+        "Titan is a large icy moon with a dense, nitrogen-dominated atmosphere and surface pressures around 1.5 bar, enabling an active climate system in which methane participates in cloud formation, rainfall, and surface liquids at cryogenic temperatures.[2][3] Cassini and Huygens transformed Titan from a haze-shrouded target into a world where the atmosphere and surface exchange volatiles in a planet-like cycle, making Titan a key laboratory for understanding atmospheric chemistry and surface–atmosphere coupling on cold bodies.[3]",
+        "Direct in-situ measurements during the Huygens landing provided benchmark near-surface constraints (including a surface temperature of 93.7 K and a surface pressure of 1.467 bar at the landing site), anchoring models of Titan’s lower atmosphere and boundary layer.[4] Cassini magnetometer observations show Titan lacks a strong intrinsic global magnetic field and instead interacts with Saturn’s magnetospheric flow in a way consistent with an induced magnetic environment.[5]",
+        "Titan’s interior remains an active area of inquiry: many interpretations have invoked subsurface liquid water reservoirs based on geophysical and radar-driven models, but recent gravity-based analyses argue that Titan’s measured tidal dissipation is inconsistent with an internal ocean, highlighting real uncertainty in Titan’s present-day internal state.[8] This tension matters beyond Titan because it links orbital evolution, interior rheology, and habitability-related hypotheses across icy moons in the outer solar system.[8]"
+    ],
+    "highlights": [
+        "Titan’s orbit is close to synchronous, with an orbital period of 15.945421 days, and it is commonly treated as tidally locked to Saturn.[1]",
+        "Titan has a dense, surface-bound atmosphere with a reported surface pressure of 1.5 bar and major constituents including nitrogen and methane.[2]",
+        "Huygens provided in-situ surface constraints, including a surface temperature of 93.7 K and surface pressure of 1.467 bar at its landing site.[4]",
+        "Cassini magnetic-field measurements indicate Titan does not have a strong intrinsic global magnetic field and its magnetic environment is consistent with induction and interaction with Saturn’s magnetosphere.[5]",
+        "Cassini RADAR-derived interpretations include candidate cryovolcanic features (for example in the Sotra Facula region), but their cryovolcanic origin remains debated in the literature.[6]",
+        "Global mapping of Titan’s ridge belts and mountain terrains supports a tectonic origin for many large-scale structures, indicating significant past tectonism.[7]"
+    ],
+    "howWeKnow": [
+        "Cassini RADAR synthetic-aperture imaging and altimetry constrained surface morphology (dunes, mountains, potential flow-like constructs) and enabled global geologic mapping.",
+        "Huygens probe in-situ descent and surface measurements (HASI and other instruments) directly measured pressure–temperature structure near the surface.",
+        "Cassini magnetometer (MAG) flybys measured Titan’s magnetic interaction with Saturn’s magnetosphere and tested for intrinsic versus induced field signatures.",
+        "Cassini radio tracking and gravity analysis constrained Titan’s gravity field and tidal response, informing interior-structure models.",
+        "Near-infrared and other remote-sensing observations constrained atmospheric composition and haze, and connected atmospheric processes to surface reservoirs."
+    ],
+    "openQuestions": [
+        "What are the dominant source and sink processes that maintain Titan’s atmospheric methane over geologic timescales?",
+        "Does Titan currently host any long-lived subsurface liquid water reservoir, and how can gravity, rotation-state, and geochemical constraints be reconciled?",
+        "Are candidate cryovolcanic constructs truly cryovolcanic, and if so, what volatiles and pathways are involved?",
+        "How do Titan’s tectonic structures relate to long-term thermal evolution, orbital history, and possible interior differentiation?",
+        "What are the detailed chemical pathways that create Titan’s organic haze and how do those products cycle onto and through the surface?"
+    ],
+    "sources": [
+        {
+            "attribution": "NASA/JPL Solar System Dynamics (Horizons API)",
+            "title": "Horizons API data sheet: Titan (Saturn) 606 — satellite physical properties and mean elements",
+            "url": "https://ssd.jpl.nasa.gov/api/horizons.api?COMMAND=606&MAKE_EPHEM=NO&format=text",
+            "year": 2022,
+            "publisher": "NASA Jet Propulsion Laboratory"
+        },
+        {
+            "attribution": "European Space Agency (ESA)",
+            "title": "Facts about Titan (Cassini-Huygens)",
+            "url": "https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Facts_about_Titan",
+            "publisher": "ESA"
+        },
+        {
+            "attribution": "NASA Science",
+            "title": "Titan — Facts and Exploration",
+            "url": "https://science.nasa.gov/saturn/moons/titan/exploration/",
+            "year": 2025,
+            "publisher": "NASA"
+        },
+        {
+            "attribution": "NASA Technical Reports Server (NTRS)",
+            "title": "Chapter 6: Titan's Atmospheric Structure, Composition, Haze, and Dynamics (includes HASI surface pressure/temperature values with literature citations)",
+            "url": "https://ntrs.nasa.gov/api/citations/20240013879/downloads/NixonChapter6STI.pdf",
+            "year": 2024,
+            "publisher": "NASA"
+        },
+        {
+            "attribution": "Backes et al. (Science) via PubMed",
+            "title": "Titan's magnetic field signature during the first Cassini encounter",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/15890875/",
+            "year": 2005,
+            "publisher": "Science"
+        },
+        {
+            "attribution": "Lopes et al. (Journal of Geophysical Research: Planets)",
+            "title": "Cryovolcanism on Titan: New results from Cassini RADAR and implications for cryovolcanic origin of features in Sotra Facula",
+            "url": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/jgre.20062",
+            "year": 2013,
+            "publisher": "American Geophysical Union"
+        },
+        {
+            "attribution": "Liu et al. (Icarus) hosted by USGS Publications Warehouse",
+            "title": "The tectonics of Titan: Global structural mapping from Cassini RADAR",
+            "url": "https://pubs.usgs.gov/publication/70191098",
+            "year": 2016,
+            "publisher": "Icarus"
+        },
+        {
+            "attribution": "Nature",
+            "title": "Titan’s strong tidal dissipation precludes a subsurface ocean",
+            "url": "https://www.nature.com/articles/s41586-025-09818-x",
+            "year": 2025,
+            "publisher": "Nature"
+        }
+    ]
+}
