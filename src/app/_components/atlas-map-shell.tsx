@@ -13,6 +13,7 @@ import { useMemo, useState } from "react";
 import { ChevronRight, Orbit } from "lucide-react";
 import { LayoutGroup, motion, useReducedMotion } from "motion/react";
 
+import { indexById } from "@/lib/collections/lookup-utils";
 import type { BodyEntity, SystemEntity } from "@/lib/content/schema";
 
 import {
@@ -43,15 +44,9 @@ type AtlasMapShellProps = {
  * @returns {JSX.Element} Interactive sticky map with bottom peek floor
  */
 export default function AtlasMapShell({ systems, bodies, childrenByParentId }: AtlasMapShellProps) {
-    const systemsById = useMemo<AtlasSystemsById>(
-        () => Object.fromEntries(systems.map((system) => [system.id, system])),
-        [systems]
-    );
+    const systemsById = useMemo<AtlasSystemsById>(() => indexById(systems), [systems]);
 
-    const bodiesById = useMemo<AtlasBodiesById>(
-        () => Object.fromEntries(bodies.map((body) => [body.id, body])),
-        [bodies]
-    );
+    const bodiesById = useMemo<AtlasBodiesById>(() => indexById(bodies), [bodies]);
 
     const primarySystem = systems.find((system) => system.id === "sol") ?? systems[0];
     const [anchorId, setAnchorId] = useState<string>(primarySystem?.id ?? "sol");
