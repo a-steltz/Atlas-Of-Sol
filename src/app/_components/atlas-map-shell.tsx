@@ -44,7 +44,7 @@ type AtlasMapShellProps = {
  * @returns {JSX.Element} Interactive sticky map with bottom peek floor
  */
 export default function AtlasMapShell({ systems, bodies, childrenByParentId }: AtlasMapShellProps) {
-    const BODY_FADE_DURATION_SECONDS = 0.48;
+    const BODY_FADE_DURATION_SECONDS = 0.24;
     const BODY_FADE_DURATION_MS = BODY_FADE_DURATION_SECONDS * 1000;
     const systemsById = useMemo<AtlasSystemsById>(() => indexById(systems), [systems]);
 
@@ -200,11 +200,31 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                                             />
                                                         </div>
 
-                                                        <div
+                                                        <motion.div
+                                                            animate={
+                                                                shouldFadeOutBodies
+                                                                    ? { opacity: 0 }
+                                                                    : { opacity: 1 }
+                                                            }
                                                             className="absolute inset-x-0 px-1"
+                                                            initial={
+                                                                shouldFadeInBodies
+                                                                    ? { opacity: 0 }
+                                                                    : false
+                                                            }
                                                             style={{
                                                                 top: `calc(50% + ${Math.round(diameter / 2) + 8}px)`
                                                             }}
+                                                            transition={
+                                                                shouldFadeInBodies ||
+                                                                shouldFadeOutBodies
+                                                                    ? {
+                                                                          duration:
+                                                                              BODY_FADE_DURATION_SECONDS,
+                                                                          ease: "easeInOut"
+                                                                      }
+                                                                    : undefined
+                                                            }
                                                         >
                                                             <p className="truncate text-sm font-semibold text-white">
                                                                 {body.name}
@@ -212,7 +232,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                                             <p className="text-xs text-slate-300">
                                                                 {body.type}
                                                             </p>
-                                                        </div>
+                                                        </motion.div>
                                                     </article>
                                                 );
                                             })}
@@ -406,7 +426,7 @@ function BodyMarker({
             }}
             transition={
                 fadeIn || fadeOut
-                    ? { duration: 0.48, ease: "easeInOut" }
+                    ? { duration: 0.24, ease: "easeInOut" }
                     : undefined
             }
             type="button"
