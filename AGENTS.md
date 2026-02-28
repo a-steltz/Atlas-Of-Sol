@@ -125,7 +125,10 @@ Rules:
 
 ### Session-End Journal Rule
 
-- Write exactly one journal entry at the end of each work session.
+- Maintain exactly one running journal entry per chat/session.
+- During a chat/session, update that same journal file as work progresses; do not create a new file for each small edit.
+- Create a new journal file only when a new chat/session starts.
+- Finalize that single running entry at the end of the work session.
 - Journal entries are written manually by the agent using the standard template.
 - Filename format: `agentMemory/YYYY-MM-DD-HHMM-<slug>.md` (24-hour `HHMM`).
 - Keep all journal entries; no pruning or archival policy is required right now.

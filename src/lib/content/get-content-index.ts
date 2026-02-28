@@ -1,5 +1,16 @@
 import "server-only";
 
+/**
+ * Content index loader for Atlas of Sol.
+ *
+ * Purpose:
+ * - Discover `system.json`, `body.json`, and `mission.json` files under `content/`
+ * - Parse and schema-validate each document against shared Zod contracts
+ * - Enforce cross-entity reference integrity and MVP hierarchy invariants
+ * - Return normalized, deterministically sorted lookup structures for server routes
+ *
+ * This module is server-only and is consumed by app routes through `getContentIndex`.
+ */
 import fs from "node:fs/promises";
 import path from "node:path";
 import { cache } from "react";
@@ -17,17 +28,30 @@ import {
 } from "@/lib/content/schema";
 
 export type ContentIndex = {
+    /** Systems sorted by display name. */
     systems: SystemEntity[];
+    /** Bodies sorted by `navOrder` (fallback: name). */
     bodies: BodyEntity[];
+    /** Missions sorted by display name. */
     missions: MissionEntity[];
+    /** Global entity lookup keyed by canonical `id` across all kinds. */
     entitiesById: Record<string, AnyEntity>;
+    /** Body list grouped by owning system ID (each list is sorted). */
     bodiesBySystemId: Record<string, BodyEntity[]>;
+    /** Direct child-body list grouped by `navParentId` (each list is sorted). */
     childrenByParentId: Record<string, BodyEntity[]>;
 };
 
+/**
+ * Internal normalized entry used during load/validation before final indexing.
+ * Retains source metadata (`relPath`) so validation errors can point to files.
+ */
 type IndexedEntity = {
+    /** Parsed content kind derived from filename (`system|body|mission`). */
     kind: ContentEntityKind;
+    /** File path relative to project root for human-friendly error output. */
     relPath: string;
+    /** Schema-validated entity payload. */
     data: AnyEntity;
 };
 
@@ -204,11 +228,22 @@ function validateReferenceIntegrity(entriesById: Map<string, IndexedEntity>): vo
 }
 
 /**
- * Loads and validates all content JSON files into a normalized in-memory index.
+ * Loads all known content files, validates them, and builds a normalized index.
+ *
+ * Pipeline overview:
+ * 1. Verify `content/` exists; return empty index when absent.
+ * 2. Recursively discover schema files (`system.json`, `body.json`, `mission.json`).
+ * 3. Parse JSON and run kind-specific Zod validation.
+ * 4. Enforce global ID uniqueness across all entity kinds.
+ * 5. Run cross-entity integrity checks (system/body/mission references and hierarchy rules).
+ * 6. Materialize sorted arrays and grouped lookups for route rendering.
  *
  * @returns {Promise<ContentIndex>} Normalized content index for route rendering
+ * @throws {Error} When JSON parsing fails, schema validation fails, IDs collide,
+ * or cross-entity integrity checks fail
  */
 async function loadContentIndex(): Promise<ContentIndex> {
+    // Fast-exit: missing `content/` is treated as an empty catalog.
     const exists = await fs
         .stat(contentRoot)
         .then((stat) => stat.isDirectory())
@@ -225,6 +260,7 @@ async function loadContentIndex(): Promise<ContentIndex> {
         };
     }
 
+    // Stage 1: discover candidate files and create an ID-keyed staging map.
     const files = await listContentFiles(contentRoot);
     const entriesById = new Map<string, IndexedEntity>();
 
@@ -232,6 +268,7 @@ async function loadContentIndex(): Promise<ContentIndex> {
         const kind = kindFromFilename(path.basename(filePath));
         if (kind === "unknown") continue;
 
+        // Stage 2: parse and schema-validate by filename-derived entity kind.
         const json = await readJsonFile(filePath);
         const relPath = path.relative(projectRoot, filePath);
 
@@ -248,6 +285,7 @@ async function loadContentIndex(): Promise<ContentIndex> {
             );
         }
 
+        // Stage 3: enforce global ID uniqueness across all content kinds.
         const existing = entriesById.get(parsed.data.id);
         if (existing) {
             throw new Error(
@@ -262,8 +300,10 @@ async function loadContentIndex(): Promise<ContentIndex> {
         });
     }
 
+    // Stage 4: validate cross-entity references and hierarchy invariants.
     validateReferenceIntegrity(entriesById);
 
+    // Stage 5: materialize primary arrays and global lookup map.
     const systems: SystemEntity[] = [];
     const bodies: BodyEntity[] = [];
     const missions: MissionEntity[] = [];
@@ -276,10 +316,12 @@ async function loadContentIndex(): Promise<ContentIndex> {
         if (entry.kind === "mission") missions.push(entry.data as MissionEntity);
     }
 
+    // Keep top-level collections deterministic for stable rendering and tests.
     systems.sort((a, b) => a.name.localeCompare(b.name));
     bodies.sort(sortBodies);
     missions.sort((a, b) => a.name.localeCompare(b.name));
 
+    // Stage 6: build secondary lookup indexes used by map and navigation UI.
     const bodiesBySystemId: Record<string, BodyEntity[]> = {};
     const childrenByParentId: Record<string, BodyEntity[]> = {};
 
@@ -293,6 +335,7 @@ async function loadContentIndex(): Promise<ContentIndex> {
         childrenByParentId[body.navParentId] = byParent;
     }
 
+    // Normalize each group order so grouped traversals are deterministic too.
     for (const bodyList of Object.values(bodiesBySystemId)) {
         bodyList.sort(sortBodies);
     }
@@ -301,6 +344,7 @@ async function loadContentIndex(): Promise<ContentIndex> {
         childList.sort(sortBodies);
     }
 
+    // Final normalized index consumed by server routes and client map shell.
     return {
         systems,
         bodies,
