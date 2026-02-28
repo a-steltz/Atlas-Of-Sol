@@ -108,7 +108,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
 
     return (
         <div className="min-h-[190svh] bg-slate-950 text-slate-100">
-            <section className="sticky top-0 z-0 h-[80svh] overflow-hidden border-b border-white/10">
+            <section className="sticky top-0 z-0 h-[76svh] overflow-hidden border-b border-white/10 md:h-[68svh] xl:h-[64svh]">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(148,163,184,0.24),transparent_40%),radial-gradient(circle_at_80%_10%,rgba(56,189,248,0.16),transparent_30%),linear-gradient(180deg,#020617_0%,#020617_65%,#0f172a_100%)]" />
                 <div className="relative mx-auto flex h-full w-full max-w-[112rem] flex-col gap-4 px-3 py-4 sm:px-5 lg:px-6">
                     <header className="flex flex-col gap-3">
@@ -136,112 +136,115 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                         </nav>
                     </header>
 
-                    <section className="flex min-h-0 flex-1 flex-col rounded-2xl border border-white/10 bg-slate-900/35 p-3 backdrop-blur sm:p-4">
-                        <div className="mb-3 flex items-center gap-2">
-                            <Orbit className="h-4 w-4 text-sky-300" />
-                            <p className="text-xs tracking-[0.22em] text-slate-300 uppercase">
-                                Orbit Map
-                            </p>
-                        </div>
-
-                        {laneModel.laneBodies.length === 0 ? (
-                            <div className="flex flex-1 items-center">
-                                <p className="w-full rounded-xl border border-dashed border-white/20 bg-slate-900/55 p-5 text-sm text-slate-300">
-                                    No center body is configured for this system yet.
+                    <div className="flex min-h-0 flex-1 flex-col justify-center">
+                        <section className="flex min-h-0 flex-col rounded-2xl border border-white/10 bg-slate-900/35 p-3 backdrop-blur sm:p-4">
+                            <div className="mb-2 flex items-center gap-2">
+                                <Orbit className="h-4 w-4 text-sky-300" />
+                                <p className="text-xs tracking-[0.22em] text-slate-300 uppercase">
+                                    Orbit Map
                                 </p>
                             </div>
-                        ) : (
-                            <div className="flex flex-1 items-center">
-                                <div className="w-full rounded-xl border border-white/10 bg-slate-900/70 px-2 py-4 sm:px-3">
-                                    <div className="orbit-lane-scrollbar h-[290px] overflow-x-auto overflow-y-hidden pb-1">
-                                        {/* Marker centers are locked to one midpoint so all circles share
-                                            the same visual orbit horizon, independent of body size. */}
-                                        <div className="flex h-full min-w-max items-stretch justify-start gap-4 sm:gap-6">
-                                            {laneModel.laneBodies.map((body, index) => {
-                                                const isCenter = index === 0;
-                                                const variant = isCenter ? "anchor" : "child";
-                                                const diameter = sizeToPixels(
-                                                    body.size,
-                                                    variant
-                                                );
-                                                const isInteractive =
-                                                    !isCenter ||
-                                                    (isCenter && laneModel.isSystemRoot);
-                                                const canInteract = isInteractive && !isTransitioning;
-                                                const isSelected =
-                                                    isCenter && !laneModel.isSystemRoot;
 
-                                                return (
-                                                    <article
-                                                        className="relative h-full text-center"
-                                                        key={body.id}
-                                                        style={{
-                                                            width: Math.max(98, diameter + 18)
-                                                        }}
-                                                    >
-                                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                                                            <BodyMarker
-                                                                key={
-                                                                    shouldFadeInBodies
-                                                                        ? `${body.id}-fade-${fadeNonce}`
-                                                                        : body.id
-                                                                }
-                                                                body={body}
-                                                                fadeIn={shouldFadeInBodies}
-                                                                fadeOut={shouldFadeOutBodies}
-                                                                interactive={canInteract}
-                                                                onSelect={() => {
-                                                                    if (!canInteract) return;
-                                                                    handleAnchorChange(body.id);
-                                                                }}
-                                                                selected={isSelected}
-                                                                showNameInside={false}
-                                                                variant={variant}
-                                                            />
-                                                        </div>
+                            {laneModel.laneBodies.length === 0 ? (
+                                <div className="flex flex-1 items-center">
+                                    <p className="w-full rounded-xl border border-dashed border-white/20 bg-slate-900/55 p-5 text-sm text-slate-300">
+                                        No center body is configured for this system yet.
+                                    </p>
+                                </div>
+                            ) : (
+                                <div className="flex flex-1 items-center">
+                                    <div className="my-6 w-full rounded-xl border border-white/10 bg-slate-900/70 px-2 py-4 sm:px-3">
+                                        <div className="orbit-lane-scrollbar h-[272px] overflow-x-auto overflow-y-hidden pb-1 md:h-[260px]">
+                                            {/* Marker centers are locked to one midpoint so all circles share
+                                                the same visual orbit horizon, independent of body size. */}
+                                            <div className="flex h-full min-w-max items-stretch justify-start gap-4 sm:gap-6">
+                                                {laneModel.laneBodies.map((body, index) => {
+                                                    const isCenter = index === 0;
+                                                    const variant = isCenter ? "anchor" : "child";
+                                                    const diameter = sizeToPixels(
+                                                        body.size,
+                                                        variant
+                                                    );
+                                                    const isInteractive =
+                                                        !isCenter ||
+                                                        (isCenter && laneModel.isSystemRoot);
+                                                    const canInteract =
+                                                        isInteractive && !isTransitioning;
+                                                    const isSelected =
+                                                        isCenter && !laneModel.isSystemRoot;
 
-                                                        <motion.div
-                                                            animate={
-                                                                shouldFadeOutBodies
-                                                                    ? { opacity: 0 }
-                                                                    : { opacity: 1 }
-                                                            }
-                                                            className="absolute inset-x-0 px-1"
-                                                            initial={
-                                                                shouldFadeInBodies
-                                                                    ? { opacity: 0 }
-                                                                    : false
-                                                            }
+                                                    return (
+                                                        <article
+                                                            className="relative h-full text-center"
+                                                            key={body.id}
                                                             style={{
-                                                                top: `calc(50% + ${Math.round(diameter / 2) + 8}px)`
+                                                                width: Math.max(98, diameter + 18)
                                                             }}
-                                                            transition={
-                                                                shouldFadeInBodies ||
-                                                                shouldFadeOutBodies
-                                                                    ? {
-                                                                          duration:
-                                                                              BODY_FADE_DURATION_SECONDS,
-                                                                          ease: "easeInOut"
-                                                                      }
-                                                                    : undefined
-                                                            }
                                                         >
-                                                            <p className="truncate text-sm font-semibold text-white">
-                                                                {body.name}
-                                                            </p>
-                                                            <p className="text-xs text-slate-300">
-                                                                {body.type}
-                                                            </p>
-                                                        </motion.div>
-                                                    </article>
-                                                );
-                                            })}
+                                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                                                <BodyMarker
+                                                                    key={
+                                                                        shouldFadeInBodies
+                                                                            ? `${body.id}-fade-${fadeNonce}`
+                                                                            : body.id
+                                                                    }
+                                                                    body={body}
+                                                                    fadeIn={shouldFadeInBodies}
+                                                                    fadeOut={shouldFadeOutBodies}
+                                                                    interactive={canInteract}
+                                                                    onSelect={() => {
+                                                                        if (!canInteract) return;
+                                                                        handleAnchorChange(body.id);
+                                                                    }}
+                                                                    selected={isSelected}
+                                                                    showNameInside={false}
+                                                                    variant={variant}
+                                                                />
+                                                            </div>
+
+                                                            <motion.div
+                                                                animate={
+                                                                    shouldFadeOutBodies
+                                                                        ? { opacity: 0 }
+                                                                        : { opacity: 1 }
+                                                                }
+                                                                className="absolute inset-x-0 px-1"
+                                                                initial={
+                                                                    shouldFadeInBodies
+                                                                        ? { opacity: 0 }
+                                                                        : false
+                                                                }
+                                                                style={{
+                                                                    top: `calc(50% + ${Math.round(diameter / 2) + 8}px)`
+                                                                }}
+                                                                transition={
+                                                                    shouldFadeInBodies ||
+                                                                    shouldFadeOutBodies
+                                                                        ? {
+                                                                              duration:
+                                                                                  BODY_FADE_DURATION_SECONDS,
+                                                                              ease: "easeInOut"
+                                                                          }
+                                                                        : undefined
+                                                                }
+                                                            >
+                                                                <p className="truncate text-sm font-semibold text-white">
+                                                                    {body.name}
+                                                                </p>
+                                                                <p className="text-xs text-slate-300">
+                                                                    {body.type}
+                                                                </p>
+                                                            </motion.div>
+                                                        </article>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
-                    </section>
+                            )}
+                        </section>
+                    </div>
                 </div>
             </section>
 
