@@ -1,0 +1,103 @@
+{
+    "id": "sol/jupiter/callisto",
+    "name": "Callisto",
+    "hook": "It is the most heavily cratered object in the solar system, with a surface age exceeding 4 billion years [1].",
+    "type": "moon",
+    "size": 4,
+    "systemId": "sol",
+    "navParentId": "sol/jupiter",
+    "navOrder": 4,
+    "curationScore": 88,
+    "physical": {
+        "meanRadiusKm": 2410.3,
+        "massKg": 1.0759e23,
+        "densityKgM3": 1834,
+        "surfaceGravityMS2": 1.236,
+        "escapeVelocityMS": 2440
+    },
+    "orbit": {
+        "semiMajorAxisKm": 1882700,
+        "orbitalPeriodDays": 16.6890184,
+        "eccentricity": 0.0074,
+        "inclinationDeg": 0.205,
+        "rotationPeriodHours": 400.536,
+        "retrogradeRotation": false,
+        "tidallyLocked": true
+    },
+    "composition": {
+        "primary": ["water ice", "silicate rock"],
+        "atmosphere": {
+            "type": "tenuous",
+            "mainComponents": ["carbon dioxide", "oxygen"]
+        },
+        "internalStructure": [
+            "partially differentiated mixture of ice and rock",
+            "subsurface liquid water ocean",
+            "rock-enriched core region"
+        ]
+    },
+    "environment": {
+        "meanTemperatureK": 134,
+        "minTemperatureK": 80,
+        "maxTemperatureK": 165,
+        "liquidWaterPresence": "subsurface",
+        "magneticFieldType": "induced",
+        "volcanicActivity": "none",
+        "cryovolcanicActivity": "none",
+        "tectonicActivity": "none"
+    },
+    "discovery": {
+        "discoveredBy": "Galileo Galilei",
+        "discoveryYear": 1610,
+        "discoveryYearPrecision": "exact",
+        "discoveryMethod": "telescopic observation"
+    },
+    "scientificSynthesis": [
+        "Callisto is the outermost of Jupiter's four Galilean moons and holds the record as the most heavily cratered object in the solar system [1]. Because it lacks significant tidal heating, its surface has remained largely unaltered by geological processes for over 4 billion years, preserving a pristine record of the early solar system's impact history [2].",
+        "Prior to the Galileo mission, Callisto was presumed to be a completely inactive, undifferentiated mix of rock and ice [3].  However, magnetic field measurements revealed an induced magnetic field, strongly suggesting the presence of a salty subsurface ocean located approximately 250 kilometers beneath its icy crust [1]. Additionally, gravity data indicated that Callisto's interior is only partially differentiated, with the percentage of rock gradually increasing toward the center, representing a unique evolutionary state compared to its sister moons [3]. Galileo also detected a tenuous exosphere primarily composed of carbon dioxide and oxygen, maintained by ongoing surface replenishment [4]."
+    ],
+    "highlights": [
+        "It is the most heavily cratered object in the solar system, with a surface age exceeding 4 billion years [1].",
+        "Callisto possesses an induced magnetic field, which is interpreted as evidence for a global, subsurface conductive saltwater ocean [1].",
+        "Its interior is only partially differentiated, meaning rock and ice are largely mixed throughout its volume rather than fully separated into distinct core and mantle layers [3].",
+        "The moon features a tenuous exosphere consisting mainly of carbon dioxide and oxygen, requiring an active surface replenishment mechanism [4].",
+        "Multi-ring impact structures, such as Valhalla, are prominent, though they lack the central mountainous peaks typical on other cratered bodies due to ice flow over geologic time [2]."
+    ],
+    "howWeKnow": [
+        "Telescopic observations by Galileo Galilei in 1610 first identified Callisto as a satellite of Jupiter.",
+        "The Voyager 1 and 2 spacecraft provided the first high-resolution global mapping of its heavily cratered surface in 1979.",
+        "The Galileo spacecraft (1995–2003) conducted detailed flybys, collecting crucial gravity and magnetic field data that reshaped understanding of its interior.",
+        "Galileo's Near-Infrared Mapping Spectrometer (NIMS) detected carbon dioxide ice on the surface and confirmed the presence of a tenuous atmospheric exosphere.",
+        "Gravity tracking via Doppler radio shifts during Galileo flybys measured Callisto's moment of inertia, revealing its partially differentiated internal structure."
+    ],
+    "openQuestions": [
+        "Does Callisto's subsurface ocean still exist today, and what is its exact depth and composition?",
+        "What processes continuously replenish the carbon dioxide and oxygen in its tenuous exosphere despite constant depletion by solar wind and Jupiter's magnetosphere?",
+        "Why did Callisto fail to fully differentiate during its formation, and what does this imply about the temperature and timeline of the Jovian sub-nebula?",
+        "Could the subsurface ocean interact with a rocky interior to provide the necessary chemical gradients for habitability?"
+    ],
+    "sources": [
+        {
+            "attribution": "NASA Science",
+            "title": "Callisto Facts",
+            "url": "https://science.nasa.gov/jupiter/jupiter-moons/callisto/facts/"
+        },
+        {
+            "attribution": "NASA Space Science Data Coordinated Archive",
+            "title": "Jovian Satellite Fact Sheet",
+            "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/joviansatfact.html"
+        },
+        {
+            "attribution": "NASA Jet Propulsion Laboratory",
+            "title": "Galileo Mission Finds Strange Interior of Jovian Moon",
+            "year": 1998,
+            "url": "https://www.jpl.nasa.gov/news/galileo-mission-finds-strange-interior-of-jovian-moon/"
+        },
+        {
+            "attribution": "NASA Jet Propulsion Laboratory",
+            "title": "Galileo Spacecraft Finds Thin Atmosphere on Callisto",
+            "year": 1999,
+            "url": "https://www.jpl.nasa.gov/news/galileo-spacecraft-finds-thin-atmosphere-on-callisto/"
+        }
+    ]
+}

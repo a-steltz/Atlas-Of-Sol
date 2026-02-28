@@ -1,0 +1,108 @@
+{
+    "id": "sol/jupiter/ganymede",
+    "name": "Ganymede",
+    "hook": "Ganymede is the largest moon in the solar system, with a radius greater than that of the planet Mercury [1].",
+    "type": "moon",
+    "size": 4,
+    "systemId": "sol",
+    "navParentId": "sol/jupiter",
+    "navOrder": 3,
+    "curationScore": 90,
+    "physical": {
+        "meanRadiusKm": 2634.1,
+        "massKg": 1.4819e23,
+        "densityKgM3": 1936,
+        "surfaceGravityMS2": 1.428,
+        "escapeVelocityMS": 2741
+    },
+    "orbit": {
+        "semiMajorAxisKm": 1070400,
+        "orbitalPeriodDays": 7.15455,
+        "eccentricity": 0.0013,
+        "inclinationDeg": 0.2,
+        "rotationPeriodHours": 171.709,
+        "retrogradeRotation": false,
+        "tidallyLocked": true
+    },
+    "composition": {
+        "primary": ["Water ice", "Silicate rock"],
+        "atmosphere": {
+            "type": "tenuous",
+            "mainComponents": ["Oxygen"]
+        },
+        "internalStructure": [
+            "Iron-rich liquid core",
+            "Silicate mantle",
+            "High-pressure ice layer",
+            "Liquid water ocean",
+            "Ice crust"
+        ]
+    },
+    "environment": {
+        "meanTemperatureK": 110,
+        "minTemperatureK": 70,
+        "maxTemperatureK": 152,
+        "liquidWaterPresence": "subsurface",
+        "magneticFieldType": "global",
+        "volcanicActivity": "none",
+        "cryovolcanicActivity": "past",
+        "tectonicActivity": "past"
+    },
+    "discovery": {
+        "discoveredBy": "Galileo Galilei",
+        "discoveryYear": 1610,
+        "discoveryYearPrecision": "exact",
+        "discoveryMethod": "Telescopic observation"
+    },
+    "scientificSynthesis": [
+        "Ganymede stands out as a unique planetary body due to its fully differentiated internal structure, consisting of a metallic core, a rocky silicate mantle, and a thick outer shell composed of water ice and liquid water [1]. It is the only known moon in the solar system to generate its own intrinsic magnetic field, a discovery made by the Galileo spacecraft that fundamentally shifted planetary science paradigms regarding moon interiors [3]. This global dipole field creates a complex, localized magnetosphere that interacts dynamically with Jupiter's own massive magnetic environment [4].",
+        "Subsequent observations, particularly of the oscillation of Ganymede's auroral belts, provided compelling indirect evidence for a deep, global subsurface ocean [5]. This ocean is hypothesized to contain more liquid water than all of Earth's surface oceans combined [2]. The ongoing interplay between its intrinsic magnetic field, a massive subsurface ocean, and distinct surface geology divided into ancient dark terrains and younger grooved regions makes Ganymede a primary target for understanding the evolution of icy worlds and evaluating the conditions necessary for habitability in the outer solar system [2]."
+    ],
+    "highlights": [
+        "Ganymede is the largest moon in the solar system, with a radius greater than that of the planet Mercury [1].",
+        "It is the only moon in the solar system known to possess an internally generated, global magnetic field [3].",
+        "Observations of Ganymede's auroral oscillations strongly indicate the presence of a massive subsurface saltwater ocean [5].",
+        "The moon's surface is distinctly divided into dark, ancient, heavily cratered regions and lighter, somewhat younger regions marked with extensive tectonic grooves and ridges [2]."
+    ],
+    "howWeKnow": [
+        "Measurements of Ganymede's mass and volume by the Pioneer and Voyager spacecraft established its low bulk density, indicating a composition rich in water ice.",
+        "The Galileo spacecraft's onboard magnetometer detected the moon's intrinsic magnetic field during close flybys in the 1990s.",
+        "Hubble Space Telescope observations of ultraviolet auroral emissions revealed a dampening in their expected oscillation, a behavior consistent with the presence of a highly conductive subsurface ocean.",
+        "Surface morphology and crater counting from Voyager, Galileo, and Juno imaging data have been used to map the relative ages and geological history of its dark and light terrains."
+    ],
+    "openQuestions": [
+        "Does the subsurface ocean maintain direct contact with the rocky mantle, or is it sandwiched entirely between layers of different high-pressure ice phases?",
+        "What is the exact mechanism and thermal history driving the internal fluid dynamo that sustains the intrinsic magnetic field?",
+        "Were the geological processes that formed the bright grooved terrains driven solely by tectonic stresses, or did ancient cryovolcanism play a significant role?",
+        "Could the conditions within the subsurface ocean support the chemical disequilibrium necessary for potential microbial life?"
+    ],
+    "sources": [
+        {
+            "attribution": "NASA Space Science Data Coordinated Archive",
+            "title": "Jovian Satellite Fact Sheet",
+            "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/joviansatfact.html"
+        },
+        {
+            "attribution": "NASA Solar System Exploration",
+            "title": "Ganymede - In Depth",
+            "url": "https://solarsystem.nasa.gov/moons/jupiter-moons/ganymede/in-depth/"
+        },
+        {
+            "attribution": "Kivelson, M. G., et al.",
+            "title": "Discovery of Ganymede's magnetic field by the Galileo spacecraft",
+            "year": 1996,
+            "publisher": "Nature"
+        },
+        {
+            "attribution": "European Space Agency (ESA)",
+            "title": "JUICE - Jupiter Icy Moons Explorer",
+            "url": "https://www.esa.int/Science_Exploration/Space_Science/Juice"
+        },
+        {
+            "attribution": "Saur, J., et al.",
+            "title": "The search for a subsurface ocean in Ganymede with Hubble Space Telescope observations of its auroras",
+            "year": 2015,
+            "publisher": "Journal of Geophysical Research: Space Physics"
+        }
+    ]
+}
