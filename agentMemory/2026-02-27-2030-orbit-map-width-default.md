@@ -7,6 +7,8 @@
 - Replaced shared-layout sliding behavior with state-transition fades targeted to one body per navigation action.
 - Tuned marker fade timing to be more gradual and less abrupt.
 - Upgraded transitions so all markers in the current lane fade out together, then all markers in the destination lane fade in together.
+- Synced name/type captions with marker transitions so labels fade in/out with their bodies.
+- Sped up lane transition fades by reducing duration ~50%.
 
 ## Decisions Locked
 - Increase only the top-map shell width cap (`max-w-6xl` -> `max-w-[96rem]`) to reduce left/right wasted space without changing internal orbit lane behavior.
@@ -21,9 +23,11 @@
 - `fadingOut`: all currently visible lane markers fade out together.
 - `fadingIn`: all markers in the newly selected lane (anchor + direct children) fade in together.
 - Marker clicks are disabled while transitions are in progress to prevent overlapping state changes.
+- Captions now share the same fade state/duration/easing as marker nodes to avoid visual desynchronization.
+- Transition duration updated from `0.48s` to `0.24s` for both fade-out and fade-in phases.
 
 ## Files Touched
-- [uncommitted] `src/app/_components/atlas-map-shell.tsx` - widened sticky map wrapper, reduced map-lane gutters, finalized left-aligned spacing, switched marker transitions from slide to fade, and implemented full-lane fade-out/fade-in sequencing.
+- [uncommitted] `src/app/_components/atlas-map-shell.tsx` - widened sticky map wrapper, reduced map-lane gutters, finalized left-aligned spacing, switched marker transitions from slide to fade, implemented full-lane fade-out/fade-in sequencing, and synced caption fade behavior.
 - [uncommitted] `src/app/globals.css` - added thin, atlas-themed horizontal scrollbar styling for the orbit lane.
 - [uncommitted] `agentMemory/2026-02-27-2030-orbit-map-width-default.md` - session journal entry.
 
@@ -36,6 +40,9 @@
 - `npm run lint` - pass (post fade timing adjustment)
 - `npm run lint` - pass (post full-lane fade sequencing)
 - `npm run typecheck` - pass (post full-lane fade sequencing)
+- `npm run lint` - pass (post caption fade sync)
+- `npm run typecheck` - pass (post caption fade sync)
+- `npm run lint` - pass (post 50% fade speed increase)
 
 ## Open Questions
 - N/A
