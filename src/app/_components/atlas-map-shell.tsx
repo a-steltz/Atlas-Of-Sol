@@ -77,7 +77,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
         <div className="min-h-[190svh] bg-slate-950 text-slate-100">
             <section className="sticky top-0 z-0 h-[80svh] overflow-hidden border-b border-white/10">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(148,163,184,0.24),transparent_40%),radial-gradient(circle_at_80%_10%,rgba(56,189,248,0.16),transparent_30%),linear-gradient(180deg,#020617_0%,#020617_65%,#0f172a_100%)]" />
-                <div className="relative mx-auto flex h-full w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:px-8">
+                <div className="relative mx-auto flex h-full w-full max-w-[112rem] flex-col gap-4 px-3 py-4 sm:px-5 lg:px-6">
                     <header className="flex flex-col gap-3">
                         <h1 className="text-2xl font-semibold tracking-[0.08em] text-sky-100 uppercase drop-shadow-[0_0_22px_rgba(56,189,248,0.32)] sm:text-3xl">
                             Atlas of Sol
@@ -120,11 +120,11 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                 </div>
                             ) : (
                                 <div className="flex flex-1 items-center">
-                                    <div className="w-full rounded-xl border border-white/10 bg-slate-900/70 px-4 py-4">
-                                        <div className="h-[290px] overflow-x-auto overflow-y-hidden pb-1">
+                                    <div className="w-full rounded-xl border border-white/10 bg-slate-900/70 px-2 py-4 sm:px-3">
+                                        <div className="orbit-lane-scrollbar h-[290px] overflow-x-auto overflow-y-hidden pb-1">
                                             {/* Marker centers are locked to one midpoint so all circles share
                                                 the same visual orbit horizon, independent of body size. */}
-                                            <div className="flex h-full min-w-max items-stretch gap-4 sm:gap-6">
+                                            <div className="flex h-full w-max min-w-full items-stretch gap-4 sm:gap-6 xl:justify-between">
                                                 {laneModel.laneBodies.map((body, index) => {
                                                     const isCenter = index === 0;
                                                     const variant = isCenter ? "anchor" : "child";
