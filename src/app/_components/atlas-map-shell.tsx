@@ -8,10 +8,10 @@
  * - Bridge server-loaded content indexes into client-side interaction state
  * - Keep all hierarchy levels visually consistent via one orbit-lane model
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ChevronRight, Orbit } from "lucide-react";
-import { LayoutGroup, motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 import { indexById } from "@/lib/collections/lookup-utils";
 import type { BodyEntity, SystemEntity } from "@/lib/content/schema";
@@ -44,12 +44,20 @@ type AtlasMapShellProps = {
  * @returns {JSX.Element} Interactive sticky map with bottom peek floor
  */
 export default function AtlasMapShell({ systems, bodies, childrenByParentId }: AtlasMapShellProps) {
+    const BODY_FADE_DURATION_SECONDS = 0.48;
+    const BODY_FADE_DURATION_MS = BODY_FADE_DURATION_SECONDS * 1000;
     const systemsById = useMemo<AtlasSystemsById>(() => indexById(systems), [systems]);
 
     const bodiesById = useMemo<AtlasBodiesById>(() => indexById(bodies), [bodies]);
 
     const primarySystem = systems.find((system) => system.id === "sol") ?? systems[0];
     const [anchorId, setAnchorId] = useState<string>(primarySystem?.id ?? "sol");
+    const [transitionPhase, setTransitionPhase] = useState<"idle" | "fadingOut" | "fadingIn">(
+        "idle"
+    );
+    const [fadeNonce, setFadeNonce] = useState(0);
+    const fadeOutTimerRef = useRef<number | null>(null);
+    const fadeInTimerRef = useRef<number | null>(null);
 
     const anchorBody = bodiesById[anchorId];
     const laneModel = deriveOrbitLaneModel({
@@ -66,12 +74,37 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
     });
 
     const quickStats = anchorBody ? getQuickStats(anchorBody) : [];
+    const shouldFadeOutBodies = transitionPhase === "fadingOut";
+    const shouldFadeInBodies = transitionPhase === "fadingIn";
+    const isTransitioning = transitionPhase !== "idle";
 
     const handleAnchorChange = (nextAnchorId: string) => {
+        if (isTransitioning || nextAnchorId === anchorId) return;
         // Centralized setter keeps click interactions explicit and easy to trace
         // when center-body and orbiter elements trigger anchor transitions.
-        setAnchorId(nextAnchorId);
+        setTransitionPhase("fadingOut");
+        fadeOutTimerRef.current = window.setTimeout(() => {
+            setAnchorId(nextAnchorId);
+            setFadeNonce((previous) => previous + 1);
+            setTransitionPhase("fadingIn");
+            fadeInTimerRef.current = window.setTimeout(() => {
+                setTransitionPhase("idle");
+                fadeInTimerRef.current = null;
+            }, BODY_FADE_DURATION_MS);
+            fadeOutTimerRef.current = null;
+        }, BODY_FADE_DURATION_MS);
     };
+
+    useEffect(() => {
+        return () => {
+            if (fadeOutTimerRef.current !== null) {
+                window.clearTimeout(fadeOutTimerRef.current);
+            }
+            if (fadeInTimerRef.current !== null) {
+                window.clearTimeout(fadeInTimerRef.current);
+            }
+        };
+    }, []);
 
     return (
         <div className="min-h-[190svh] bg-slate-950 text-slate-100">
@@ -103,91 +136,92 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                         </nav>
                     </header>
 
-                    <LayoutGroup>
-                        <section className="flex min-h-0 flex-1 flex-col rounded-2xl border border-white/10 bg-slate-900/35 p-3 backdrop-blur sm:p-4">
-                            <div className="mb-3 flex items-center gap-2">
-                                <Orbit className="h-4 w-4 text-sky-300" />
-                                <p className="text-xs tracking-[0.22em] text-slate-300 uppercase">
-                                    Orbit Map
+                    <section className="flex min-h-0 flex-1 flex-col rounded-2xl border border-white/10 bg-slate-900/35 p-3 backdrop-blur sm:p-4">
+                        <div className="mb-3 flex items-center gap-2">
+                            <Orbit className="h-4 w-4 text-sky-300" />
+                            <p className="text-xs tracking-[0.22em] text-slate-300 uppercase">
+                                Orbit Map
+                            </p>
+                        </div>
+
+                        {laneModel.laneBodies.length === 0 ? (
+                            <div className="flex flex-1 items-center">
+                                <p className="w-full rounded-xl border border-dashed border-white/20 bg-slate-900/55 p-5 text-sm text-slate-300">
+                                    No center body is configured for this system yet.
                                 </p>
                             </div>
+                        ) : (
+                            <div className="flex flex-1 items-center">
+                                <div className="w-full rounded-xl border border-white/10 bg-slate-900/70 px-2 py-4 sm:px-3">
+                                    <div className="orbit-lane-scrollbar h-[290px] overflow-x-auto overflow-y-hidden pb-1">
+                                        {/* Marker centers are locked to one midpoint so all circles share
+                                            the same visual orbit horizon, independent of body size. */}
+                                        <div className="flex h-full min-w-max items-stretch justify-start gap-4 sm:gap-6">
+                                            {laneModel.laneBodies.map((body, index) => {
+                                                const isCenter = index === 0;
+                                                const variant = isCenter ? "anchor" : "child";
+                                                const diameter = sizeToPixels(
+                                                    body.size,
+                                                    variant
+                                                );
+                                                const isInteractive =
+                                                    !isCenter ||
+                                                    (isCenter && laneModel.isSystemRoot);
+                                                const canInteract = isInteractive && !isTransitioning;
+                                                const isSelected =
+                                                    isCenter && !laneModel.isSystemRoot;
 
-                            {laneModel.laneBodies.length === 0 ? (
-                                <div className="flex flex-1 items-center">
-                                    <p className="w-full rounded-xl border border-dashed border-white/20 bg-slate-900/55 p-5 text-sm text-slate-300">
-                                        No center body is configured for this system yet.
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="flex flex-1 items-center">
-                                    <div className="w-full rounded-xl border border-white/10 bg-slate-900/70 px-2 py-4 sm:px-3">
-                                        <div className="orbit-lane-scrollbar h-[290px] overflow-x-auto overflow-y-hidden pb-1">
-                                            {/* Marker centers are locked to one midpoint so all circles share
-                                                the same visual orbit horizon, independent of body size. */}
-                                            <div className="flex h-full min-w-max items-stretch justify-start gap-4 sm:gap-6">
-                                                {laneModel.laneBodies.map((body, index) => {
-                                                    const isCenter = index === 0;
-                                                    const variant = isCenter ? "anchor" : "child";
-                                                    const diameter = sizeToPixels(
-                                                        body.size,
-                                                        variant
-                                                    );
-                                                    const isInteractive =
-                                                        !isCenter ||
-                                                        (isCenter && laneModel.isSystemRoot);
-                                                    const isSelected =
-                                                        isCenter && !laneModel.isSystemRoot;
+                                                return (
+                                                    <article
+                                                        className="relative h-full text-center"
+                                                        key={body.id}
+                                                        style={{
+                                                            width: Math.max(98, diameter + 18)
+                                                        }}
+                                                    >
+                                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                                            <BodyMarker
+                                                                key={
+                                                                    shouldFadeInBodies
+                                                                        ? `${body.id}-fade-${fadeNonce}`
+                                                                        : body.id
+                                                                }
+                                                                body={body}
+                                                                fadeIn={shouldFadeInBodies}
+                                                                fadeOut={shouldFadeOutBodies}
+                                                                interactive={canInteract}
+                                                                onSelect={() => {
+                                                                    if (!canInteract) return;
+                                                                    handleAnchorChange(body.id);
+                                                                }}
+                                                                selected={isSelected}
+                                                                showNameInside={false}
+                                                                variant={variant}
+                                                            />
+                                                        </div>
 
-                                                    return (
-                                                        <article
-                                                            className="relative h-full text-center"
-                                                            key={body.id}
+                                                        <div
+                                                            className="absolute inset-x-0 px-1"
                                                             style={{
-                                                                width: Math.max(98, diameter + 18)
+                                                                top: `calc(50% + ${Math.round(diameter / 2) + 8}px)`
                                                             }}
                                                         >
-                                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                                                                {/*
-                                                                    Center bodies and orbiters render in the same lane,
-                                                                    but shared `layoutId` still links each body identity so
-                                                                    promotion animations remain smooth and continuous.
-                                                                */}
-                                                                <BodyMarker
-                                                                    body={body}
-                                                                    interactive={isInteractive}
-                                                                    onSelect={() => {
-                                                                        if (!isInteractive) return;
-                                                                        handleAnchorChange(body.id);
-                                                                    }}
-                                                                    selected={isSelected}
-                                                                    showNameInside={false}
-                                                                    variant={variant}
-                                                                />
-                                                            </div>
-
-                                                            <div
-                                                                className="absolute inset-x-0 px-1"
-                                                                style={{
-                                                                    top: `calc(50% + ${Math.round(diameter / 2) + 8}px)`
-                                                                }}
-                                                            >
-                                                                <p className="truncate text-sm font-semibold text-white">
-                                                                    {body.name}
-                                                                </p>
-                                                                <p className="text-xs text-slate-300">
-                                                                    {body.type}
-                                                                </p>
-                                                            </div>
-                                                        </article>
-                                                    );
-                                                })}
-                                            </div>
+                                                            <p className="truncate text-sm font-semibold text-white">
+                                                                {body.name}
+                                                            </p>
+                                                            <p className="text-xs text-slate-300">
+                                                                {body.type}
+                                                            </p>
+                                                        </div>
+                                                    </article>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 </div>
-                            )}
-                        </section>
-                    </LayoutGroup>
+                            </div>
+                        )}
+                    </section>
                 </div>
             </section>
 
@@ -271,6 +305,10 @@ type BodyMarkerProps = {
     showNameInside?: boolean;
     /** Whether the marker accepts user interaction. */
     interactive?: boolean;
+    /** Whether this marker should fade in for a navigation transition. */
+    fadeIn?: boolean;
+    /** Whether this marker should fade out for a navigation transition. */
+    fadeOut?: boolean;
 };
 
 type MarkerKind = "orb" | "annulus";
@@ -311,7 +349,6 @@ function resolveMarkerKind(bodyType: BodyEntity["type"]): MarkerKind {
 
 /**
  * Circular 2D map marker used for both center-body and orbiter rendering.
- * The canonical body ID is used to build the shared Motion `layoutId`.
  *
  * @param {BodyMarkerProps} props - Marker inputs
  * @returns {JSX.Element} Animated body marker button
@@ -322,7 +359,9 @@ function BodyMarker({
     onSelect,
     selected = false,
     showNameInside = variant === "anchor",
-    interactive = true
+    interactive = true,
+    fadeIn = false,
+    fadeOut = false
 }: BodyMarkerProps) {
     const diameter = sizeToPixels(body.size, variant);
     const markerKind = resolveMarkerKind(body.type);
@@ -343,10 +382,8 @@ function BodyMarker({
                     ? `cursor-pointer hover:scale-[1.03] ${hoverClass}`
                     : "cursor-default"
             }`}
-            layout
-            // The body ID is globally unique in content and maps 1:1 to the entity,
-            // making it the safest shared transition key across map states.
-            layoutId={`body-${body.id}`}
+            animate={fadeOut ? { opacity: 0 } : { opacity: 1 }}
+            initial={fadeIn ? { opacity: 0 } : false}
             onClick={() => {
                 if (!interactive || !onSelect) return;
                 onSelect();
@@ -367,12 +404,11 @@ function BodyMarker({
                 width: diameter,
                 height: diameter
             }}
-            transition={{
-                type: "spring",
-                stiffness: 280,
-                damping: 28,
-                mass: 0.65
-            }}
+            transition={
+                fadeIn || fadeOut
+                    ? { duration: 0.48, ease: "easeInOut" }
+                    : undefined
+            }
             type="button"
         >
             {isAnnulus ? (
