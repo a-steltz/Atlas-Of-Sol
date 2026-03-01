@@ -278,9 +278,13 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                             ) : null}
 
                             <article
-                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                                className="relative scroll-mt-20 overflow-hidden rounded-2xl border border-white/15 bg-slate-950/60 p-5"
                                 id="museum-hook"
                             >
+                                <span
+                                    aria-hidden
+                                    className="pointer-events-none absolute inset-y-5 left-0 w-12 bg-[radial-gradient(circle_at_left,rgba(56,189,248,0.3),rgba(56,189,248,0.08)_40%,transparent_72%)]"
+                                />
                                 <div className="flex flex-wrap items-center justify-between gap-3">
                                     <div className="flex flex-wrap items-center gap-3">
                                         <h3 className="text-lg font-semibold text-white">
@@ -292,7 +296,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                     </div>
                                     <BackToTopLink />
                                 </div>
-                                <p className="mt-3 text-base leading-7 text-slate-100">
+                                <p className="mt-3 text-lg leading-8 font-medium text-slate-100 md:text-xl">
                                     {anchorBody.hook}
                                 </p>
                             </article>
