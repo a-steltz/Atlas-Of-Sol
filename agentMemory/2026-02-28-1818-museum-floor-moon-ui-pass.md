@@ -8,6 +8,7 @@
 - Moved all "Back to Top" links into each card header row using flex + `justify-between` to keep actions aligned with section titles.
 - Applied Hook emphasis pass: increased hook typography, added a subtle left-side glow, and added a small "Curiosity Hook" label.
 - Removed the "Curiosity Hook" label from the Hook card while retaining the larger hook typography and subtle left glow styling.
+- Reworked section structure so the Hook card acts as the top title anchor: removed visible "Museum Floor" label, kept an `sr-only` heading, moved TOC pills below Hook, removed Hook-card back link, and retargeted all other back links to `#museum-hook`.
 
 ## Decisions Locked
 - Museum Floor no longer renders `curationScore` or `size` in visitor-facing detail content.
@@ -42,6 +43,9 @@
 - `npx prettier --write src/app/_components/atlas-map-shell.tsx` (post hook-label removal) - pass.
 - `npm run lint` (post hook-label removal) - pass.
 - `npm run typecheck` (post hook-label removal) - pass.
+- `npx prettier --write src/app/_components/atlas-map-shell.tsx` (post hook-title-card restructuring) - pass.
+- `npm run lint` (post hook-title-card restructuring) - pass.
+- `npm run typecheck` (post hook-title-card restructuring) - pass.
 
 ## Open Questions
 - Should optional sections with no data (for bodies with sparse payloads) be hidden entirely instead of showing “still being curated” placeholder text?

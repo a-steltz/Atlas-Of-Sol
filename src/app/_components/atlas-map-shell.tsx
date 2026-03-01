@@ -253,30 +253,11 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
             </section>
 
             <section className="relative z-10 min-h-[126svh] rounded-t-3xl border border-white/10 bg-slate-900/96 px-4 pb-20 pt-6 shadow-[0_-24px_70px_rgba(2,6,23,0.78)] backdrop-blur sm:px-8">
-                <div className="mx-auto flex w-full max-w-5xl flex-col gap-5" id="museum-floor-top">
-                    <p className="text-xs tracking-[0.24em] text-slate-400 uppercase">
-                        Museum Floor
-                    </p>
+                <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
+                    <h2 className="sr-only">Museum Floor</h2>
 
                     {anchorBody ? (
                         <>
-                            {jumpLinks.length > 0 ? (
-                                <nav
-                                    aria-label="Museum floor sections"
-                                    className="orbit-lane-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1"
-                                >
-                                    {jumpLinks.map((link) => (
-                                        <a
-                                            className="whitespace-nowrap rounded-full border border-white/15 bg-slate-950/55 px-3 py-1.5 text-[11px] tracking-[0.14em] text-slate-200 uppercase transition hover:border-sky-300/50 hover:text-white"
-                                            href={`#${link.id}`}
-                                            key={link.id}
-                                        >
-                                            {link.label}
-                                        </a>
-                                    ))}
-                                </nav>
-                            ) : null}
-
                             <article
                                 className="relative scroll-mt-20 overflow-hidden rounded-2xl border border-white/15 bg-slate-950/60 p-5"
                                 id="museum-hook"
@@ -294,12 +275,28 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                             {formatBodyTypeLabel(anchorBody.type)}
                                         </span>
                                     </div>
-                                    <BackToTopLink />
                                 </div>
                                 <p className="mt-3 text-lg leading-8 font-medium text-slate-100 md:text-xl">
                                     {anchorBody.hook}
                                 </p>
                             </article>
+
+                            {jumpLinks.length > 0 ? (
+                                <nav
+                                    aria-label="Museum floor sections"
+                                    className="orbit-lane-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1"
+                                >
+                                    {jumpLinks.map((link) => (
+                                        <a
+                                            className="whitespace-nowrap rounded-full border border-white/15 bg-slate-950/55 px-3 py-1.5 text-[11px] tracking-[0.14em] text-slate-200 uppercase transition hover:border-sky-300/50 hover:text-white"
+                                            href={`#${link.id}`}
+                                            key={link.id}
+                                        >
+                                            {link.label}
+                                        </a>
+                                    ))}
+                                </nav>
+                            ) : null}
 
                             <article
                                 className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
@@ -639,7 +636,7 @@ function BackToTopLink() {
     return (
         <a
             className="rounded-md border border-white/15 px-2.5 py-1 text-[11px] tracking-[0.12em] text-slate-300 uppercase transition hover:border-sky-300/45 hover:text-sky-100"
-            href="#museum-floor-top"
+            href="#museum-hook"
         >
             Back to Top
         </a>
