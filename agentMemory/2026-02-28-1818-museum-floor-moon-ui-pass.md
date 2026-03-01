@@ -6,6 +6,8 @@
 - Added two interchangeable list presentation variants for Highlights/How We Know/Open Questions (Single Panel and Left Rail) with a live preview toggle.
 - Locked Highlights/How We Know/Open Questions to a simplified left-dot style: removed vertical rail line, removed section pills, and removed the style preview toggle.
 - Moved all "Back to Top" links into each card header row using flex + `justify-between` to keep actions aligned with section titles.
+- Applied Hook emphasis pass: increased hook typography, added a subtle left-side glow, and added a small "Curiosity Hook" label.
+- Removed the "Curiosity Hook" label from the Hook card while retaining the larger hook typography and subtle left glow styling.
 
 ## Decisions Locked
 - Museum Floor no longer renders `curationScore` or `size` in visitor-facing detail content.
@@ -34,6 +36,12 @@
 - `npx prettier --write src/app/_components/atlas-map-shell.tsx` (post back-to-top header alignment update) - pass.
 - `npm run lint` (post back-to-top header alignment update) - pass.
 - `npm run typecheck` (post back-to-top header alignment update) - pass.
+- `npx prettier --write src/app/_components/atlas-map-shell.tsx` (post hook-emphasis update) - pass.
+- `npm run lint` (post hook-emphasis update) - pass.
+- `npm run typecheck` (post hook-emphasis update) - pass.
+- `npx prettier --write src/app/_components/atlas-map-shell.tsx` (post hook-label removal) - pass.
+- `npm run lint` (post hook-label removal) - pass.
+- `npm run typecheck` (post hook-label removal) - pass.
 
 ## Open Questions
 - Should optional sections with no data (for bodies with sparse payloads) be hidden entirely instead of showing “still being curated” placeholder text?
