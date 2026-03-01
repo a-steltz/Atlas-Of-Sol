@@ -19,7 +19,9 @@ import type { BodyEntity, SystemEntity } from "@/lib/content/schema";
 import {
     buildBreadcrumb,
     deriveOrbitLaneModel,
-    getQuickStats,
+    getDiscoveryDetails,
+    getMuseumFactSections,
+    normalizeSourceUrl,
     sizeToPixels,
     type AtlasBodiesById,
     type AtlasChildrenByParentId,
@@ -73,7 +75,9 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
         bodiesById
     });
 
-    const quickStats = anchorBody ? getQuickStats(anchorBody) : [];
+    const discoveryDetails = anchorBody ? getDiscoveryDetails(anchorBody) : [];
+    const factSections = anchorBody ? getMuseumFactSections(anchorBody) : [];
+    const jumpLinks = anchorBody ? buildMuseumJumpLinks(anchorBody, factSections.length > 0) : [];
     const shouldFadeOutBodies = transitionPhase === "fadingOut";
     const shouldFadeInBodies = transitionPhase === "fadingIn";
     const isTransitioning = transitionPhase !== "idle";
@@ -256,44 +260,255 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
 
                     {anchorBody ? (
                         <>
-                            <article className="rounded-2xl border border-white/10 bg-slate-950/55 p-5">
-                                <h3 className="text-lg font-semibold text-white">
-                                    {anchorBody.name}
-                                </h3>
-                                <p className="mt-2 text-sm leading-6 text-slate-200">
+                            {jumpLinks.length > 0 ? (
+                                <nav
+                                    aria-label="Museum floor sections"
+                                    className="orbit-lane-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1"
+                                >
+                                    {jumpLinks.map((link) => (
+                                        <a
+                                            className="whitespace-nowrap rounded-full border border-white/15 bg-slate-950/55 px-3 py-1.5 text-[11px] tracking-[0.14em] text-slate-200 uppercase transition hover:border-sky-300/50 hover:text-white"
+                                            href={`#${link.id}`}
+                                            key={link.id}
+                                        >
+                                            {link.label}
+                                        </a>
+                                    ))}
+                                </nav>
+                            ) : null}
+
+                            <article
+                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                                id="museum-hook"
+                            >
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <h3 className="text-lg font-semibold text-white">
+                                        {anchorBody.name}
+                                    </h3>
+                                    <span className="rounded-full border border-sky-200/30 bg-sky-950/45 px-2.5 py-1 text-[11px] tracking-[0.14em] text-sky-100 uppercase">
+                                        {formatBodyTypeLabel(anchorBody.type)}
+                                    </span>
+                                </div>
+                                <p className="mt-3 text-base leading-7 text-slate-100">
                                     {anchorBody.hook}
                                 </p>
-
-                                <dl className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                                    {quickStats.map((stat) => (
-                                        <div
-                                            className="rounded-lg border border-white/10 bg-slate-900/70 px-3 py-2"
-                                            key={stat.label}
-                                        >
-                                            <dt className="text-[11px] tracking-[0.16em] text-slate-400 uppercase">
-                                                {stat.label}
-                                            </dt>
-                                            <dd className="mt-1 text-sm font-medium text-slate-100">
-                                                {stat.value}
-                                            </dd>
-                                        </div>
-                                    ))}
-                                </dl>
                             </article>
 
-                            <article className="rounded-2xl border border-white/10 bg-slate-950/55 p-5">
+                            <article
+                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                                id="museum-discovery"
+                            >
                                 <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
-                                    Highlight Snapshot
+                                    Discovery
+                                </h4>
+                                {discoveryDetails.length ? (
+                                    <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+                                        {discoveryDetails.map((detail) => (
+                                            <div
+                                                className="rounded-lg border border-white/10 bg-slate-900/70 px-3 py-2.5"
+                                                key={detail.label}
+                                            >
+                                                <dt className="text-[11px] tracking-[0.16em] text-slate-400 uppercase">
+                                                    {detail.label}
+                                                </dt>
+                                                <dd className="mt-1.5 text-sm leading-6 text-slate-100">
+                                                    {detail.value}
+                                                </dd>
+                                            </div>
+                                        ))}
+                                    </dl>
+                                ) : (
+                                    <p className="mt-3 text-sm leading-6 text-slate-300">
+                                        Discovery details are still being curated for this body.
+                                    </p>
+                                )}
+                            </article>
+
+                            <article
+                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                                id="museum-highlights"
+                            >
+                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
+                                    Highlights
                                 </h4>
                                 {anchorBody.highlights?.length ? (
-                                    <ul className="mt-3 space-y-2 text-sm text-slate-200">
-                                        {anchorBody.highlights.slice(0, 2).map((item) => (
-                                            <li key={item}>{item}</li>
+                                    <ul className="mt-3 space-y-2.5 text-sm leading-6 text-slate-200">
+                                        {anchorBody.highlights.map((item, index) => (
+                                            <li
+                                                className="rounded-lg border border-white/10 bg-slate-900/65 px-3 py-2"
+                                                key={`${index}-${item}`}
+                                            >
+                                                {item}
+                                            </li>
                                         ))}
                                     </ul>
                                 ) : (
-                                    <p className="mt-3 text-sm text-slate-300">
-                                        Extended highlights for this body are still being curated.
+                                    <p className="mt-3 text-sm leading-6 text-slate-300">
+                                        Highlights are still being curated for this body.
+                                    </p>
+                                )}
+                            </article>
+
+                            {factSections.length > 0 ? (
+                                <section
+                                    className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                                    id="museum-core-facts"
+                                >
+                                    <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
+                                        Core Facts
+                                    </h4>
+                                    <div className="mt-4 grid gap-3 lg:grid-cols-2">
+                                        {factSections.map((section) => (
+                                            <article
+                                                className="rounded-xl border border-white/10 bg-slate-900/65 p-4"
+                                                key={section.id}
+                                            >
+                                                <h5 className="text-xs tracking-[0.15em] text-slate-300 uppercase">
+                                                    {section.title}
+                                                </h5>
+                                                <dl className="mt-3 space-y-2">
+                                                    {section.items.map((item) => (
+                                                        <div
+                                                            className="rounded-md border border-white/10 bg-slate-950/55 px-3 py-2"
+                                                            key={item.label}
+                                                        >
+                                                            <dt className="text-[11px] tracking-[0.14em] text-slate-400 uppercase">
+                                                                {item.label}
+                                                            </dt>
+                                                            <dd className="mt-1 text-sm leading-6 text-slate-100">
+                                                                {item.value}
+                                                            </dd>
+                                                        </div>
+                                                    ))}
+                                                </dl>
+                                            </article>
+                                        ))}
+                                    </div>
+                                </section>
+                            ) : null}
+
+                            <article
+                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                                id="museum-how-we-know"
+                            >
+                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
+                                    How We Know
+                                </h4>
+                                {anchorBody.howWeKnow?.length ? (
+                                    <ul className="mt-3 space-y-2.5 text-sm leading-6 text-slate-200">
+                                        {anchorBody.howWeKnow.map((item, index) => (
+                                            <li
+                                                className="rounded-lg border border-white/10 bg-slate-900/65 px-3 py-2"
+                                                key={`${index}-${item}`}
+                                            >
+                                                {item}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="mt-3 text-sm leading-6 text-slate-300">
+                                        Evidence notes have not been added yet for this body.
+                                    </p>
+                                )}
+                            </article>
+
+                            <article
+                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                                id="museum-open-questions"
+                            >
+                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
+                                    Open Questions
+                                </h4>
+                                {anchorBody.openQuestions?.length ? (
+                                    <ul className="mt-3 space-y-2.5 text-sm leading-6 text-slate-200">
+                                        {anchorBody.openQuestions.map((item, index) => (
+                                            <li
+                                                className="rounded-lg border border-white/10 bg-slate-900/65 px-3 py-2"
+                                                key={`${index}-${item}`}
+                                            >
+                                                {item}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="mt-3 text-sm leading-6 text-slate-300">
+                                        Open research questions are still being curated for this
+                                        body.
+                                    </p>
+                                )}
+                            </article>
+
+                            <article
+                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                                id="museum-synthesis"
+                            >
+                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
+                                    Scientific Synthesis
+                                </h4>
+                                {anchorBody.scientificSynthesis?.length ? (
+                                    <div className="mt-3 space-y-3 text-sm leading-7 text-slate-200">
+                                        {anchorBody.scientificSynthesis.map((paragraph, index) => (
+                                            <p
+                                                className="rounded-lg border border-white/10 bg-slate-900/65 px-3 py-2.5"
+                                                key={`${index}-${paragraph.slice(0, 30)}`}
+                                            >
+                                                {paragraph}
+                                            </p>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="mt-3 text-sm leading-6 text-slate-300">
+                                        A synthesis summary has not been added yet for this body.
+                                    </p>
+                                )}
+                            </article>
+
+                            <article
+                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                                id="museum-sources"
+                            >
+                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
+                                    Sources
+                                </h4>
+                                {anchorBody.sources?.length ? (
+                                    <ol className="mt-3 space-y-3 text-sm text-slate-200">
+                                        {anchorBody.sources.map((source, index) => {
+                                            const sourceUrl = normalizeSourceUrl(source.url);
+
+                                            return (
+                                                <li
+                                                    className="rounded-lg border border-white/10 bg-slate-900/65 px-3 py-2.5"
+                                                    key={`${source.title}-${source.attribution}-${index}`}
+                                                >
+                                                    <p className="leading-6 text-slate-100">
+                                                        <span className="font-medium text-white">
+                                                            [{index + 1}] {source.title}
+                                                        </span>
+                                                    </p>
+                                                    <p className="mt-1 leading-6 text-slate-300">
+                                                        {source.attribution}
+                                                        {source.publisher
+                                                            ? ` · ${source.publisher}`
+                                                            : ""}
+                                                        {source.year ? ` · ${source.year}` : ""}
+                                                    </p>
+                                                    {sourceUrl ? (
+                                                        <a
+                                                            className="mt-2 inline-flex rounded-md border border-sky-300/35 px-2.5 py-1 text-xs tracking-[0.12em] text-sky-100 uppercase transition hover:border-sky-200 hover:text-white"
+                                                            href={sourceUrl}
+                                                            rel="noreferrer noopener"
+                                                            target="_blank"
+                                                        >
+                                                            View Source
+                                                        </a>
+                                                    ) : null}
+                                                </li>
+                                            );
+                                        })}
+                                    </ol>
+                                ) : (
+                                    <p className="mt-3 text-sm leading-6 text-slate-300">
+                                        Sources have not been attached yet for this body.
                                     </p>
                                 )}
                             </article>
@@ -305,7 +520,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                             </h3>
                             <p className="mt-2 text-sm leading-6 text-slate-200">
                                 {laneModel.system?.description ??
-                                    "The top map remains in view while this floor scrolls. Select a body above to reveal hook and quick stats here."}
+                                    "The top map remains in view while this floor scrolls. Select a body above to reveal the hook, discovery details, and supporting science sections here."}
                             </p>
                         </article>
                     )}
@@ -313,6 +528,60 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
             </section>
         </div>
     );
+}
+
+type MuseumJumpLink = {
+    id: string;
+    label: string;
+};
+
+/**
+ * Builds the museum-floor section jump list based on data availability.
+ *
+ * @param {BodyEntity} body - Active body shown on the museum floor
+ * @param {boolean} hasFactSections - Whether grouped scientific fact cards exist
+ * @returns {MuseumJumpLink[]} Ordered jump links matching rendered section IDs
+ */
+function buildMuseumJumpLinks(body: BodyEntity, hasFactSections: boolean): MuseumJumpLink[] {
+    const links: MuseumJumpLink[] = [
+        { id: "museum-hook", label: "Hook" },
+        { id: "museum-discovery", label: "Discovery" },
+        { id: "museum-highlights", label: "Highlights" }
+    ];
+
+    if (hasFactSections) {
+        links.push({ id: "museum-core-facts", label: "Core Facts" });
+    }
+
+    if (body.howWeKnow?.length) {
+        links.push({ id: "museum-how-we-know", label: "How We Know" });
+    }
+
+    if (body.openQuestions?.length) {
+        links.push({ id: "museum-open-questions", label: "Open Questions" });
+    }
+
+    if (body.scientificSynthesis?.length) {
+        links.push({ id: "museum-synthesis", label: "Synthesis" });
+    }
+
+    links.push({ id: "museum-sources", label: "Sources" });
+
+    return links;
+}
+
+/**
+ * Converts body type enum values (for example `dwarf-planet`) into
+ * display-friendly title case labels.
+ *
+ * @param {BodyEntity["type"]} type - Canonical body type
+ * @returns {string} Human-readable type label
+ */
+function formatBodyTypeLabel(type: BodyEntity["type"]): string {
+    return type
+        .split("-")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
 }
 
 type BodyMarkerProps = {
@@ -401,9 +670,7 @@ function BodyMarker({
         <motion.button
             aria-label={`${interactive ? "Select" : "Viewing"} ${body.name}`}
             className={`relative grid shrink-0 place-items-center overflow-hidden rounded-full border text-[11px] font-semibold tracking-wide transition ${baseClass} ${
-                interactive
-                    ? `cursor-pointer hover:scale-[1.03] ${hoverClass}`
-                    : "cursor-default"
+                interactive ? `cursor-pointer hover:scale-[1.03] ${hoverClass}` : "cursor-default"
             }`}
             animate={fadeOut ? { opacity: 0 } : { opacity: 1 }}
             initial={fadeIn ? { opacity: 0 } : false}
@@ -427,11 +694,7 @@ function BodyMarker({
                 width: diameter,
                 height: diameter
             }}
-            transition={
-                fadeIn || fadeOut
-                    ? { duration: 0.24, ease: "easeInOut" }
-                    : undefined
-            }
+            transition={fadeIn || fadeOut ? { duration: 0.24, ease: "easeInOut" } : undefined}
             type="button"
         >
             {isAnnulus ? (
@@ -449,7 +712,11 @@ function BodyMarker({
                             animate={
                                 twinkleActive && speck.twinkle
                                     ? {
-                                          opacity: [speck.opacity, Math.min(1, speck.opacity + 0.22), speck.opacity],
+                                          opacity: [
+                                              speck.opacity,
+                                              Math.min(1, speck.opacity + 0.22),
+                                              speck.opacity
+                                          ],
                                           scale: [1, 1.18, 1]
                                       }
                                     : {
