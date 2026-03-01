@@ -2,6 +2,7 @@
 - Reworked the Museum Floor body detail experience to prioritize visitor-relevant content from `body.json` and remove editorial-only fields from display.
 - Implemented a new section flow for selected bodies: Hook, Discovery, Highlights, Core Facts, How We Know, Open Questions, Scientific Synthesis, and Sources.
 - Added horizontal jump links at the top of Museum Floor to improve long-page navigation.
+- Added per-section "Back to Top" links that return users to the Museum Floor heading/jump-nav anchor.
 
 ## Decisions Locked
 - Museum Floor no longer renders `curationScore` or `size` in visitor-facing detail content.
@@ -9,7 +10,7 @@
 - Scientific backbone data (`physical`, `orbit`, `composition`, `environment`) is grouped into approachable “Core Facts” cards rather than dense raw dumps.
 
 ## Files Touched
-- [uncommitted] `src/app/_components/atlas-map-shell.tsx` - replaced quick-stats snapshot UI with ordered museum sections, section jump-nav, and source rendering at end.
+- [uncommitted] `src/app/_components/atlas-map-shell.tsx` - replaced quick-stats snapshot UI with ordered museum sections, section jump-nav, source rendering at end, and per-section "Back to Top" links.
 - [uncommitted] `src/app/_components/atlas-map-utils.ts` - removed quick-stats derivation and added discovery details, grouped fact extraction, and source URL normalization helpers.
 - [uncommitted] `agentMemory/2026-02-28-1818-museum-floor-moon-ui-pass.md` - session journal entry.
 
@@ -18,6 +19,9 @@
 - `npm run lint` - pass.
 - `npm run typecheck` - pass.
 - `npm run content:validate` - pass (`Content validation passed: 19 entities (19 files scanned).`).
+- `npx prettier --write src/app/_components/atlas-map-shell.tsx` - pass.
+- `npm run lint` (post back-to-top update) - pass.
+- `npm run typecheck` (post back-to-top update) - pass.
 
 ## Open Questions
 - Should optional sections with no data (for bodies with sparse payloads) be hidden entirely instead of showing “still being curated” placeholder text?

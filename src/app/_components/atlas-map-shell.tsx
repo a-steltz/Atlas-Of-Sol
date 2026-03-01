@@ -253,7 +253,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
             </section>
 
             <section className="relative z-10 min-h-[126svh] rounded-t-3xl border border-white/10 bg-slate-900/96 px-4 pb-20 pt-6 shadow-[0_-24px_70px_rgba(2,6,23,0.78)] backdrop-blur sm:px-8">
-                <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
+                <div className="mx-auto flex w-full max-w-5xl flex-col gap-5" id="museum-floor-top">
                     <p className="text-xs tracking-[0.24em] text-slate-400 uppercase">
                         Museum Floor
                     </p>
@@ -292,6 +292,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                 <p className="mt-3 text-base leading-7 text-slate-100">
                                     {anchorBody.hook}
                                 </p>
+                                <BackToTopLink />
                             </article>
 
                             <article
@@ -322,6 +323,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                         Discovery details are still being curated for this body.
                                     </p>
                                 )}
+                                <BackToTopLink />
                             </article>
 
                             <article
@@ -347,6 +349,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                         Highlights are still being curated for this body.
                                     </p>
                                 )}
+                                <BackToTopLink />
                             </article>
 
                             {factSections.length > 0 ? (
@@ -384,6 +387,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                             </article>
                                         ))}
                                     </div>
+                                    <BackToTopLink />
                                 </section>
                             ) : null}
 
@@ -410,6 +414,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                         Evidence notes have not been added yet for this body.
                                     </p>
                                 )}
+                                <BackToTopLink />
                             </article>
 
                             <article
@@ -436,6 +441,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                         body.
                                     </p>
                                 )}
+                                <BackToTopLink />
                             </article>
 
                             <article
@@ -461,6 +467,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                         A synthesis summary has not been added yet for this body.
                                     </p>
                                 )}
+                                <BackToTopLink />
                             </article>
 
                             <article
@@ -511,6 +518,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                         Sources have not been attached yet for this body.
                                     </p>
                                 )}
+                                <BackToTopLink />
                             </article>
                         </>
                     ) : (
@@ -582,6 +590,25 @@ function formatBodyTypeLabel(type: BodyEntity["type"]): string {
         .split("-")
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
         .join(" ");
+}
+
+/**
+ * Lightweight section footer link that returns the user to the museum-floor
+ * heading and section jump controls.
+ *
+ * @returns {JSX.Element} Intra-page anchor link to museum-floor top
+ */
+function BackToTopLink() {
+    return (
+        <div className="mt-4 flex justify-end">
+            <a
+                className="rounded-md border border-white/15 px-2.5 py-1 text-[11px] tracking-[0.12em] text-slate-300 uppercase transition hover:border-sky-300/45 hover:text-sky-100"
+                href="#museum-floor-top"
+            >
+                Back to Top
+            </a>
+        </div>
+    );
 }
 
 type BodyMarkerProps = {
