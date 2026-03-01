@@ -258,45 +258,47 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
 
                     {anchorBody ? (
                         <>
-                            <article
-                                className="relative scroll-mt-20 overflow-hidden rounded-2xl border border-white/15 bg-slate-950/60 p-5"
+                            <section
+                                className="relative scroll-mt-20 overflow-hidden rounded-2xl border border-white/12 bg-slate-950/58"
                                 id="museum-hook"
                             >
-                                <span
-                                    aria-hidden
-                                    className="pointer-events-none absolute inset-y-5 left-0 w-12 bg-[radial-gradient(circle_at_left,rgba(56,189,248,0.3),rgba(56,189,248,0.08)_40%,transparent_72%)]"
-                                />
-                                <div className="flex flex-wrap items-center justify-between gap-3">
-                                    <div className="flex flex-wrap items-center gap-3">
-                                        <h3 className="text-lg font-semibold text-white">
-                                            {anchorBody.name}
-                                        </h3>
-                                        <span className="rounded-full border border-sky-200/30 bg-sky-950/45 px-2.5 py-1 text-[11px] tracking-[0.14em] text-sky-100 uppercase">
-                                            {formatBodyTypeLabel(anchorBody.type)}
-                                        </span>
+                                <div className="relative p-5">
+                                    <span
+                                        aria-hidden
+                                        className="pointer-events-none absolute inset-y-5 left-0 w-10 bg-[radial-gradient(circle_at_left,rgba(56,189,248,0.2),rgba(56,189,248,0.05)_42%,transparent_72%)]"
+                                    />
+                                    <div className="flex flex-wrap items-center justify-between gap-3">
+                                        <div className="flex flex-wrap items-center gap-3">
+                                            <h3 className="text-lg font-semibold text-white">
+                                                {anchorBody.name}
+                                            </h3>
+                                            <span className="rounded-full border border-sky-200/30 bg-sky-950/45 px-2.5 py-1 text-[11px] tracking-[0.14em] text-sky-100 uppercase">
+                                                {formatBodyTypeLabel(anchorBody.type)}
+                                            </span>
+                                        </div>
                                     </div>
+                                    <p className="mt-3 text-lg leading-8 font-medium text-slate-100 md:text-xl">
+                                        {anchorBody.hook}
+                                    </p>
                                 </div>
-                                <p className="mt-3 text-lg leading-8 font-medium text-slate-100 md:text-xl">
-                                    {anchorBody.hook}
-                                </p>
-                            </article>
 
-                            {jumpLinks.length > 0 ? (
-                                <nav
-                                    aria-label="Museum floor sections"
-                                    className="orbit-lane-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1"
-                                >
-                                    {jumpLinks.map((link) => (
-                                        <a
-                                            className="whitespace-nowrap rounded-full border border-white/15 bg-slate-950/55 px-3 py-1.5 text-[11px] tracking-[0.14em] text-slate-200 uppercase transition hover:border-sky-300/50 hover:text-white"
-                                            href={`#${link.id}`}
-                                            key={link.id}
-                                        >
-                                            {link.label}
-                                        </a>
-                                    ))}
-                                </nav>
-                            ) : null}
+                                {jumpLinks.length > 0 ? (
+                                    <nav
+                                        aria-label="Museum floor sections"
+                                        className="orbit-lane-scrollbar flex gap-2 overflow-x-auto border-t border-white/10 bg-slate-950/35 px-5 py-3"
+                                    >
+                                        {jumpLinks.map((link) => (
+                                            <a
+                                                className="whitespace-nowrap rounded-full border border-white/15 bg-slate-950/55 px-3 py-1.5 text-[11px] tracking-[0.14em] text-slate-200 uppercase transition hover:border-sky-300/50 hover:text-white"
+                                                href={`#${link.id}`}
+                                                key={link.id}
+                                            >
+                                                {link.label}
+                                            </a>
+                                        ))}
+                                    </nav>
+                                ) : null}
+                            </section>
 
                             <article
                                 className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
