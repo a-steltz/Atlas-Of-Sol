@@ -22,10 +22,17 @@ export type BreadcrumbItem = {
     kind: "system" | "body";
 };
 
-/** Compact key/value pair displayed in the museum floor quick-stats grid. */
-export type QuickStat = {
+/** Label/value pair used in museum-floor detail sections. */
+export type MuseumDetail = {
     label: string;
     value: string;
+};
+
+/** Group of related museum-floor facts displayed as one card. */
+export type MuseumFactSection = {
+    id: string;
+    title: string;
+    items: MuseumDetail[];
 };
 
 /**
@@ -203,50 +210,190 @@ export function buildBreadcrumb({
 }
 
 /**
- * Produces compact quick stats for the museum floor preview card.
+ * Builds discovery detail rows for the museum-floor discovery card.
  *
  * @param {BodyEntity} body - Body currently selected as anchor
- * @returns {QuickStat[]} Lightweight stat chips for first-read orientation
+ * @returns {MuseumDetail[]} Discovery metadata rows in display order
  */
-export function getQuickStats(body: BodyEntity): QuickStat[] {
-    const stats: QuickStat[] = [
-        { label: "Type", value: body.type },
-        { label: "Curation", value: `${Math.round(body.curationScore)}` },
-        { label: "Size", value: `${body.size}/10` }
-    ];
+export function getDiscoveryDetails(body: BodyEntity): MuseumDetail[] {
+    const discovery = body.discovery;
+    if (!discovery) return [];
 
-    const numericCandidates: Array<{ label: string; value: number | undefined; unit: string }> = [
-        {
-            label: "Radius",
-            value: body.physical?.meanRadiusKm,
-            unit: "km"
-        },
-        {
-            label: "Orbital Period",
-            value: body.orbit?.orbitalPeriodDays,
-            unit: "days"
-        },
-        {
-            label: "Rotation",
-            value: body.orbit?.rotationPeriodHours,
-            unit: "hrs"
-        },
-        {
-            label: "Mean Temp",
-            value: body.environment?.meanTemperatureK,
-            unit: "K"
-        }
-    ];
+    const details: MuseumDetail[] = [];
 
-    const metric = numericCandidates.find((candidate) => candidate.value !== undefined);
-    if (metric && metric.value !== undefined) {
-        stats.push({
-            label: metric.label,
-            value: `${formatMetric(metric.value)} ${metric.unit}`
+    if (discovery.discoveryYearPrecision === "prehistoric") {
+        details.push({
+            label: "Discovery Era",
+            value: "Known since prehistory"
         });
     }
 
-    return stats;
+    if (discovery.discoveryYear !== undefined) {
+        details.push({
+            label: "Discovery Year",
+            value:
+                discovery.discoveryYearPrecision === "estimated"
+                    ? `c. ${discovery.discoveryYear} (estimated)`
+                    : `${discovery.discoveryYear}`
+        });
+    }
+
+    if (discovery.discoveredBy) {
+        details.push({
+            label: "Discovered By",
+            value: discovery.discoveredBy
+        });
+    }
+
+    if (discovery.discoveryMethod) {
+        details.push({
+            label: "Method",
+            value: discovery.discoveryMethod
+        });
+    }
+
+    return details;
+}
+
+/**
+ * Derives grouped scientific facts for approachable museum-floor scanning.
+ *
+ * @param {BodyEntity} body - Body currently selected as anchor
+ * @returns {MuseumFactSection[]} Non-empty scientific fact groups
+ */
+export function getMuseumFactSections(body: BodyEntity): MuseumFactSection[] {
+    const sections: MuseumFactSection[] = [];
+
+    const physicalItems: MuseumDetail[] = [
+        formatNumberDetail("Mean Radius", body.physical?.meanRadiusKm, "km"),
+        formatNumberDetail("Mass", body.physical?.massKg, "kg"),
+        formatNumberDetail("Density", body.physical?.densityKgM3, "kg/m^3"),
+        formatNumberDetail("Surface Gravity", body.physical?.surfaceGravityMS2, "m/s^2"),
+        formatNumberDetail("Escape Velocity", body.physical?.escapeVelocityMS, "m/s")
+    ].flatMap(definedDetail);
+
+    if (physicalItems.length > 0) {
+        sections.push({
+            id: "physical-profile",
+            title: "Physical Profile",
+            items: physicalItems
+        });
+    }
+
+    const orbitItems: MuseumDetail[] = [
+        formatNumberDetail("Semi-Major Axis", body.orbit?.semiMajorAxisKm, "km"),
+        formatNumberDetail("Orbital Period", body.orbit?.orbitalPeriodDays, "days"),
+        formatNumberDetail("Eccentricity", body.orbit?.eccentricity),
+        formatNumberDetail("Inclination", body.orbit?.inclinationDeg, "deg"),
+        formatNumberDetail("Rotation Period", body.orbit?.rotationPeriodHours, "hrs"),
+        formatBooleanDetail("Retrograde Rotation", body.orbit?.retrogradeRotation),
+        formatBooleanDetail("Tidally Locked", body.orbit?.tidallyLocked)
+    ].flatMap(definedDetail);
+
+    if (orbitItems.length > 0) {
+        sections.push({
+            id: "orbit-rotation",
+            title: "Orbit and Rotation",
+            items: orbitItems
+        });
+    }
+
+    const compositionItems: MuseumDetail[] = [
+        formatStringListDetail("Primary Composition", body.composition?.primary),
+        body.composition?.atmosphere?.type
+            ? {
+                  label: "Atmosphere Type",
+                  value: formatEnumLabel(body.composition.atmosphere.type)
+              }
+            : null,
+        formatStringListDetail(
+            "Atmospheric Components",
+            body.composition?.atmosphere?.mainComponents
+        ),
+        formatNumberDetail(
+            "Surface Pressure",
+            body.composition?.atmosphere?.surfacePressureBar,
+            "bar"
+        ),
+        formatStringListDetail("Internal Structure", body.composition?.internalStructure)
+    ].flatMap(definedDetail);
+
+    if (compositionItems.length > 0) {
+        sections.push({
+            id: "composition",
+            title: "Composition",
+            items: compositionItems
+        });
+    }
+
+    const environmentItems: MuseumDetail[] = [
+        formatNumberDetail("Mean Temperature", body.environment?.meanTemperatureK, "K"),
+        formatNumberDetail("Minimum Temperature", body.environment?.minTemperatureK, "K"),
+        formatNumberDetail("Maximum Temperature", body.environment?.maxTemperatureK, "K"),
+        body.environment?.liquidWaterPresence
+            ? {
+                  label: "Liquid Water",
+                  value: formatEnumLabel(body.environment.liquidWaterPresence)
+              }
+            : null,
+        body.environment?.magneticFieldType
+            ? {
+                  label: "Magnetic Field",
+                  value: formatEnumLabel(body.environment.magneticFieldType)
+              }
+            : null,
+        body.environment?.volcanicActivity
+            ? {
+                  label: "Volcanic Activity",
+                  value: formatEnumLabel(body.environment.volcanicActivity)
+              }
+            : null,
+        body.environment?.cryovolcanicActivity
+            ? {
+                  label: "Cryovolcanic Activity",
+                  value: formatEnumLabel(body.environment.cryovolcanicActivity)
+              }
+            : null,
+        body.environment?.tectonicActivity
+            ? {
+                  label: "Tectonic Activity",
+                  value: formatEnumLabel(body.environment.tectonicActivity)
+              }
+            : null
+    ].flatMap(definedDetail);
+
+    if (environmentItems.length > 0) {
+        sections.push({
+            id: "environment",
+            title: "Environment",
+            items: environmentItems
+        });
+    }
+
+    return sections;
+}
+
+/**
+ * Normalizes source URLs so cards can link even when legacy markdown-link
+ * formatting appears inside content JSON.
+ *
+ * @param {string | undefined} rawUrl - Source URL field from content
+ * @returns {string | null} Clickable URL or null when absent/unusable
+ */
+export function normalizeSourceUrl(rawUrl: string | undefined): string | null {
+    if (!rawUrl) return null;
+
+    const markdownLinkMatch = rawUrl.match(/\[[^\]]+\]\((https?:\/\/[^)]+)\)/);
+    if (markdownLinkMatch) {
+        return markdownLinkMatch[1];
+    }
+
+    const trimmedUrl = rawUrl.trim();
+    if (!trimmedUrl.startsWith("http://") && !trimmedUrl.startsWith("https://")) {
+        return null;
+    }
+
+    return trimmedUrl;
 }
 
 /**
@@ -266,4 +413,77 @@ function formatMetric(value: number): string {
     return new Intl.NumberFormat("en-US", {
         maximumFractionDigits: 2
     }).format(value);
+}
+
+/**
+ * Converts finite numeric values to museum-floor label rows.
+ *
+ * @param {string} label - Display label for this metric
+ * @param {number | undefined} value - Numeric value from content
+ * @param {string} [unit] - Optional suffix unit label
+ * @returns {MuseumDetail | null} Detail row or null when value is absent
+ */
+function formatNumberDetail(
+    label: string,
+    value: number | undefined,
+    unit?: string
+): MuseumDetail | null {
+    if (value === undefined) return null;
+    return {
+        label,
+        value: unit ? `${formatMetric(value)} ${unit}` : formatMetric(value)
+    };
+}
+
+/**
+ * Converts boolean values into reader-friendly yes/no label rows.
+ *
+ * @param {string} label - Display label for this metric
+ * @param {boolean | undefined} value - Boolean value from content
+ * @returns {MuseumDetail | null} Detail row or null when value is absent
+ */
+function formatBooleanDetail(label: string, value: boolean | undefined): MuseumDetail | null {
+    if (value === undefined) return null;
+    return {
+        label,
+        value: value ? "Yes" : "No"
+    };
+}
+
+/**
+ * Converts optional string arrays into comma-joined museum-floor rows.
+ *
+ * @param {string} label - Display label for this detail
+ * @param {string[] | undefined} values - Optional string array value
+ * @returns {MuseumDetail | null} Detail row or null when no strings are provided
+ */
+function formatStringListDetail(label: string, values: string[] | undefined): MuseumDetail | null {
+    if (!values?.length) return null;
+    return {
+        label,
+        value: values.join(", ")
+    };
+}
+
+/**
+ * Title-cases simple enum values stored in kebab-case.
+ *
+ * @param {string} value - Enum value from content schema
+ * @returns {string} Human-readable label
+ */
+function formatEnumLabel(value: string): string {
+    return value
+        .split("-")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+}
+
+/**
+ * Helper used with `flatMap` to strip null detail candidates.
+ *
+ * @param {MuseumDetail | null} detail - Candidate detail row
+ * @returns {MuseumDetail[]} Array with zero or one concrete detail rows
+ */
+function definedDetail(detail: MuseumDetail | null): MuseumDetail[] {
+    return detail ? [detail] : [];
 }
