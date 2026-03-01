@@ -326,31 +326,13 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                 <BackToTopLink />
                             </article>
 
-                            <article
-                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                            <MuseumInsightSection
+                                emptyMessage="Highlights are still being curated for this body."
                                 id="museum-highlights"
-                            >
-                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
-                                    Highlights
-                                </h4>
-                                {anchorBody.highlights?.length ? (
-                                    <ul className="mt-3 space-y-2.5 text-sm leading-6 text-slate-200">
-                                        {anchorBody.highlights.map((item, index) => (
-                                            <li
-                                                className="rounded-lg border border-white/10 bg-slate-900/65 px-3 py-2"
-                                                key={`${index}-${item}`}
-                                            >
-                                                {item}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p className="mt-3 text-sm leading-6 text-slate-300">
-                                        Highlights are still being curated for this body.
-                                    </p>
-                                )}
-                                <BackToTopLink />
-                            </article>
+                                items={anchorBody.highlights}
+                                title="Highlights"
+                                tone="highlight"
+                            />
 
                             {factSections.length > 0 ? (
                                 <section
@@ -391,58 +373,21 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                 </section>
                             ) : null}
 
-                            <article
-                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                            <MuseumInsightSection
+                                emptyMessage="Evidence notes have not been added yet for this body."
                                 id="museum-how-we-know"
-                            >
-                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
-                                    How We Know
-                                </h4>
-                                {anchorBody.howWeKnow?.length ? (
-                                    <ul className="mt-3 space-y-2.5 text-sm leading-6 text-slate-200">
-                                        {anchorBody.howWeKnow.map((item, index) => (
-                                            <li
-                                                className="rounded-lg border border-white/10 bg-slate-900/65 px-3 py-2"
-                                                key={`${index}-${item}`}
-                                            >
-                                                {item}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p className="mt-3 text-sm leading-6 text-slate-300">
-                                        Evidence notes have not been added yet for this body.
-                                    </p>
-                                )}
-                                <BackToTopLink />
-                            </article>
+                                items={anchorBody.howWeKnow}
+                                title="How We Know"
+                                tone="evidence"
+                            />
 
-                            <article
-                                className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+                            <MuseumInsightSection
+                                emptyMessage="Open research questions are still being curated for this body."
                                 id="museum-open-questions"
-                            >
-                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
-                                    Open Questions
-                                </h4>
-                                {anchorBody.openQuestions?.length ? (
-                                    <ul className="mt-3 space-y-2.5 text-sm leading-6 text-slate-200">
-                                        {anchorBody.openQuestions.map((item, index) => (
-                                            <li
-                                                className="rounded-lg border border-white/10 bg-slate-900/65 px-3 py-2"
-                                                key={`${index}-${item}`}
-                                            >
-                                                {item}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p className="mt-3 text-sm leading-6 text-slate-300">
-                                        Open research questions are still being curated for this
-                                        body.
-                                    </p>
-                                )}
-                                <BackToTopLink />
-                            </article>
+                                items={anchorBody.openQuestions}
+                                title="Open Questions"
+                                tone="question"
+                            />
 
                             <article
                                 className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
@@ -543,6 +488,16 @@ type MuseumJumpLink = {
     label: string;
 };
 
+type InsightTone = "highlight" | "evidence" | "question";
+
+type MuseumInsightSectionProps = {
+    id: string;
+    title: string;
+    items: string[] | undefined;
+    emptyMessage: string;
+    tone: InsightTone;
+};
+
 /**
  * Builds the museum-floor section jump list based on data availability.
  *
@@ -590,6 +545,72 @@ function formatBodyTypeLabel(type: BodyEntity["type"]): string {
         .split("-")
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
         .join(" ");
+}
+
+/**
+ * Shared section frame for insight-heavy museum floor lists.
+ *
+ * @param {MuseumInsightSectionProps} props - Section content and style controls
+ * @returns {JSX.Element} Rendered section with one of two list layout variants
+ */
+function MuseumInsightSection({ id, title, items, emptyMessage, tone }: MuseumInsightSectionProps) {
+    const toneStyles = getInsightToneStyles(tone);
+
+    return (
+        <article
+            className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
+            id={id}
+        >
+            <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">{title}</h4>
+
+            {items?.length ? (
+                <ul className="mt-3 space-y-2.5 pl-1">
+                    {items.map((item, index) => (
+                        <li
+                            className="grid grid-cols-[auto_1fr] items-start gap-3 text-sm leading-6 text-slate-100"
+                            key={`${index}-${item}`}
+                        >
+                            <span
+                                aria-hidden
+                                className={`mt-2 inline-block h-2.5 w-2.5 rounded-full ring-1 ${toneStyles.dot}`}
+                            />
+                            <span className="block rounded-md bg-slate-900/30 px-2.5 py-1.5">
+                                {item}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p className="mt-3 text-sm leading-6 text-slate-300">{emptyMessage}</p>
+            )}
+            <BackToTopLink />
+        </article>
+    );
+}
+
+/**
+ * Tone-specific accents used by insight list sections to preserve semantic
+ * distinction while avoiding dense per-item card borders.
+ *
+ * @param {InsightTone} tone - Semantic tone for this section
+ * @returns {{ dot: string }} Style tokens for the selected tone
+ */
+function getInsightToneStyles(tone: InsightTone): { dot: string } {
+    if (tone === "highlight") {
+        return {
+            dot: "bg-sky-300/70 ring-sky-200/45"
+        };
+    }
+
+    if (tone === "evidence") {
+        return {
+            dot: "bg-teal-300/70 ring-teal-200/45"
+        };
+    }
+
+    return {
+        dot: "bg-amber-300/70 ring-amber-200/45"
+    };
 }
 
 /**

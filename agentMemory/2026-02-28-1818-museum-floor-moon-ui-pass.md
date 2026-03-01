@@ -3,6 +3,8 @@
 - Implemented a new section flow for selected bodies: Hook, Discovery, Highlights, Core Facts, How We Know, Open Questions, Scientific Synthesis, and Sources.
 - Added horizontal jump links at the top of Museum Floor to improve long-page navigation.
 - Added per-section "Back to Top" links that return users to the Museum Floor heading/jump-nav anchor.
+- Added two interchangeable list presentation variants for Highlights/How We Know/Open Questions (Single Panel and Left Rail) with a live preview toggle.
+- Locked Highlights/How We Know/Open Questions to a simplified left-dot style: removed vertical rail line, removed section pills, and removed the style preview toggle.
 
 ## Decisions Locked
 - Museum Floor no longer renders `curationScore` or `size` in visitor-facing detail content.
@@ -10,7 +12,7 @@
 - Scientific backbone data (`physical`, `orbit`, `composition`, `environment`) is grouped into approachable “Core Facts” cards rather than dense raw dumps.
 
 ## Files Touched
-- [uncommitted] `src/app/_components/atlas-map-shell.tsx` - replaced quick-stats snapshot UI with ordered museum sections, section jump-nav, source rendering at end, and per-section "Back to Top" links.
+- [uncommitted] `src/app/_components/atlas-map-shell.tsx` - replaced quick-stats snapshot UI with ordered museum sections, section jump-nav, source rendering at end, per-section "Back to Top" links, and finalized simplified left-dot insight lists (no rail line/pills/toggle).
 - [uncommitted] `src/app/_components/atlas-map-utils.ts` - removed quick-stats derivation and added discovery details, grouped fact extraction, and source URL normalization helpers.
 - [uncommitted] `agentMemory/2026-02-28-1818-museum-floor-moon-ui-pass.md` - session journal entry.
 
@@ -22,6 +24,12 @@
 - `npx prettier --write src/app/_components/atlas-map-shell.tsx` - pass.
 - `npm run lint` (post back-to-top update) - pass.
 - `npm run typecheck` (post back-to-top update) - pass.
+- `npx prettier --write src/app/_components/atlas-map-shell.tsx` (post insight-variant update) - pass.
+- `npm run lint` (post insight-variant update) - pass.
+- `npm run typecheck` (post insight-variant update) - pass.
+- `npx prettier --write src/app/_components/atlas-map-shell.tsx` (post simplification update) - pass.
+- `npm run lint` (post simplification update) - pass.
+- `npm run typecheck` (post simplification update) - pass.
 
 ## Open Questions
 - Should optional sections with no data (for bodies with sparse payloads) be hidden entirely instead of showing “still being curated” placeholder text?
