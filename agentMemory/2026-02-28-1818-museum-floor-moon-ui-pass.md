@@ -5,6 +5,7 @@
 - Added per-section "Back to Top" links that return users to the Museum Floor heading/jump-nav anchor.
 - Added two interchangeable list presentation variants for Highlights/How We Know/Open Questions (Single Panel and Left Rail) with a live preview toggle.
 - Locked Highlights/How We Know/Open Questions to a simplified left-dot style: removed vertical rail line, removed section pills, and removed the style preview toggle.
+- Moved all "Back to Top" links into each card header row using flex + `justify-between` to keep actions aligned with section titles.
 
 ## Decisions Locked
 - Museum Floor no longer renders `curationScore` or `size` in visitor-facing detail content.
@@ -30,6 +31,9 @@
 - `npx prettier --write src/app/_components/atlas-map-shell.tsx` (post simplification update) - pass.
 - `npm run lint` (post simplification update) - pass.
 - `npm run typecheck` (post simplification update) - pass.
+- `npx prettier --write src/app/_components/atlas-map-shell.tsx` (post back-to-top header alignment update) - pass.
+- `npm run lint` (post back-to-top header alignment update) - pass.
+- `npm run typecheck` (post back-to-top header alignment update) - pass.
 
 ## Open Questions
 - Should optional sections with no data (for bodies with sparse payloads) be hidden entirely instead of showing “still being curated” placeholder text?

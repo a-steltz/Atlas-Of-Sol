@@ -281,27 +281,32 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                 className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
                                 id="museum-hook"
                             >
-                                <div className="flex flex-wrap items-center gap-3">
-                                    <h3 className="text-lg font-semibold text-white">
-                                        {anchorBody.name}
-                                    </h3>
-                                    <span className="rounded-full border border-sky-200/30 bg-sky-950/45 px-2.5 py-1 text-[11px] tracking-[0.14em] text-sky-100 uppercase">
-                                        {formatBodyTypeLabel(anchorBody.type)}
-                                    </span>
+                                <div className="flex flex-wrap items-center justify-between gap-3">
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <h3 className="text-lg font-semibold text-white">
+                                            {anchorBody.name}
+                                        </h3>
+                                        <span className="rounded-full border border-sky-200/30 bg-sky-950/45 px-2.5 py-1 text-[11px] tracking-[0.14em] text-sky-100 uppercase">
+                                            {formatBodyTypeLabel(anchorBody.type)}
+                                        </span>
+                                    </div>
+                                    <BackToTopLink />
                                 </div>
                                 <p className="mt-3 text-base leading-7 text-slate-100">
                                     {anchorBody.hook}
                                 </p>
-                                <BackToTopLink />
                             </article>
 
                             <article
                                 className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
                                 id="museum-discovery"
                             >
-                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
-                                    Discovery
-                                </h4>
+                                <div className="flex flex-wrap items-center justify-between gap-2">
+                                    <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
+                                        Discovery
+                                    </h4>
+                                    <BackToTopLink />
+                                </div>
                                 {discoveryDetails.length ? (
                                     <dl className="mt-4 grid gap-3 sm:grid-cols-2">
                                         {discoveryDetails.map((detail) => (
@@ -323,7 +328,6 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                         Discovery details are still being curated for this body.
                                     </p>
                                 )}
-                                <BackToTopLink />
                             </article>
 
                             <MuseumInsightSection
@@ -339,9 +343,12 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                     className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
                                     id="museum-core-facts"
                                 >
-                                    <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
-                                        Core Facts
-                                    </h4>
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                        <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
+                                            Core Facts
+                                        </h4>
+                                        <BackToTopLink />
+                                    </div>
                                     <div className="mt-4 grid gap-3 lg:grid-cols-2">
                                         {factSections.map((section) => (
                                             <article
@@ -369,7 +376,6 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                             </article>
                                         ))}
                                     </div>
-                                    <BackToTopLink />
                                 </section>
                             ) : null}
 
@@ -393,9 +399,12 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                 className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
                                 id="museum-synthesis"
                             >
-                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
-                                    Scientific Synthesis
-                                </h4>
+                                <div className="flex flex-wrap items-center justify-between gap-2">
+                                    <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
+                                        Scientific Synthesis
+                                    </h4>
+                                    <BackToTopLink />
+                                </div>
                                 {anchorBody.scientificSynthesis?.length ? (
                                     <div className="mt-3 space-y-3 text-sm leading-7 text-slate-200">
                                         {anchorBody.scientificSynthesis.map((paragraph, index) => (
@@ -412,16 +421,18 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                         A synthesis summary has not been added yet for this body.
                                     </p>
                                 )}
-                                <BackToTopLink />
                             </article>
 
                             <article
                                 className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
                                 id="museum-sources"
                             >
-                                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
-                                    Sources
-                                </h4>
+                                <div className="flex flex-wrap items-center justify-between gap-2">
+                                    <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">
+                                        Sources
+                                    </h4>
+                                    <BackToTopLink />
+                                </div>
                                 {anchorBody.sources?.length ? (
                                     <ol className="mt-3 space-y-3 text-sm text-slate-200">
                                         {anchorBody.sources.map((source, index) => {
@@ -463,7 +474,6 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                                         Sources have not been attached yet for this body.
                                     </p>
                                 )}
-                                <BackToTopLink />
                             </article>
                         </>
                     ) : (
@@ -561,7 +571,10 @@ function MuseumInsightSection({ id, title, items, emptyMessage, tone }: MuseumIn
             className="scroll-mt-20 rounded-2xl border border-white/10 bg-slate-950/55 p-5"
             id={id}
         >
-            <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">{title}</h4>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <h4 className="text-sm tracking-[0.2em] text-slate-300 uppercase">{title}</h4>
+                <BackToTopLink />
+            </div>
 
             {items?.length ? (
                 <ul className="mt-3 space-y-2.5 pl-1">
@@ -583,7 +596,6 @@ function MuseumInsightSection({ id, title, items, emptyMessage, tone }: MuseumIn
             ) : (
                 <p className="mt-3 text-sm leading-6 text-slate-300">{emptyMessage}</p>
             )}
-            <BackToTopLink />
         </article>
     );
 }
@@ -621,14 +633,12 @@ function getInsightToneStyles(tone: InsightTone): { dot: string } {
  */
 function BackToTopLink() {
     return (
-        <div className="mt-4 flex justify-end">
-            <a
-                className="rounded-md border border-white/15 px-2.5 py-1 text-[11px] tracking-[0.12em] text-slate-300 uppercase transition hover:border-sky-300/45 hover:text-sky-100"
-                href="#museum-floor-top"
-            >
-                Back to Top
-            </a>
-        </div>
+        <a
+            className="rounded-md border border-white/15 px-2.5 py-1 text-[11px] tracking-[0.12em] text-slate-300 uppercase transition hover:border-sky-300/45 hover:text-sky-100"
+            href="#museum-floor-top"
+        >
+            Back to Top
+        </a>
     );
 }
 
