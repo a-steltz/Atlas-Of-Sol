@@ -471,7 +471,7 @@ function formatStringListDetail(label: string, values: string[] | undefined): Mu
  * @param {string} value - Enum value from content schema
  * @returns {string} Human-readable label
  */
-function formatEnumLabel(value: string): string {
+export function formatEnumLabel(value: string): string {
     return value
         .split("-")
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
