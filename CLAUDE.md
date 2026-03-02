@@ -1,4 +1,4 @@
-# AGENTS.md — Atlas of Sol
+# CLAUDE.md — Atlas of Sol
 
 This file is the “how to work in this repo” guide for coding agents and humans.
 

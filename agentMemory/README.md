@@ -4,7 +4,7 @@
 
 This folder is for continuity, not canonical product rules. Architecture and schema source-of-truth documents remain:
 
-- `AGENTS.md`
+- `CLAUDE.md`
 - `Atlas of Sol.md`
 - `src/lib/content/schema.ts`
 - `scripts/content/validate.ts`
@@ -45,15 +45,3 @@ Every journal entry must include these headers exactly:
 - `## Risks / Notes`
 
 If no decisions or actions apply to a required header, write `"N/A"`. Do not invent content to fill sections.
-
-## Status Tags
-
-Uncommitted context is optional and decided per session. If included, label it explicitly:
-
-- `[committed]` for merged or committed work
-- `[uncommitted]` for completed but not committed work
-
-Example bullets:
-
-- `[committed] Added required body hooks and updated schema validation.`
-- `[uncommitted] Drafted Mercury highlights but did not commit yet.`
