@@ -160,7 +160,7 @@ export default function AtlasMapShell({ systems, bodies, childrenByParentId }: A
                             ) : (
                                 <div className="flex flex-1 items-center">
                                     <div className="my-6 w-full rounded-xl border border-white/10 bg-slate-900/70 px-2 py-4 sm:px-3">
-                                        <div className="orbit-lane-scrollbar h-[272px] overflow-x-auto overflow-y-hidden pb-1 md:h-[260px]">
+                                        <div className="orbit-lane-scrollbar h-[300px] overflow-x-auto overflow-y-hidden pb-1">
                                             {/* Marker centers are locked to one midpoint so all circles share
                                                 the same visual orbit horizon, independent of body size. */}
                                             <div className="flex h-full min-w-max items-stretch justify-start gap-4 sm:gap-6">

@@ -33,3 +33,20 @@ N/A
 
 - Shell is now ~647 lines (down from ~825). `body-marker.tsx` is ~175 lines.
 - `getChildren` in `atlas-map-utils.ts` is exported but only called internally within `deriveOrbitLaneModel`. Noted as low-priority cleanup for a future session if desired.
+
+---
+
+## Session Summary (follow-up — orbit lane height fix)
+
+Fixed orbit lane container height to prevent label clipping on large anchor bodies (Sun, Jupiter as system head).
+
+## Decisions Locked (follow-up)
+
+- Orbit lane scroll container height changed from `h-[272px] md:h-[260px]` to `h-[300px]`.
+  - Removed the `md:h-[260px]` breakpoint override — it was making clipping worse on larger screens.
+  - Minimum safe height for size-10 anchor (208px diameter): label at `50% + 112px` offset + ~36px text = needs H ≥ 296px. Settled on 300px for a comfortable buffer.
+  - This slightly exceeds the original pre-compaction height of 290px, but necessary to accommodate label geometry for max-size bodies.
+
+## Files Touched (follow-up)
+
+- [committed] `src/app/_components/atlas-map-shell.tsx` — orbit lane height bump (`h-[272px] md:h-[260px]` → `h-[300px]`)
