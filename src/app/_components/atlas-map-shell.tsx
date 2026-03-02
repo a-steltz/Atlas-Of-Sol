@@ -583,14 +583,14 @@ function MuseumInsightSection({ id, title, items, emptyMessage, tone }: MuseumIn
                 <ul className="mt-3 space-y-2.5 pl-1">
                     {items.map((item, index) => (
                         <li
-                            className="grid grid-cols-[auto_1fr] items-start gap-3 text-sm leading-6 text-slate-100"
+                            className="grid grid-cols-[auto_1fr] items-center gap-3 text-sm leading-6 text-slate-100"
                             key={`${index}-${item}`}
                         >
                             <span
                                 aria-hidden
-                                className={`mt-2 inline-block h-2.5 w-2.5 rounded-full ring-1 ${toneStyles.dot}`}
+                                className={`inline-block h-2.5 w-2.5 rounded-full ring-1 ${toneStyles.dot}`}
                             />
-                            <span className="block rounded-md bg-slate-900/30 px-2.5 py-1.5">
+                            <span className="block rounded-lg border border-white/10 bg-slate-900/70 px-3 py-2.5">
                                 {item}
                             </span>
                         </li>
